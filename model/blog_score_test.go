@@ -15,23 +15,23 @@ func TestBlogScore(t *testing.T) {
 	}
 	defer tRepo.db.Close()
 
-	t.Run("SetPersonalBlogScoreByID", func(t *testing.T) {
+	t.Run("GetPersonalBlogScoreByID", func(t *testing.T) {
 		//personal_blog_score := PersonalBlogScore{
 		//	ScoringItemID: 	1,
 		//	ScorekeeperID: 	1,
 		//	Grade:         	70,
 		//}
-		sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
+		rows := sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 80)
 
-		tRepo.mock.ExpectExec("UPDATE Personal_Blog_Grade").WithArgs(0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
+		tRepo.mock.ExpectQuery("SELECT *").WillReturnRows(rows)
 
-		personalBlogScore, err := tRepo.repo.SetPersonalBlogScoreByID(1,80)
+		personalBlogScore, err := tRepo.repo.GetPersonalBlogScoreByID(1)
 
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, personalBlogScore , 1)
+			assert.Equal(t, personalBlogScore.Grade , 80)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
@@ -39,18 +39,18 @@ func TestBlogScore(t *testing.T) {
 		}
 	})
 
-	t.Run("SetTeamBlogScoreByID", func(t *testing.T) {
-		sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
+	t.Run("GetTeamBlogScoreByID", func(t *testing.T) {
+		rows := sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 80)
 
-		tRepo.mock.ExpectExec("UPDATE Team_Blog_Grade").WithArgs(0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
+		tRepo.mock.ExpectQuery("SELECT *").WillReturnRows(rows)
 
-		teamBlogScore, err := tRepo.repo.SetTeamBlogScoreByID(1,80)
+		teamBlogScore, err := tRepo.repo.GetTeamBlogScoreByID(1)
 
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, teamBlogScore , 1)
+			assert.Equal(t, teamBlogScore.Grade , 80)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
