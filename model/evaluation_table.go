@@ -12,7 +12,7 @@ type EvaluationTable struct {
 	TableName  string `gorm:"type:varchar(255);not null"`
 	HomeworkID int    `gorm:"type:int;not null"`
 	TeamID     int    `gorm:"type:int;not null"`
-	TableItems []EvaluationTableItem
+	TableItem		  []EvaluationTableItem
 }
 
 // EvaluationTableItem 评审表项模型
@@ -22,21 +22,24 @@ type EvaluationTableItem struct {
 	Content           string `gorm:"type:varchar(255);not null"`
 	Score             int    `gorm:"type:int;not null;default:-1"`
 	Description       string `gorm:"type:text"`
-	ParentItemID      int    `gorm:"type:int;not null;default:0"`
-	Index             int    `gorm:"type:int;not null;default:0"`
+	Level			  int	 `gorm:"not null;default:0"`
+	//Index	          int    `gorm:"type:int;not null;default:0"`
 }
 
-// GetEvaluationTable 获取评审表
-func (Repo *Repository) GetEvaluationTable(ID uint) (EvaluationTable, error) {
+// GetEvaluationTableItems 获取评审表
+func (Repo *Repository) GetEvaluationTableItems(ID uint) (EvaluationTable, error) {
 	var table EvaluationTable
-	tableResult := Repo.DB.First(&table, ID)
-	if tableResult.Error != nil {
-		return EvaluationTable{}, tableResult.Error
+	result := Repo.DB.First(&table, ID)
+	if result.Error != nil {
+		return EvaluationTable{}, result.Error
 	}
-	err := Repo.DB.Model(&table).Association("TableItems").Find(&table.TableItems)
-	if err != nil {
-		return EvaluationTable{}, err
+
+	var items []EvaluationTableItem
+	result = Repo.DB.Order("index desc").Where("evaluation_table_id = ?", ID).Find(&items)
+	if result.Error != nil {
+		return EvaluationTable{}, result.Error
 	}
+	table.TableItem = items
 
 	return table, nil
 }

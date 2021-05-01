@@ -10,7 +10,6 @@ type EvaluationTable struct {
 
 // EvaluationTableItem 评审表项序列化器
 type EvaluationTableItem struct {
-	Index           int                   `json:"index"`
 	Content         string                `json:"content"`
 	Score           int                   `json:"score"`
 	Description     string                `json:"description"`
@@ -21,11 +20,66 @@ type EvaluationTableItem struct {
 func BuildEvaluationTable(tableModel model.EvaluationTable) EvaluationTable {
 	var table EvaluationTable
 	table.TableName = tableModel.TableName
+	items := BuildTableItems(0, len(tableModel.TableItem) - 1, tableModel.TableItem)
+	return EvaluationTable{
+		TableName:  tableModel.TableName,
+		TableItems: items,
+	}
+}
 
-	// TODO: Fix it later.
-	//for index, item := range tableModel.TableItems {
-	//
-	//}
+func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []EvaluationTableItem {
+	level := tableItems[begin].Level
 
-	return EvaluationTable{}
+	b := -1
+	e := -1
+	heads := make([]EvaluationTableItem, 0)
+	items := make([]EvaluationTableItem, 0)
+	i := begin
+	for i <= end{
+		if tableItems[i].Level > level{
+			e = i
+			if b == -1 {
+				b = i
+			}
+		}
+
+		if tableItems[i].Level == level {
+			if b != -1 {
+				items = append([]EvaluationTableItem{{
+					Content:         tableItems[i].Content,
+					Score:           tableItems[i].Score,
+					Description:     tableItems[i].Description,
+					ChildTableItems: BuildTableItems(b, e, tableItems),
+				}}, items...)
+				b = -1
+				e = -1
+			} else {
+				items = append([]EvaluationTableItem{{
+					Content:         tableItems[i].Content,
+					Score:           tableItems[i].Score,
+					Description:     tableItems[i].Description,
+					ChildTableItems: nil,
+				}}, items...)
+			}
+		}
+
+		if tableItems[i].Level < level && tableItems[i].Level == 1{
+			childItems := make([]EvaluationTableItem, len(items))
+			copy(childItems, items)
+			heads = append([]EvaluationTableItem{{
+				Content:         tableItems[i].Content,
+				Score:           tableItems[i].Score,
+				Description:     tableItems[i].Description,
+				ChildTableItems: childItems,
+			}}, heads...)
+			items = make([]EvaluationTableItem, 0)
+		}
+		i = i + 1
+	}
+
+	if i < len(tableItems) {
+		return items
+	} else {
+		return heads
+	}
 }
