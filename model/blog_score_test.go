@@ -24,7 +24,7 @@ func TestBlogScore(t *testing.T) {
 		sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 80)
 
-		tRepo.mock.ExpectExec("UPDATE Personal_Blog_Grade").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
+		tRepo.mock.ExpectExec("UPDATE Personal_Blog_Grade").WithArgs(0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 
 		personalBlogScore, err := tRepo.repo.SetPersonalBlogScoreByID(1,80)
 
@@ -43,7 +43,7 @@ func TestBlogScore(t *testing.T) {
 		sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 80)
 
-		//tRepo.mock.ExpectExec("UPDATE Team_Blog_Grade").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
+		tRepo.mock.ExpectExec("UPDATE Team_Blog_Grade").WithArgs(0, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 
 		teamBlogScore, err := tRepo.repo.SetTeamBlogScoreByID(1,80)
 
