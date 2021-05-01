@@ -21,12 +21,12 @@ func TestWorkSubmission(t *testing.T) {
 
 		tRepo.mock.ExpectExec("UPDATE Job_Submission").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
 
-		t, err := tRepo.repo.SetSubmitStatusByID(1,1)
+		x, err := tRepo.repo.SetSubmitStatusByID(1,1)
 
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, t , 1)
+			assert.Equal(t, x , 1)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
