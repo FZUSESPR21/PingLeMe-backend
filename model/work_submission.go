@@ -4,7 +4,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"testing"
 )
 
 // WorkSubmission 作业提交模型
@@ -42,7 +41,7 @@ func (Repo *Repository) GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID 
 }
 
 // SetSubmitStatusByID 根据ID设置作业提交状态
-func (Repo *Repository) SetSubmitStatusByID(ID, submitStatus int) (*testing.T, error) {
+func (Repo *Repository) SetSubmitStatusByID(ID, submitStatus int) (int64, error) {
 	result := Repo.DB.Model(&WorkSubmission{}).Where("ID = ?", ID).Update("submit_status", submitStatus)
 	return result.RowsAffected, result.Error
 }
