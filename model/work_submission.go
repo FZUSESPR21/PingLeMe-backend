@@ -19,31 +19,31 @@ type WorkSubmission struct {
 // CreateWorkSubmission 创建作业提交表
 func (Repo *Repository) CreateWorkSubmission(SubmitterID int, HomeworkID int,
 	SubmitStatus uint8, Filepath string) (int64, error) {
-	work_submission := WorkSubmission{SubmitterID: SubmitterID, HomeworkID: HomeworkID,
+	workSubmission := WorkSubmission{SubmitterID: SubmitterID, HomeworkID: HomeworkID,
 		SubmitStatus: SubmitStatus, Filepath: Filepath}
-	result := Repo.DB.Create(&work_submission)
+	result := Repo.DB.Create(&workSubmission)
 	return result.RowsAffected, result.Error
 }
 
 // GetWorkSubmissionByID 根据ID获取作业提交表
 func (Repo *Repository) GetWorkSubmissionByID(ID int) (WorkSubmission, error) {
-	var work_submission WorkSubmission
-	result := Repo.DB.Where("ID = ?", ID).Find(&work_submission)
-	return work_submission, result.Error
+	var workSubmission WorkSubmission
+	result := Repo.DB.Where("ID = ?", ID).Find(&workSubmission)
+	return workSubmission, result.Error
 }
 
 // GetWorkSubmissionBySubmitterIDandHomeworkID 根据SubmitterID和HomeworkID获取作业提交表
 func (Repo *Repository) GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID int,
 	HomeworkID int) (WorkSubmission, error) {
-	var work_submission WorkSubmission
+	var workSubmission WorkSubmission
 	result := Repo.DB.Where(map[string]interface{}{"SubmitterID": SubmitterID,
-		"HomeworkID": HomeworkID}).Find(&work_submission)
-	return work_submission, result.Error
+		"HomeworkID": HomeworkID}).Find(&workSubmission)
+	return workSubmission, result.Error
 }
 
 // SetSubmitStatusByID 根据ID设置作业提交状态
-func (Repo *Repository) SetSubmitStatusByID(ID, submit_status int) (*testing.T, error) {
-	result := Repo.DB.Model(&WorkSubmission{}).Where("ID = ?", ID).Update("submit_status", submit_status)
+func (Repo *Repository) SetSubmitStatusByID(ID, submitStatus int) (*testing.T, error) {
+	result := Repo.DB.Model(&WorkSubmission{}).Where("ID = ?", ID).Update("submit_status", submitStatus)
 	return result.RowsAffected, result.Error
 }
 
