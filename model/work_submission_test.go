@@ -19,7 +19,7 @@ func TestWorkSubmission(t *testing.T) {
 		sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "submitter_id", "homework_id", "submit_status"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 0)
 
-		tRepo.mock.ExpectExec("UPDATE Job_Submission").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
+		//tRepo.mock.ExpectExec("UPDATE Job_Submission").WithArgs(2, 3).WillReturnResult(sqlmock.NewResult(1, 1))
 
 		x, err := tRepo.repo.SetSubmitStatusByID(1,1)
 
