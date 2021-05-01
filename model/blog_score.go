@@ -24,23 +24,23 @@ type TeamBlogScore struct {
 
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID int) (PersonalBlogScore, error) {
-	var personalBlogScore PersonalBlogScore
-	result := Repo.DB.Where("ID = ?", ID).Find(&personalBlogScore)
-	return personalBlogScore, result.Error
+	var personal_blog_score PersonalBlogScore
+	result := Repo.DB.Where("ID = ?", ID).Find(&personal_blog_score)
+	return personal_blog_score, result.Error
 }
 
 // GetPersonalBlogScoreByID 用ID获取团队博客成绩
 func (Repo *Repository) GetTeamBlogScoreByID(ID int) (TeamBlogScore, error) {
-	var teamBlogScore TeamBlogScore
-	result := Repo.DB.Where("ID = ?", ID).Find(&teamBlogScore)
-	return teamBlogScore, result.Error
+	var team_blog_score TeamBlogScore
+	result := Repo.DB.Where("ID = ?", ID).Find(&team_blog_score)
+	return team_blog_score, result.Error
 }
 
 // GetPersonalBlogScores 获取全部个人博客成绩    仍需修改！
 func (Repo *Repository) GetPersonalBlogScores(ID int) (PersonalBlogScore, error) {
-	var personalBlogScore PersonalBlogScore
-	result := Repo.DB.Where("ID = ?", ID).Find(&personalBlogScore)
-	return personalBlogScore, result.Error
+	var personal_blog_score PersonalBlogScore
+	result := Repo.DB.Where("ID = ?", ID).Find(&personal_blog_score)
+	return personal_blog_score, result.Error
 }
 
 // SetPersonalBlogScoreByID 根据ID设置个人博客成绩
