@@ -1,3 +1,4 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
 package service
 
 import (
@@ -5,6 +6,7 @@ import (
 	"PingLeMe-Backend/serializer"
 	"github.com/gin-gonic/gin"
 )
+
 
 type CreateClassService struct {
 	model.ClassRepositoryInterface
