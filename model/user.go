@@ -35,6 +35,7 @@ type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
 	SetTeacher(user User) error
+	DeleteUser(ID int) error
 }
 
 // GetUser 用ID获取用户
@@ -53,6 +54,11 @@ func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 
 // AddUser 添加老师或助教
 func (Repo *Repository) SetTeacher(user User) error {
+	return nil
+}
+
+// DeleteUser 删除用户
+func (Repo *Repository) DeleteUser(ID int) error {
 	return nil
 }
 
