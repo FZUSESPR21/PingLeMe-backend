@@ -14,6 +14,12 @@ type Class struct {
 	Students []User `gorm:"many2many:student_class;"`
 }
 
+type ClassRepositoryInterface interface {
+	GetClassByID(ID interface{}) (Class, error)
+	AddClass(name string) (Class, error)
+	DeleteClass(classID interface{}) error
+}
+
 // GetClassByID 通过班级ID获取班级
 func (Repo *Repository) GetClassByID(ID interface{}) (Class, error) {
 	var class Class
@@ -34,10 +40,10 @@ func (class *Class) GetAllStudents() ([]User, error) {
 }
 
 // AddClass 添加一个班级
-func (Repo *Repository) AddClass(name string) error {
+func (Repo *Repository) AddClass(name string) (Class, error) {
 	class := Class{Name: name}
 	result := Repo.DB.Create(&class)
-	return result.Error
+	return class, result.Error
 }
 
 // AddTeacher 添加一个老师
