@@ -28,7 +28,7 @@ func (service *CreateClassService) CreateClass(c *gin.Context, teacherID int) se
 
 	teacher, err2 := service.GetUser(teacherID)
 	if err2 != nil {
-		return serializer.DBErr("", err2)
+		return serializer.ParamErr("", err2)
 	}
 
 	err1 = class.AddTeacher(teacher)
@@ -39,12 +39,12 @@ func (service *CreateClassService) CreateClass(c *gin.Context, teacherID int) se
 	for i := 0; i < len(service.Assistants) - 1; i++ {
 		assistant, err3 := service.GetUser(service.Assistants[i].AssistantID)
 		if err3 != nil {
-			return serializer.DBErr("", err3)
+			return serializer.ParamErr("", err3)
 		}
 
 		err1 = class.AddTeacher(assistant)
 		if err1 != nil {
-			return serializer.DBErr("", err1)
+			return serializer.DBErr("分配助教失败", err1)
 		}
 	}
 
