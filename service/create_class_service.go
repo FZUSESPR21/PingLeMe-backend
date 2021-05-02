@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
+// CreateClassService 创建班级的服务
 type CreateClassService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
@@ -19,6 +19,7 @@ type AssistantService struct {
 	AssistantID		int    `form:"assistant_id" jason:"assistant_id binding:"required"`
 }
 
+// CreateClass 创建班级函数
 func (service *CreateClassService) CreateClass(c *gin.Context, teacherID int) serializer.Response{
 	class, err1 := service.AddClass(service.ClassName)
 	if err1 != nil {
