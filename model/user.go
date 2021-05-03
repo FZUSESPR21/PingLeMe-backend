@@ -11,15 +11,24 @@ import (
 type User struct {
 	gorm.Model
 	UID            string `gorm:"type:varchar(9);not null;unique"`
-	PasswordDigest string `gorm:"type:varchar(16);not null"`
+	PasswordDigest string `gorm:"type:varchar(30);not null"`
 	Nickname       string `gorm:"type:varchar(20);not null;unique"`
-	Role           uint8  `gorm:"type:int;not null"`
+	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
 
 const (
 	// PassWordCost 密码加密难度
 	PassWordCost = 12
+
+	// RoleTeacher 身份：教师
+	RoleTeacher = 1
+	// RoleAssistant 身份：助教
+	RoleAssistant = 2
+	// RoleAdmin 身份：超级管理员
+	RoleAdmin = 9
+	// RoleStudent 身份：学生
+	RoleStudent = 0
 )
 
 type UserRepositoryInterface interface {
@@ -39,6 +48,18 @@ func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 	var user User
 	result := Repo.DB.Where("uid = ?", UID).First(&user)
 	return user, result.Error
+}
+
+func (Repo *Repository) SetUser(user []User) error {
+	result := Repo.DB.Create(&user)
+	if result.Error != nil {
+		return result.Error
+	}
+	err := Repo.SetUserRole(user[1].Role, user)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // SetPassword 设置密码

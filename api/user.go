@@ -3,6 +3,7 @@
 package api
 
 import (
+	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"PingLeMe-Backend/util"
@@ -16,6 +17,7 @@ import (
 func UserLogin(c *gin.Context) {
 	var service service.UserLoginService
 	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
 		res := service.Login(c)
 		c.JSON(200, res)
 	} else {

@@ -70,7 +70,7 @@ func (Repo *Repository) SetUserRole(roleType uint8, users []User) error {
 	}
 
 	for _, user := range users {
-		Repo.DB.Exec("INSERT INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
+		Repo.DB.Exec("INSERT IGNORE INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
 	}
 
 	return nil
