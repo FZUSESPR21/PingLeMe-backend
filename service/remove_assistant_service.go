@@ -10,8 +10,8 @@ import (
 type RemoveAssistantService struct {
 	model.UserRepositoryInterface
 	model.ClassRepositoryInterface
-	UID		string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
-	ClassID	int		`form:"class_id" json:"class_id" binding:"required"`
+	UID     string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
+	ClassID int    `form:"class_id" json:"class_id" binding:"required"`
 }
 
 // RemoveAssistant 移除助教函数
@@ -32,7 +32,7 @@ func (service *RemoveAssistantService) RemoveAssistant() serializer.Response {
 	}
 
 	return serializer.Response{
-		Code:	0,
-		Msg: 	"Success",
+		Code: 0,
+		Msg:  "Success",
 	}
 }

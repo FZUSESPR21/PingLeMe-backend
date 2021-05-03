@@ -10,16 +10,16 @@ import (
 type CreateClassService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
-	ClassName	string	`form:"class_name" jason:"class_name binding:"required,min=5,max=30"`
-	Assistants  []AssistantService	`form:"assistant_list" jason:"assistant_list" binding:"required"`
+	ClassName  string             `form:"class_name" jason:"class_name binding:"required,min=5,max=30"`
+	Assistants []AssistantService `form:"assistant_list" jason:"assistant_list" binding:"required"`
 }
 
 type AssistantService struct {
-	AssistantID		int    `form:"assistant_id" jason:"assistant_id binding:"required"`
+	AssistantID int `form:"assistant_id" jason:"assistant_id binding:"required"`
 }
 
 // CreateClass 创建班级函数
-func (service *CreateClassService) CreateClass(teacherID int) serializer.Response{
+func (service *CreateClassService) CreateClass(teacherID int) serializer.Response {
 	class, err1 := service.AddClass(service.ClassName)
 	if err1 != nil {
 		return serializer.DBErr("班级创建失败", err1)
@@ -48,7 +48,7 @@ func (service *CreateClassService) CreateClass(teacherID int) serializer.Respons
 	}
 
 	return serializer.Response{
-		Code:		0,
-		Msg:		"Success",
+		Code: 0,
+		Msg:  "Success",
 	}
 }

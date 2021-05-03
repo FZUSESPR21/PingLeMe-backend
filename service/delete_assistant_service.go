@@ -9,7 +9,7 @@ import (
 // DeleteAssistantService 删除助教的服务
 type DeleteAssistantService struct {
 	model.UserRepositoryInterface
-	ID	int `form:"uid" json:"uid" binding:"required"`
+	ID int `form:"uid" json:"uid" binding:"required"`
 }
 
 // DeleteAssistant 删除助教函数
@@ -21,6 +21,6 @@ func (service *DeleteAssistantService) DeleteAssistant() serializer.Response {
 
 	return serializer.Response{
 		Code: 0,
-		Msg: "Success",
+		Msg:  "Success",
 	}
 }
