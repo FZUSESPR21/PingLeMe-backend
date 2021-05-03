@@ -10,7 +10,7 @@ import (
 type CreateClassService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
-	ClassName  string             `form:"class_name" json:"class_name binding:"required,min=5,max=30"`
+	ClassName  string             `form:"class_name" json:"class_name" binding:"required,min=5,max=30"`
 	Assistants []AssistantService `form:"assistant_list" json:"assistant_list" binding:"required"`
 }
 
