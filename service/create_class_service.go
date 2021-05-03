@@ -35,7 +35,7 @@ func (service *CreateClassService) CreateClass(teacherID int) serializer.Respons
 		return serializer.DBErr("", err1)
 	}
 
-	for i := 0; i < len(service.Assistants) - 1; i++ {
+	for i := 0; i < len(service.Assistants); i++ {
 		assistant, err3 := service.GetUser(service.Assistants[i].AssistantID)
 		if err3 != nil {
 			return serializer.ParamErr("", err3)
