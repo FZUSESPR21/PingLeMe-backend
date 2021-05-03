@@ -4,7 +4,6 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
-	"github.com/gin-gonic/gin"
 )
 
 // CreateAssistantService 添加助教的服务
@@ -16,7 +15,7 @@ type CreateAssistantService struct {
 }
 
 // CreateAssistant 创建助教函数
-func (service *CreateAssistantService) CreateAssistant(c *gin.Context) serializer.Response {
+func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 	assistant := model.User{
 		UID:            service.UID,
 		PasswordDigest: service.Password,

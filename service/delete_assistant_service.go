@@ -4,7 +4,6 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
-	"github.com/gin-gonic/gin"
 )
 
 // DeleteAssistantService 删除助教的服务
@@ -14,7 +13,7 @@ type DeleteAssistantService struct {
 }
 
 // DeleteAssistant 删除助教函数
-func (service *DeleteAssistantService) DeleteAssistant(c *gin.Context) serializer.Response {
+func (service *DeleteAssistantService) DeleteAssistant() serializer.Response {
 	err := service.DeleteUser(service.ID)
 	if err != nil {
 		return serializer.DBErr("删除助教失败", err)

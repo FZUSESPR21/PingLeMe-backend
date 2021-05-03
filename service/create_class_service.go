@@ -4,7 +4,6 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
-	"github.com/gin-gonic/gin"
 )
 
 // CreateClassService 创建班级的服务
@@ -20,7 +19,7 @@ type AssistantService struct {
 }
 
 // CreateClass 创建班级函数
-func (service *CreateClassService) CreateClass(c *gin.Context, teacherID int) serializer.Response{
+func (service *CreateClassService) CreateClass(teacherID int) serializer.Response{
 	class, err1 := service.AddClass(service.ClassName)
 	if err1 != nil {
 		return serializer.DBErr("班级创建失败", err1)
