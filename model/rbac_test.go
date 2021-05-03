@@ -32,7 +32,7 @@ func TestRBAC(t *testing.T) {
 				sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "type"}).
 					AddRow(1, time.Now(), time.Now(), time.Now(), 1),
 			)
-		tRepo.mock.ExpectExec("INSERT INTO user_role").
+		tRepo.mock.ExpectExec("INSERT IGNORE INTO user_role").
 			WithArgs(1, 1)
 
 		users := []User{{
