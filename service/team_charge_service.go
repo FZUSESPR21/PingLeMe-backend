@@ -16,7 +16,7 @@ type TeamChargeService struct {
 	model.TeamRepositoryInterface
 	Number int `form:"Number" json:"Number" binding:"required"`
 	Name      string `form:"Name" json:"Name" binding:"required,min=1,max=30"`
-	GroupLeaderID int `form:"GroupLeaderID" json:"GroupLeaderID" binding:"required`
+	GroupLeaderID int `form:"GroupLeaderID" json:"GroupLeaderID"`
 	ClassID int `form:"ClassID" json:"ClassID" binding:"required"`
 	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
 }
