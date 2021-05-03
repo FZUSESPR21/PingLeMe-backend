@@ -54,9 +54,9 @@ func (homework *Homework) GetAllScoringItem() ([]ScoringItem, error) {
 }
 
 // GetAssignedScoringItem 获得分配给某个助教所有的评分项
-func (assistant *User) GetAssignedScoringItem() ([]ScoringItem, error) {
+func (user *User) GetAssignedScoringItem() ([]ScoringItem, error) {
 	var scoringItem []ScoringItem
-	result := Repo.DB.Where("assistant_id = ?", assistant.ID).Find(scoringItem)
+	result := Repo.DB.Where("assistant_id = ?", user.ID).Find(scoringItem)
 	return scoringItem, result.Error
 }
 

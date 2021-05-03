@@ -24,7 +24,7 @@ func TestEvaluationTable(t *testing.T) {
 	//			AddRow(2, time.Now(), time.Now(), time.Now(), 2, "item2", 22, "item2desc", 0, 2),
 	//		)
 	//
-	//	table, err := tRepo.repo.GetEvaluationTableItems(1)
+	//	table, err := tRepo.repo.GetEvaluationTable(1)
 	//	if err != nil {
 	//		t.Error(err)
 	//	}

@@ -10,8 +10,8 @@ import (
 type EvaluationTable struct {
 	gorm.Model
 	TableName  string `gorm:"type:varchar(255);not null"`
-	HomeworkID int    `gorm:"type:int;not null"`
-	TeamID     int    `gorm:"type:int;not null"`
+	HomeworkID uint   `gorm:"type:int;not null"`
+	TeamID     uint   `gorm:"type:int;not null"`
 	TableItem		  []EvaluationTableItem
 }
 
@@ -21,13 +21,16 @@ type EvaluationTableItem struct {
 	EvaluationTableID uint
 	Content           string `gorm:"type:varchar(255);not null"`
 	Score             int    `gorm:"type:int;not null;default:-1"`
-	Description       string `gorm:"type:text"`
 	Level			  int	 `gorm:"not null;default:0"`
-	//Index	          int    `gorm:"type:int;not null;default:0"`
 }
 
-// GetEvaluationTableItems 获取评审表
-func (Repo *Repository) GetEvaluationTableItems(ID uint) (EvaluationTable, error) {
+type EvaluationTableRepositoryInterface interface {
+	GetEvaluationTable(ID uint) (EvaluationTable, error)
+	SetEvaluationTable(table EvaluationTable) error
+}
+
+// GetEvaluationTable 获取评审表
+func (Repo *Repository) GetEvaluationTable(ID uint) (EvaluationTable, error) {
 	var table EvaluationTable
 	result := Repo.DB.First(&table, ID)
 	if result.Error != nil {

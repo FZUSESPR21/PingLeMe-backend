@@ -48,7 +48,6 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 				items = append([]EvaluationTableItem{{
 					Content:         tableItems[i].Content,
 					Score:           tableItems[i].Score,
-					Description:     tableItems[i].Description,
 					ChildTableItems: BuildTableItems(b, e, tableItems),
 				}}, items...)
 				b = -1
@@ -57,7 +56,6 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 				items = append([]EvaluationTableItem{{
 					Content:         tableItems[i].Content,
 					Score:           tableItems[i].Score,
-					Description:     tableItems[i].Description,
 					ChildTableItems: nil,
 				}}, items...)
 			}
@@ -69,7 +67,6 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 			heads = append([]EvaluationTableItem{{
 				Content:         tableItems[i].Content,
 				Score:           tableItems[i].Score,
-				Description:     tableItems[i].Description,
 				ChildTableItems: childItems,
 			}}, heads...)
 			items = make([]EvaluationTableItem, 0)
