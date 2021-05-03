@@ -15,7 +15,7 @@ type CreateClassService struct {
 }
 
 type AssistantService struct {
-	AssistantID int `form:"assistant_id" jason:"assistant_id binding:"required"`
+	AssistantID int `form:"assistant_id" json:"assistant_id" binding:"required"`
 }
 
 // CreateClass 创建班级函数
