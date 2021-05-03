@@ -27,7 +27,7 @@ func TestWorkSubmission(t *testing.T) {
 			t.Error(err)
 		} else {
 			var x uint8 = 0
-			assert.Equal(t, workSubmission.SubmitStatus , x)
+			assert.Equal(t, workSubmission.SubmitStatus, x)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {

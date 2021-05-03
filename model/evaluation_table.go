@@ -12,7 +12,7 @@ type EvaluationTable struct {
 	TableName  string `gorm:"type:varchar(255);not null"`
 	HomeworkID uint   `gorm:"type:int;not null"`
 	TeamID     uint   `gorm:"type:int;not null"`
-	TableItem		  []EvaluationTableItem
+	TableItem  []EvaluationTableItem
 }
 
 // EvaluationTableItem 评审表项模型
@@ -21,7 +21,7 @@ type EvaluationTableItem struct {
 	EvaluationTableID uint
 	Content           string `gorm:"type:varchar(255);not null"`
 	Score             int    `gorm:"type:int;not null;default:-1"`
-	Level			  int	 `gorm:"not null;default:0"`
+	Level             int    `gorm:"not null;default:0"`
 }
 
 type EvaluationTableRepositoryInterface interface {

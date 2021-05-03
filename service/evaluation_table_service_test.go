@@ -9,7 +9,7 @@ import (
 
 func TestGetChildrenItems(t *testing.T) {
 	evaluationTableService := EvaluationTableService{
-		TableName:  "bala bala",
+		TableName: "bala bala",
 		TableItems: []EvaluationTableItem{
 			{
 				Content: "1",
@@ -21,23 +21,23 @@ func TestGetChildrenItems(t *testing.T) {
 								Content: "10",
 								ChildrenItems: []EvaluationTableItem{
 									{
-										Content: "14",
+										Content:       "14",
 										ChildrenItems: nil,
 									},
 									{
-										Content: "15",
+										Content:       "15",
 										ChildrenItems: nil,
 									},
 								},
 							},
 							{
-								Content: "11",
+								Content:       "11",
 								ChildrenItems: nil,
 							},
 						},
 					},
 					{
-						Content: "6",
+						Content:       "6",
 						ChildrenItems: nil,
 					},
 				},
@@ -49,21 +49,21 @@ func TestGetChildrenItems(t *testing.T) {
 						Content: "7",
 						ChildrenItems: []EvaluationTableItem{
 							{
-								Content: "12",
+								Content:       "12",
 								ChildrenItems: nil,
 							},
 							{
-								Content: "13",
+								Content:       "13",
 								ChildrenItems: nil,
 							},
 						},
 					},
 					{
-						Content: "8",
+						Content:       "8",
 						ChildrenItems: nil,
 					},
 					{
-						Content: "9",
+						Content:       "9",
 						ChildrenItems: nil,
 					},
 				},
@@ -73,56 +73,56 @@ func TestGetChildrenItems(t *testing.T) {
 
 	except := []model.EvaluationTableItem{
 		{
-			Content:           "1",
-			Level:             1,
+			Content: "1",
+			Level:   1,
 		},
 		{
-			Content:           "5",
-			Level:             2,
+			Content: "5",
+			Level:   2,
 		},
 		{
-			Content:           "10",
-			Level:             3,
+			Content: "10",
+			Level:   3,
 		},
 		{
-			Content:           "14",
-			Level:             4,
+			Content: "14",
+			Level:   4,
 		},
 		{
-			Content:           "15",
-			Level:             4,
+			Content: "15",
+			Level:   4,
 		},
 		{
-			Content:           "11",
-			Level:             3,
+			Content: "11",
+			Level:   3,
 		},
 		{
-			Content:           "6",
-			Level:             2,
+			Content: "6",
+			Level:   2,
 		},
 		{
-			Content:           "2",
-			Level:             1,
+			Content: "2",
+			Level:   1,
 		},
 		{
-			Content:           "7",
-			Level:             2,
+			Content: "7",
+			Level:   2,
 		},
 		{
-			Content:           "12",
-			Level:             3,
+			Content: "12",
+			Level:   3,
 		},
 		{
-			Content:           "13",
-			Level:             3,
+			Content: "13",
+			Level:   3,
 		},
 		{
-			Content:           "8",
-			Level:             2,
+			Content: "8",
+			Level:   2,
 		},
 		{
-			Content:           "9",
-			Level:             2,
+			Content: "9",
+			Level:   2,
 		},
 	}
 

@@ -8,65 +8,65 @@ import (
 
 func TestEvaluationTable(t *testing.T) {
 	evaluationTableModel := model.EvaluationTable{
-		TableName:  "bala bala",
-		TableItem:  []model.EvaluationTableItem{
+		TableName: "bala bala",
+		TableItem: []model.EvaluationTableItem{
 			{
-				Content: 		   "9",
-				Level:             2,
+				Content: "9",
+				Level:   2,
 			},
 			{
-				Content: 		   "8",
-				Level:             2,
+				Content: "8",
+				Level:   2,
 			},
 			{
-				Content: 		   "13",
-				Level:             3,
+				Content: "13",
+				Level:   3,
 			},
 			{
-				Content: 		   "12",
-				Level:             3,
+				Content: "12",
+				Level:   3,
 			},
 			{
-				Content: 		   "7",
-				Level:             2,
+				Content: "7",
+				Level:   2,
 			},
 			{
-				Content: 		   "2",
-				Level:             1,
+				Content: "2",
+				Level:   1,
 			},
 			{
-				Content: 		   "6",
-				Level:             2,
+				Content: "6",
+				Level:   2,
 			},
 			{
-				Content: 		   "11",
-				Level:             3,
+				Content: "11",
+				Level:   3,
 			},
 			{
-				Content: 		   "15",
-				Level:             4,
+				Content: "15",
+				Level:   4,
 			},
 			{
-				Content: 		   "14",
-				Level:             4,
+				Content: "14",
+				Level:   4,
 			},
 			{
-				Content: 		   "10",
-				Level:             3,
+				Content: "10",
+				Level:   3,
 			},
 			{
-				Content: 		   "5",
-				Level:             2,
+				Content: "5",
+				Level:   2,
 			},
 			{
-				Content: 		   "1",
-				Level:             1,
+				Content: "1",
+				Level:   1,
 			},
 		},
 	}
 
 	evaluationTable := EvaluationTable{
-		TableName:  "bala bala",
+		TableName: "bala bala",
 		TableItems: []EvaluationTableItem{
 			{
 				Content: "1",
@@ -78,23 +78,23 @@ func TestEvaluationTable(t *testing.T) {
 								Content: "10",
 								ChildTableItems: []EvaluationTableItem{
 									{
-										Content: "14",
+										Content:         "14",
 										ChildTableItems: nil,
 									},
 									{
-										Content: "15",
+										Content:         "15",
 										ChildTableItems: nil,
 									},
 								},
 							},
 							{
-								Content: "11",
+								Content:         "11",
 								ChildTableItems: nil,
 							},
 						},
 					},
 					{
-						Content: "6",
+						Content:         "6",
 						ChildTableItems: nil,
 					},
 				},
@@ -106,21 +106,21 @@ func TestEvaluationTable(t *testing.T) {
 						Content: "7",
 						ChildTableItems: []EvaluationTableItem{
 							{
-								Content: "12",
+								Content:         "12",
 								ChildTableItems: nil,
 							},
 							{
-								Content: "13",
+								Content:         "13",
 								ChildTableItems: nil,
 							},
 						},
 					},
 					{
-						Content: "8",
+						Content:         "8",
 						ChildTableItems: nil,
 					},
 					{
-						Content: "9",
+						Content:         "9",
 						ChildTableItems: nil,
 					},
 				},

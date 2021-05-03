@@ -7,10 +7,10 @@ import (
 
 type EvaluationTableService struct {
 	model.EvaluationTableRepositoryInterface
-	TableName	string               `json:"table_name" binding:"required"`
-	HomeworkID 	uint                `json:"homework_id" binding:"required"`
-	TeamID		uint                `json:"team_id" binding:"required"`
-	TableItems  []EvaluationTableItem `json:"table_items"`
+	TableName  string                `json:"table_name" binding:"required"`
+	HomeworkID uint                  `json:"homework_id" binding:"required"`
+	TeamID     uint                  `json:"team_id" binding:"required"`
+	TableItems []EvaluationTableItem `json:"table_items"`
 }
 
 type EvaluationTableDetailService struct {
@@ -18,9 +18,9 @@ type EvaluationTableDetailService struct {
 }
 
 type EvaluationTableItem struct {
-	Content		string               `json:"content"`
-	Score		int                    `json:"score" binding:"gte=0"`
-	ActualScore int                     `json:"actual_score" binding:"gte=0"`
+	Content       string                `json:"content"`
+	Score         int                   `json:"score" binding:"gte=0"`
+	ActualScore   int                   `json:"actual_score" binding:"gte=0"`
 	ChildrenItems []EvaluationTableItem `json:"children_items"`
 }
 
@@ -39,8 +39,8 @@ func (service *EvaluationTableService) CreateEvaluationTable() serializer.Respon
 		return serializer.ParamErr("", err)
 	}
 	return serializer.Response{
-		Code:  0,
-		Msg:   "Success",
+		Code: 0,
+		Msg:  "Success",
 	}
 }
 
@@ -51,13 +51,13 @@ func (service *EvaluationTableDetailService) ViewEvaluationTable(ID uint) serial
 		return serializer.ParamErr("", err)
 	}
 	return serializer.Response{
-		Code:  0,
-		Data:  serializer.BuildEvaluationTable(table),
+		Code: 0,
+		Data: serializer.BuildEvaluationTable(table),
 	}
 }
 
 // MarkEvaluationTable 评审表评分
-func (service *EvaluationTableService) MarkEvaluationTable()  {
+func (service *EvaluationTableService) MarkEvaluationTable() {
 }
 
 // GetChildrenItems 递归获取子项
@@ -65,12 +65,12 @@ func GetChildrenItems(target []EvaluationTableItem, level int) []model.Evaluatio
 	items := make([]model.EvaluationTableItem, 0)
 	for _, item := range target {
 		items = append(items, model.EvaluationTableItem{
-			Content:           item.Content,
-			Score:             item.Score,
-			Level:             level,
+			Content: item.Content,
+			Score:   item.Score,
+			Level:   level,
 		})
 		if item.ChildrenItems != nil {
-			items = append(items, GetChildrenItems(item.ChildrenItems, level + 1)...)
+			items = append(items, GetChildrenItems(item.ChildrenItems, level+1)...)
 		}
 	}
 	return items

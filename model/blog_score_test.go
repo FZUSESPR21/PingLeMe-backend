@@ -31,7 +31,7 @@ func TestBlogScore(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, personalBlogScore.Grade , 80)
+			assert.Equal(t, personalBlogScore.Grade, 80)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
@@ -50,7 +50,7 @@ func TestBlogScore(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, teamBlogScore.Grade , 80)
+			assert.Equal(t, teamBlogScore.Grade, 80)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {

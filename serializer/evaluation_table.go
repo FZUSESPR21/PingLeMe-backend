@@ -20,7 +20,7 @@ type EvaluationTableItem struct {
 func BuildEvaluationTable(tableModel model.EvaluationTable) EvaluationTable {
 	var table EvaluationTable
 	table.TableName = tableModel.TableName
-	items := BuildTableItems(0, len(tableModel.TableItem) - 1, tableModel.TableItem)
+	items := BuildTableItems(0, len(tableModel.TableItem)-1, tableModel.TableItem)
 	return EvaluationTable{
 		TableName:  tableModel.TableName,
 		TableItems: items,
@@ -35,8 +35,8 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 	heads := make([]EvaluationTableItem, 0)
 	items := make([]EvaluationTableItem, 0)
 	i := begin
-	for i <= end{
-		if tableItems[i].Level > level{
+	for i <= end {
+		if tableItems[i].Level > level {
 			e = i
 			if b == -1 {
 				b = i
@@ -61,7 +61,7 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 			}
 		}
 
-		if tableItems[i].Level < level && tableItems[i].Level == 1{
+		if tableItems[i].Level < level && tableItems[i].Level == 1 {
 			childItems := make([]EvaluationTableItem, len(items))
 			copy(childItems, items)
 			heads = append([]EvaluationTableItem{{
