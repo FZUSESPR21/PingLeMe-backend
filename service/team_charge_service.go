@@ -73,10 +73,17 @@ func (service *TeamChargeService) Delete(c *gin.Context, ID interface{}, user mo
 func (service *TeamChargeService) Edit(c *gin.Context, ID interface{}, name string) serializer.Response {
 	team, err := service.GetTeam(ID)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return serializer.ParamErr("创建团队错误", nil)
+		return serializer.ParamErr("获取团队信息错误", nil)
 	}
 
-	team.Name = name
+	res, err1 := service.SetClassNameByID(ID ,name)
+	if res == 0 {
+		return serializer.ParamErr("修改团队名称错误", nil)
+	}
+
+	if errors.Is(err1, gorm.ErrRecordNotFound) {
+		return serializer.ParamErr("修改团队名称错误", nil)
+	}
 
 	return serializer.BuildTeamResponse(team)
 }
