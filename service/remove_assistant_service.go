@@ -18,12 +18,12 @@ type RemoveAssistantService struct {
 func (service *RemoveAssistantService) RemoveAssistant() serializer.Response {
 	class, err1 := service.GetClassByID(service.ClassID)
 	if err1 != nil {
-		return serializer.ParamErr("", err1)
+		return serializer.ParamErr("获取班级失败", err1)
 	}
 
 	assistant, err2 := service.GetUserByUID(service.UID)
 	if err2 != nil {
-		return serializer.ParamErr("", err2)
+		return serializer.ParamErr("获取助教失败", err2)
 	}
 
 	err3 := class.DeleteTeacher(assistant)

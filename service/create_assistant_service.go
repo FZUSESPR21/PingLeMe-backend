@@ -18,10 +18,10 @@ type CreateAssistantService struct {
 func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 	assistant := model.User{
 		UID:            service.UID,
-		PasswordDigest: service.Password,
 		Nickname:       service.Name,
 		Role:           2,
 	}
+	assistant.SetPassword(service.Password)
 	err := service.SetTeacher(assistant)
 	if err != nil {
 		return serializer.DBErr("添加助教失败", err)
