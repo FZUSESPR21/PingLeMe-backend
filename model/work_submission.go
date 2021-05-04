@@ -17,15 +17,15 @@ type WorkSubmission struct {
 
 // CreateWorkSubmission 创建作业提交表
 func (Repo *Repository) CreateWorkSubmission(SubmitterID int, HomeworkID int,
-	SubmitStatus uint8, Filepath string) (int64, error) {
+	SubmitStatus uint8, Filepath string) (WorkSubmission, error) {
 	workSubmission := WorkSubmission{SubmitterID: SubmitterID, HomeworkID: HomeworkID,
 		SubmitStatus: SubmitStatus, Filepath: Filepath}
 	result := Repo.DB.Create(&workSubmission)
-	return result.RowsAffected, result.Error
+	return workSubmission, result.Error
 }
 
 // GetWorkSubmissionByID 根据ID获取作业提交表
-func (Repo *Repository) GetWorkSubmissionByID(ID int) (WorkSubmission, error) {
+func (Repo *Repository) GetWorkSubmissionByID(ID interface{}) (WorkSubmission, error) {
 	var workSubmission WorkSubmission
 	result := Repo.DB.Where("ID = ?", ID).Find(&workSubmission)
 	return workSubmission, result.Error
@@ -41,13 +41,13 @@ func (Repo *Repository) GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID 
 }
 
 // SetSubmitStatusByID 根据ID设置作业提交状态
-func (Repo *Repository) SetSubmitStatusByID(ID, submitStatus int) (int64, error) {
+func (Repo *Repository) SetSubmitStatusByID(ID interface{}, submitStatus int) (int64, error) {
 	result := Repo.DB.Model(&WorkSubmission{}).Where("ID = ?", ID).Update("submit_status", submitStatus)
 	return result.RowsAffected, result.Error
 }
 
 // DeleteWorkSubmissionByID 根据ID删除作业提交表
-func (Repo *Repository) DeleteWorkSubmissionByID(ID int) error {
+func (Repo *Repository) DeleteWorkSubmissionByID(ID interface{}) (int64, error) {
 	result := Repo.DB.Delete(&WorkSubmission{}, ID)
-	return result.Error
+	return result.RowsAffected, result.Error
 }
