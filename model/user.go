@@ -34,8 +34,8 @@ const (
 type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
-	SetTeacher(user User) error
-	DeleteUser(ID int) error
+	SetUser(user User) error
+	DeleteUser(ID uint) error
 }
 
 // GetUser 用ID获取用户
@@ -62,14 +62,12 @@ func (Repo *Repository) SetUser(user []User) error {
 	if err != nil {
 		return err
 	}
-  
-// SetTeacher 添加老师或助教
-func (Repo *Repository) SetTeacher(user User) error {
 	return nil
 }
 
 // DeleteUser 删除用户
-func (Repo *Repository) DeleteUser(ID int) error {
+func (Repo *Repository) DeleteUser(ID interface{}) error {
+	Repo.DB.Delete(&User{}, ID)
 	return nil
 }
 
