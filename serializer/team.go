@@ -4,7 +4,7 @@ package serializer
 
 import "PingLeMe-Backend/model"
 
-// User 用户序列化器
+// Team 用户序列化器
 type Team struct {
 	Number        int    `json:"number"`
 	Name          string `json:"name"`
@@ -12,17 +12,17 @@ type Team struct {
 	ClassID       int    `json:"classID"`
 }
 
-// BuildUser 序列化用户
+// BuildTeam 序列化用户
 func BuildTeam(team model.Team) Team {
 	return Team{
 		Number:        team.Number,
-		Name:  team.Name,
+		Name:          team.Name,
 		GroupLeaderID: team.GroupLeaderID,
-		ClassID: team.ClassID,
+		ClassID:       team.ClassID,
 	}
 }
 
-// BuildUserResponse 序列化用户响应
+// BuildTeamResponse 序列化用户响应
 func BuildTeamResponse(team model.Team) Response {
 	return Response{
 		Data: BuildTeam(team),

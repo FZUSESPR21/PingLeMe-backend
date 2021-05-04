@@ -35,11 +35,11 @@ type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
 	SetUser(user User) error
-	DeleteUser(ID uint) error
+	DeleteUser(ID interface{}) error
 }
 
 // GetUser 用ID获取用户
-func (Repo *Repository) GetUser(ID interface{}) (User, error) {
+func (Repo *Repository) GetUser(ID int) (User, error) {
 	var user User
 	result := Repo.DB.First(&user, ID)
 	return user, result.Error

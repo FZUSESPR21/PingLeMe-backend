@@ -18,8 +18,8 @@ type Team struct {
 
 type TeamRepositoryInterface interface {
 	SetTeam(team Team) (int64, error)
-	GetTeam(ID interface{})(Team, error)
-	GetLastTeam()(Team, error)
+	GetTeam(ID interface{}) (Team, error)
+	GetLastTeam() (Team, error)
 	SetClassNameByID(ID interface{}, name string) (int64, error)
 }
 
@@ -46,7 +46,7 @@ func (Repo *Repository) SetTeam(team Team) (int64, error) {
 	return result.RowsAffected, result.Error
 }
 
-func (Repo *Repository) AddStudent(team Team,user User) Team {
+func (Repo *Repository) AddStudent(team Team, user User) Team {
 	team.Students = append(team.Students, user)
 	return team
 }
