@@ -11,9 +11,9 @@ import (
 type User struct {
 	gorm.Model
 	UID            string `gorm:"type:varchar(9);not null;unique"`
-	PasswordDigest string `gorm:"type:varchar(16);not null"`
+	PasswordDigest string `gorm:"type:varchar(30);not null"`
 	Nickname       string `gorm:"type:varchar(20);not null;unique"`
-	Role           uint8  `gorm:"type:int;not null"`
+	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
 
@@ -34,8 +34,9 @@ const (
 type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
-	SetTeacher(user User) error
-	DeleteUser(ID int) error
+	SetUser(user User) error
+	SetUsers(user []User) error
+	DeleteUser(ID interface{}) error
 }
 
 // GetUser 用ID获取用户
@@ -52,13 +53,35 @@ func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 	return user, result.Error
 }
 
-// AddUser 添加老师或助教
-func (Repo *Repository) SetTeacher(user User) error {
+// SetUser 添加用户
+func (Repo *Repository) SetUser(user User) error {
+	result := Repo.DB.Create(&user)
+	if result.Error != nil {
+		return result.Error
+	}
+	err := Repo.SetUserRole(user.Role, user)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// SetUsers 添加用户组
+func (Repo *Repository) SetUsers(users []User) error {
+	result := Repo.DB.Create(&users)
+	if result.Error != nil {
+		return result.Error
+	}
+	err := Repo.SetUsersRole(users[0].Role, users)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
 // DeleteUser 删除用户
-func (Repo *Repository) DeleteUser(ID int) error {
+func (Repo *Repository) DeleteUser(ID interface{}) error {
+	Repo.DB.Delete(&User{}, ID)
 	return nil
 }
 

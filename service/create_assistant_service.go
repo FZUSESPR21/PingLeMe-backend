@@ -1,4 +1,5 @@
 //  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package service
 
 import (
@@ -17,16 +18,16 @@ type CreateAssistantService struct {
 // CreateAssistant 创建助教函数
 func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 	assistant := model.User{
-		UID:            service.UID,
-		Nickname:       service.Name,
-		Role:           2,
+		UID:      service.UID,
+		Nickname: service.Name,
+		Role:     model.RoleAssistant,
 	}
 	err := assistant.SetPassword(service.Password)
 	if err != nil {
 		return serializer.ParamErr("", err)
 	}
-	
-	err = service.SetTeacher(assistant)
+
+	err = service.SetUser(assistant)
 	if err != nil {
 		return serializer.DBErr("添加助教失败", err)
 	}
