@@ -20,11 +20,22 @@ type User struct {
 const (
 	// PassWordCost 密码加密难度
 	PassWordCost = 12
+
+	// RoleTeacher 身份：教师
+	RoleTeacher = 1
+	// RoleAssistant 身份：助教
+	RoleAssistant = 2
+	// RoleAdmin 身份：超级管理员
+	RoleAdmin = 9
+	// RoleStudent 身份：学生
+	RoleStudent = 0
 )
 
 type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
+	SetTeacher(user User) error
+	DeleteUser(ID int) error
 }
 
 // GetUser 用ID获取用户
@@ -39,6 +50,16 @@ func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 	var user User
 	result := Repo.DB.Where("uid = ?", UID).First(&user)
 	return user, result.Error
+}
+
+// AddUser 添加老师或助教
+func (Repo *Repository) SetTeacher(user User) error {
+	return nil
+}
+
+// DeleteUser 删除用户
+func (Repo *Repository) DeleteUser(ID int) error {
+	return nil
 }
 
 // SetPassword 设置密码
