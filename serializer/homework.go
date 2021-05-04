@@ -19,10 +19,10 @@ type Homework struct {
 
 // ScoringItem 评分项序列化器
 type ScoringItem struct {
-	Description       string        `json:"description"`
-	Score             int           `json:"score"`
-	Option            uint8         `json:"option"`
-	Note              string        `json:"note"`
+	Description string `json:"description"`
+	Score       int    `json:"score"`
+	Option      uint8  `json:"option"`
+	Note        string `json:"note"`
 	//AssistantID       uint          `json:"assistant_id"`
 	ChildScoringItems []ScoringItem `json:"child_scoring_items"`
 }
@@ -30,19 +30,19 @@ type ScoringItem struct {
 // BuildHomework 序列化作业
 func BuildHomework(homeworkModel model.Homework) Homework {
 	var homework Homework
-	homework.Type  = homeworkModel.Type
+	homework.Type = homeworkModel.Type
 	homework.Title = homeworkModel.Title
-	homework.Content  = homeworkModel.Content
+	homework.Content = homeworkModel.Content
 	homework.StartTime = homeworkModel.StartTime
-	homework.EndTime  = homeworkModel.EndTime
+	homework.EndTime = homeworkModel.EndTime
 	items := BuildScoringItems(0, len(homeworkModel.ScoringItems)-1, homeworkModel.ScoringItems)
 	return Homework{
-		Type:           homeworkModel.Type,
-		Title:			homeworkModel.Title,
-		Content: 		homeworkModel.Content,
-		StartTime: 		homeworkModel.StartTime,
-		EndTime: 		homeworkModel.EndTime,
-		ScoringItems:   items,
+		Type:         homeworkModel.Type,
+		Title:        homeworkModel.Title,
+		Content:      homeworkModel.Content,
+		StartTime:    homeworkModel.StartTime,
+		EndTime:      homeworkModel.EndTime,
+		ScoringItems: items,
 	}
 }
 
@@ -65,20 +65,20 @@ func BuildScoringItems(begin, end int, scoringItems []model.ScoringItem) []Scori
 		if scoringItems[i].Level == level {
 			if b != -1 {
 				items = append([]ScoringItem{{
-					Description:     scoringItems[i].Description,
-					Score:           scoringItems[i].Score,
-					Option:			scoringItems[i].Option,
-					Note: 			scoringItems[i].Note,
+					Description:       scoringItems[i].Description,
+					Score:             scoringItems[i].Score,
+					Option:            scoringItems[i].Option,
+					Note:              scoringItems[i].Note,
 					ChildScoringItems: BuildScoringItems(b, e, scoringItems),
 				}}, items...)
 				b = -1
 				e = -1
 			} else {
 				items = append([]ScoringItem{{
-					Description:     scoringItems[i].Description,
-					Score:           scoringItems[i].Score,
-					Option:			scoringItems[i].Option,
-					Note: 			scoringItems[i].Note,
+					Description:       scoringItems[i].Description,
+					Score:             scoringItems[i].Score,
+					Option:            scoringItems[i].Option,
+					Note:              scoringItems[i].Note,
 					ChildScoringItems: nil,
 				}}, items...)
 			}
@@ -88,10 +88,10 @@ func BuildScoringItems(begin, end int, scoringItems []model.ScoringItem) []Scori
 			childItems := make([]ScoringItem, len(items))
 			copy(childItems, items)
 			heads = append([]ScoringItem{{
-				Description:     scoringItems[i].Description,
-				Score:           scoringItems[i].Score,
-				Option:			scoringItems[i].Option,
-				Note: 			scoringItems[i].Note,
+				Description:       scoringItems[i].Description,
+				Score:             scoringItems[i].Score,
+				Option:            scoringItems[i].Option,
+				Note:              scoringItems[i].Note,
 				ChildScoringItems: childItems,
 			}}, heads...)
 			items = make([]ScoringItem, 0)

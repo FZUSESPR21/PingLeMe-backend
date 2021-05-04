@@ -127,7 +127,7 @@ func TestGetChildrenItems(t *testing.T) {
 	}
 
 	t.Run("test 1", func(t *testing.T) {
-		items := GetChildrenItems(evaluationTableService.TableItems, 1)
+		items := GetChildScoringItems(evaluationTableService.TableItems, 1)
 
 		assert.Equal(t, except, items)
 	})

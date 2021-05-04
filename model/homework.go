@@ -24,12 +24,17 @@ type ScoringItem struct {
 	gorm.Model
 	HomeworkID  uint   `gorm:"type:int;not null"`
 	Description string `gorm:"type:varchar(255);not null"`
-	Score       int    `gorm:"type:int;not null"`
+	Score       int    `gorm:"type:int;not null;default:-1"`
 	Option      uint8  `gorm:"type:int;not null"`
 	Note        string `gorm:"type:varchar(255)"`
 	AssistantID uint   `gorm:"type:int;not null"`
-	Level       int    `gorm:"type:int;not null"`
+	Level       int    `gorm:"not null;default:0"`
 	Index       int    `gorm:"type:int;not null"`
+}
+
+type HomeworkRepositoryInterface interface {
+	GetHomeworkByID(ID uint) (Homework, error)
+	SetHomework(homework Homework) error
 }
 
 // GetHomeworkByID 获得某个特定ID的作业
