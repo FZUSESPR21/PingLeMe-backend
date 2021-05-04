@@ -29,18 +29,14 @@ func (service *TeamManagementService) Create(c *gin.Context, team model.Team) se
 	team.ClassID = service.ClassID
 
 	res, err := service.SetTeam(team)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return serializer.ParamErr("创建团队错误，未发现记录", nil)
-	}
-	if errors.Is(err, gorm.ErrInvalidField) {
-		return serializer.ParamErr("创建团队错误，字段的值无效", nil)
-	}
-	if errors.Is(err, gorm.ErrInvalidValue) {
+	if err != nil{
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return serializer.ParamErr("创建团队错误", nil)
+		}
+	} else {
 		return serializer.ParamErr("创建团队错误，值无效", nil)
 	}
-	if errors.Is(err, gorm.ErrInvalidValueOfLength) {
-		return serializer.ParamErr("创建团队错误，值的长度过长", nil)
-	}
+
 	if res == 0 {
 		return serializer.ParamErr("创建团队错误", nil)
 	}
