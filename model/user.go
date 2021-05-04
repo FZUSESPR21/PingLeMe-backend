@@ -39,7 +39,7 @@ type UserRepositoryInterface interface {
 }
 
 // GetUser 用ID获取用户
-func (Repo *Repository) GetUser(ID int) (User, error) {
+func (Repo *Repository) GetUser(ID interface{}) (User, error) {
 	var user User
 	result := Repo.DB.First(&user, ID)
 	return user, result.Error
