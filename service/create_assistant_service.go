@@ -21,8 +21,12 @@ func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 		Nickname:       service.Name,
 		Role:           2,
 	}
-	assistant.SetPassword(service.Password)
-	err := service.SetTeacher(assistant)
+	err := assistant.SetPassword(service.Password)
+	if err != nil {
+		return serializer.ParamErr("", err)
+	}
+	
+	err = service.SetTeacher(assistant)
 	if err != nil {
 		return serializer.DBErr("添加助教失败", err)
 	}
