@@ -16,9 +16,22 @@ type Team struct {
 	Students      []User `gorm:"many2many:student_team;"`
 }
 
+type TeamRepositoryInterface interface {
+	SetTeam(team Team) (int64, error)
+	GetTeam(ID interface{})(Team, error)
+	GetLastTeam()(Team, error)
+	SetClassNameByID(ID interface{}, name string) (int64, error)
+}
+
 func (Repo *Repository) GetTeam(ID interface{}) (Team, error) {
 	var team Team
 	result := Repo.DB.First(&team, ID)
+	return team, result.Error
+}
+
+func (Repo *Repository) GetLastTeam() (Team, error) {
+	var team Team
+	result := Repo.DB.Last(&team)
 	return team, result.Error
 }
 
@@ -31,4 +44,9 @@ func (Repo *Repository) SetClassNameByID(ID interface{}, name string) (int64, er
 func (Repo *Repository) SetTeam(team Team) (int64, error) {
 	result := Repo.DB.Create(&team)
 	return result.RowsAffected, result.Error
+}
+
+func (Repo *Repository) AddStudent(team Team,user User) Team {
+	team.Students = append(team.Students, user)
+	return team
 }
