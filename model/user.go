@@ -100,3 +100,10 @@ func (user *User) CheckPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
 	return err == nil
 }
+
+
+func (Repo *Repository) GetAllTeacher() []User {
+	var user []User
+	result := Repo.DB.Where("uid = ?", UID).First(&user)
+	return user
+}
