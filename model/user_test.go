@@ -18,11 +18,9 @@ func TestUser(t *testing.T) {
 	defer tRepo.db.Close()
 
 	t.Run("GetUser", func(t *testing.T) {
-		rows := sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "uid", "password_digest", "nickname", "role"}).
-			AddRow(1, time.Now(), time.Now(), time.Now(), "test1", "password", "nickname", 1)
-
 		tRepo.mock.ExpectQuery("SELECT (.+) FROM `users` WHERE `users`.`id` = \\? AND `users`.`deleted_at` IS NULL ORDER BY `users`.`id` LIMIT 1").
-			WithArgs(1).WillReturnRows(rows)
+			WithArgs(1).WillReturnRows(sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "uid", "password_digest", "nickname", "role"}).
+			AddRow(1, time.Now(), time.Now(), time.Now(), "test1", "password", "nickname", 1))
 
 		user, err := tRepo.repo.GetUser(1)
 
