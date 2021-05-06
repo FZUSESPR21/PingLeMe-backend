@@ -34,6 +34,9 @@ const (
 type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
+	SetUser(user User) error
+	SetUsers(user []User) error
+	DeleteUser(ID interface{}) error
 }
 
 // GetUser 用ID获取用户
@@ -50,15 +53,35 @@ func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 	return user, result.Error
 }
 
-func (Repo *Repository) SetUser(user []User) error {
+// SetUser 添加用户
+func (Repo *Repository) SetUser(user User) error {
 	result := Repo.DB.Create(&user)
 	if result.Error != nil {
 		return result.Error
 	}
-	err := Repo.SetUserRole(user[1].Role, user)
+	err := Repo.SetUserRole(user.Role, user)
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+// SetUsers 添加用户组
+func (Repo *Repository) SetUsers(users []User) error {
+	result := Repo.DB.Create(&users)
+	if result.Error != nil {
+		return result.Error
+	}
+	err := Repo.SetUsersRole(users[0].Role, users)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// DeleteUser 删除用户
+func (Repo *Repository) DeleteUser(ID interface{}) error {
+	Repo.DB.Delete(&User{}, ID)
 	return nil
 }
 

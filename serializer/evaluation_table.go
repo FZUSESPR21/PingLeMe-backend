@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package serializer
 
 import "PingLeMe-Backend/model"
