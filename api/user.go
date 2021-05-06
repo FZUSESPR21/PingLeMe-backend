@@ -7,10 +7,9 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"PingLeMe-Backend/util"
-	"go.uber.org/zap"
-
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // UserLogin 用户登录接口
@@ -37,4 +36,9 @@ func UserLogout(c *gin.Context) {
 		Code: 0,
 		Msg:  "登出成功",
 	})
+}
+
+// StudentImport 文件导入学生（Excel）
+func StudentImport(c *gin.Context) {
+
 }
