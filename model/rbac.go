@@ -61,7 +61,21 @@ func (Repo *Repository) SetPermission(permissionType uint8, permissionDesc strin
 }
 
 // SetUserRole 设置用户角色
-func (Repo *Repository) SetUserRole(roleType uint8, users []User) error {
+func (Repo *Repository) SetUserRole(roleType uint8, user User) error {
+	var role Role
+	result := Repo.DB.Where("type = ?", roleType).First(&role)
+	if result.Error != nil {
+		util.Log().Error("rbac.go/SetUserRole", zap.Error(result.Error))
+		return result.Error
+	}
+
+	Repo.DB.Exec("INSERT IGNORE INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
+
+	return nil
+}
+
+// SetUsersRole 设置用户角色
+func (Repo *Repository) SetUsersRole(roleType uint8, users []User) error {
 	var role Role
 	result := Repo.DB.Where("type = ?", roleType).First(&role)
 	if result.Error != nil {
@@ -70,7 +84,7 @@ func (Repo *Repository) SetUserRole(roleType uint8, users []User) error {
 	}
 
 	for _, user := range users {
-		Repo.DB.Exec("INSERT INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
+		Repo.DB.Exec("INSERT IGNORE INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
 	}
 
 	return nil

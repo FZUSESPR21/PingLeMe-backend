@@ -32,7 +32,7 @@ func (Repo *Repository) CreateEvaluationItemScore(evaluationItemScore Evaluation
 	return evaluationItemScore, nil
 }
 
-// GetPair 用ID获取评审表项成绩
+// GetEvaluationItemScore 用ID获取评审表项成绩
 func (Repo *Repository) GetEvaluationItemScore(ID int) (EvaluationItemScore, error) {
 	var evaluationItemScore EvaluationItemScore
 	result := Repo.DB.First(&evaluationItemScore, ID)

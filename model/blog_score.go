@@ -29,7 +29,7 @@ func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogSc
 	return personalBlogScore, result.Error
 }
 
-// GetPersonalBlogScoreByID 用ID获取团队博客成绩
+// GetTeamBlogScoreByID 用ID获取团队博客成绩
 func (Repo *Repository) GetTeamBlogScoreByID(ID interface{}) (TeamBlogScore, error) {
 	var teamBlogScore TeamBlogScore
 	result := Repo.DB.Where("ID = ?", ID).Find(&teamBlogScore)

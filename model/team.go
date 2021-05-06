@@ -17,10 +17,11 @@ type Team struct {
 }
 
 type TeamRepositoryInterface interface {
-	SetTeam(team Team) (int64, error)
-	GetTeam(ID interface{})(Team, error)
-	GetLastTeam()(Team, error)
+	GetTeam(ID interface{}) (Team, error)
 	SetClassNameByID(ID interface{}, name string) (int64, error)
+	SetTeam(team Team) (int64, error)
+	SetTeammate(ID interface{}, students []User) (int64, error)
+	GetTeamByName(name string) (int64, error)
 }
 
 func (Repo *Repository) GetTeam(ID interface{}) (Team, error) {
@@ -29,10 +30,10 @@ func (Repo *Repository) GetTeam(ID interface{}) (Team, error) {
 	return team, result.Error
 }
 
-func (Repo *Repository) GetLastTeam() (Team, error) {
+func (Repo *Repository) GetTeamByName(name string) (int64, error) {
 	var team Team
-	result := Repo.DB.Last(&team)
-	return team, result.Error
+	result := Repo.DB.Where("Name = ?", name).First(&team)
+	return result.RowsAffected, result.Error
 }
 
 func (Repo *Repository) SetClassNameByID(ID interface{}, name string) (int64, error) {
@@ -46,7 +47,8 @@ func (Repo *Repository) SetTeam(team Team) (int64, error) {
 	return result.RowsAffected, result.Error
 }
 
-func (Repo *Repository) AddStudent(team Team,user User) Team {
-	team.Students = append(team.Students, user)
-	return team
+func (Repo *Repository) SetTeammate(ID interface{}, students []User) (int64, error) {
+	var team Team
+	result := Repo.DB.Model(&team).Where("ID = ?", ID).Update("students", students)
+	return result.RowsAffected, result.Error
 }
