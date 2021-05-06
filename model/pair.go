@@ -14,8 +14,17 @@ type Pair struct {
 	Student2ID int `gorm:"type:int;index:studentID"`
 }
 
+type PairRepositoryInterface interface {
+	GetPair(ID interface{}) (Pair, error)
+	CreatePair(pair Pair) (Pair, error)
+	GetPairByStudentID(ID int) (int, error)
+	DeletePair(ID int) error
+	DeletePairByStudentID(ID int) error
+	UpdatePair(ID int, student1ID int, student2ID int) (Pair, error)
+}
+
 // GetPair 用ID获取结对
-func (Repo *Repository) GetPair(ID int) (Pair, error) {
+func (Repo *Repository) GetPair(ID interface{}) (Pair, error) {
 	var pair Pair
 	result := Repo.DB.First(&pair, ID)
 	if result.Error != nil {

@@ -45,7 +45,7 @@ func TestRBAC(t *testing.T) {
 			Role:           1,
 		}}
 
-		err := tRepo.repo.SetUserRole(1, users)
+		err := tRepo.repo.SetUsersRole(1, users)
 		if err != nil {
 			t.Error(err)
 		}

@@ -15,6 +15,14 @@ type EvaluationItemScore struct {
 	Grade         int    `gorm:"type:int;not null"`
 }
 
+type EvaluationItemScoreRepositoryInterface interface {
+	CreateEvaluationItemScore(evaluationItemScore EvaluationItemScore) (EvaluationItemScore, error)
+	GetEvaluationItemScore(ID int) (EvaluationItemScore, error)
+	DeleteEvaluationItemScore(ID int) error
+	UpdateEvaluationItemScore(ID int, grade int) error
+	GetEvaluationItemScores(scoringItemID int, teamID int) ([]EvaluationItemScore, error)
+}
+
 // CreateEvaluationItemScore 创建评审表项成绩
 func (Repo *Repository) CreateEvaluationItemScore(evaluationItemScore EvaluationItemScore) (EvaluationItemScore, error) {
 	result := Repo.DB.Create(&evaluationItemScore)
@@ -24,7 +32,7 @@ func (Repo *Repository) CreateEvaluationItemScore(evaluationItemScore Evaluation
 	return evaluationItemScore, nil
 }
 
-// GetPair 用ID获取评审表项成绩
+// GetEvaluationItemScore 用ID获取评审表项成绩
 func (Repo *Repository) GetEvaluationItemScore(ID int) (EvaluationItemScore, error) {
 	var evaluationItemScore EvaluationItemScore
 	result := Repo.DB.First(&evaluationItemScore, ID)

@@ -6,17 +6,17 @@ import "PingLeMe-Backend/model"
 
 // User 用户序列化器
 type User struct {
-	ID        uint   `json:"id"`
+	UID       uint   `json:"uid"`
 	UserName  string `json:"user_name"`
-	CreatedAt int64  `json:"created_at"`
+	Role 	  uint8  `json:"role"`
 }
 
 // BuildUser 序列化用户
 func BuildUser(user model.User) User {
 	return User{
-		ID:        user.ID,
+		UID:       user.ID,
 		UserName:  user.UID,
-		CreatedAt: user.CreatedAt.Unix(),
+		Role: 	   user.Role,
 	}
 }
 
