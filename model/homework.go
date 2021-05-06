@@ -61,6 +61,12 @@ func (Repo *Repository) SetHomework(homework Homework) error {
 	return result.Error
 }
 
+// AssignedToAssistant 分配给助教
+func (scoringItem *ScoringItem) AssignedToAssistant(assistantID uint) (ScoringItem, error) {
+	scoringItem.AssistantID = assistantID
+	return *scoringItem, nil
+}
+
 // GetAllHomework 获得某个班级布置的所有作业
 func (class *Class) GetAllHomework() ([]Homework, error) {
 	var homework []Homework

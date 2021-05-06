@@ -8,12 +8,12 @@ import (
 
 type HomeworkService struct {
 	model.HomeworkRepositoryInterface
-	ClassID      uint      `json:"class_id" binding:"required"`
-	Type         uint8     `json:"type" binding:"required"`
-	Title        string    `json:"title" binding:"required"`
-	Content      string    `json:"content" binding:"required"`
-	StartTime    time.Time `json:"start_time" binding:"required"`
-	EndTime      time.Time `json:"end_time" binding:"required"`
+	ClassID      uint          `json:"class_id" binding:"required"`
+	Type         uint8         `json:"type" binding:"required"`
+	Title        string        `json:"title" binding:"required"`
+	Content      string        `json:"content" binding:"required"`
+	StartTime    time.Time     `json:"start_time" binding:"required"`
+	EndTime      time.Time     `json:"end_time" binding:"required"`
 	ScoringItems []ScoringItem `json:"scoring_items"`
 }
 
@@ -23,22 +23,22 @@ type HomeworkDetailService struct {
 
 // ScoringItem 评分项模型
 type ScoringItem struct {
-	Description string `json:"description" binding:"required"`
-	Score       int    `json:"score" binding:"required"`
-	Option      uint8  `json:"option" binding:"required"`
-	Note        string `json:"note" binding:"required"`
+	Description   string        `json:"description" binding:"required"`
+	Score         int           `json:"score" binding:"required"`
+	Option        uint8         `json:"option" binding:"required"`
+	Note          string        `json:"note" binding:"required"`
 	ChildrenItems []ScoringItem `json:"children_items"`
 }
 
 // CreateHomework 创建作业
 func (service *HomeworkService) CreateHomework() serializer.Response {
 	homework := model.Homework{
-		ClassID:  service.ClassID,
-		Type: service.Type,
+		ClassID:   service.ClassID,
+		Type:      service.Type,
 		Title:     service.Title,
-		Content: service.Content,
+		Content:   service.Content,
 		StartTime: service.StartTime,
-		EndTime: service.EndTime,
+		EndTime:   service.EndTime,
 	}
 
 	homework.ScoringItems = GetChildScoringItems(service.ScoringItems, 1)
@@ -71,14 +71,26 @@ func GetChildScoringItems(target []ScoringItem, level int) []model.ScoringItem {
 	for _, item := range target {
 		items = append(items, model.ScoringItem{
 			Description: item.Description,
-			Score:   item.Score,
-			Option: item.Option,
-			Note: item.Note,
-			Level:   level,
+			Score:       item.Score,
+			Option:      item.Option,
+			Note:        item.Note,
+			Level:       level,
 		})
 		if item.ChildrenItems != nil {
 			items = append(items, GetChildScoringItems(item.ChildrenItems, level+1)...)
 		}
 	}
 	return items
+}
+
+// AssignedToAssistantService 将评分项一级项分配给助教
+func (scoringItem *ScoringItem) AssignedToAssistantService(assistantID uint) []model.ScoringItem {
+	var aim []ScoringItem
+	aim = append(aim, *scoringItem)
+	var result []model.ScoringItem
+	result = GetChildScoringItems(aim, 1)
+	for i, _ := range result {
+		result[i].AssistantID = assistantID
+	}
+	return result
 }
