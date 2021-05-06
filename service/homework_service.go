@@ -87,9 +87,8 @@ func GetChildScoringItems(target []ScoringItem, level int) []model.ScoringItem {
 func (scoringItem *ScoringItem) AssignedToAssistantService(assistantID uint) []model.ScoringItem {
 	var aim []ScoringItem
 	aim = append(aim, *scoringItem)
-	var result []model.ScoringItem
-	result = GetChildScoringItems(aim, 1)
-	for i, _ := range result {
+	result := GetChildScoringItems(aim, 1)
+	for i := range result {
 		result[i].AssistantID = assistantID
 	}
 	return result

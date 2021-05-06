@@ -10,12 +10,12 @@ import (
 
 func TestGetChildScoringItems(t *testing.T) {
 	homeworkService := HomeworkService{
-		ClassID: 1,
-		Type: 1,
-		Title: "pia pia pia",
-		Content: "content pia pia",
-		StartTime:  time.Now(),
-		EndTime:  time.Now(),
+		ClassID:   1,
+		Type:      1,
+		Title:     "pia pia pia",
+		Content:   "content pia pia",
+		StartTime: time.Now(),
+		EndTime:   time.Now(),
 		ScoringItems: []ScoringItem{
 			{
 				Description: "1",
@@ -27,23 +27,23 @@ func TestGetChildScoringItems(t *testing.T) {
 								Description: "10",
 								ChildrenItems: []ScoringItem{
 									{
-										Description:       "14",
+										Description:   "14",
 										ChildrenItems: nil,
 									},
 									{
-										Description:       "15",
+										Description:   "15",
 										ChildrenItems: nil,
 									},
 								},
 							},
 							{
-								Description:       "11",
+								Description:   "11",
 								ChildrenItems: nil,
 							},
 						},
 					},
 					{
-						Description:       "6",
+						Description:   "6",
 						ChildrenItems: nil,
 					},
 				},
@@ -55,21 +55,21 @@ func TestGetChildScoringItems(t *testing.T) {
 						Description: "7",
 						ChildrenItems: []ScoringItem{
 							{
-								Description:       "12",
+								Description:   "12",
 								ChildrenItems: nil,
 							},
 							{
-								Description:       "13",
+								Description:   "13",
 								ChildrenItems: nil,
 							},
 						},
 					},
 					{
-						Description:       "8",
+						Description:   "8",
 						ChildrenItems: nil,
 					},
 					{
-						Description:       "9",
+						Description:   "9",
 						ChildrenItems: nil,
 					},
 				},
@@ -80,55 +80,55 @@ func TestGetChildScoringItems(t *testing.T) {
 	except := []model.ScoringItem{
 		{
 			Description: "1",
-			Level:   1,
+			Level:       1,
 		},
 		{
 			Description: "5",
-			Level:   2,
+			Level:       2,
 		},
 		{
 			Description: "10",
-			Level:   3,
+			Level:       3,
 		},
 		{
 			Description: "14",
-			Level:   4,
+			Level:       4,
 		},
 		{
 			Description: "15",
-			Level:   4,
+			Level:       4,
 		},
 		{
 			Description: "11",
-			Level:   3,
+			Level:       3,
 		},
 		{
 			Description: "6",
-			Level:   2,
+			Level:       2,
 		},
 		{
 			Description: "2",
-			Level:   1,
+			Level:       1,
 		},
 		{
 			Description: "7",
-			Level:   2,
+			Level:       2,
 		},
 		{
 			Description: "12",
-			Level:   3,
+			Level:       3,
 		},
 		{
 			Description: "13",
-			Level:   3,
+			Level:       3,
 		},
 		{
 			Description: "8",
-			Level:   2,
+			Level:       2,
 		},
 		{
 			Description: "9",
-			Level:   2,
+			Level:       2,
 		},
 	}
 
