@@ -13,8 +13,8 @@ func TestHomework(t *testing.T) {
 		Type: 1,
 		Title: "pia pia pia",
 		Content: "content pia pia",
-		StartTime:  time.Now(),
-		EndTime:  time.Now(),
+		//StartTime:  time.Now(),
+		//EndTime:  time.Now(),
 		ScoringItems: []model.ScoringItem{
 			{
 				Description: "9",
