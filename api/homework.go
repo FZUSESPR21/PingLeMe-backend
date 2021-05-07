@@ -24,7 +24,7 @@ func ViewHomework(c *gin.Context) {
 	var homeworkDetailService service.HomeworkDetailService
 	if err := c.ShouldBind(&homeworkDetailService); err == nil {
 		homeworkDetailService.HomeworkRepositoryInterface = &model.Repo
-		intID, _ := strconv.Atoi(c.Param("id"))
+		intID, _ := strconv.Atoi(c.Param("homework_id"))
 		uintID := uint(intID)
 		res := homeworkDetailService.ViewHomework(uintID)
 		c.JSON(200, res)

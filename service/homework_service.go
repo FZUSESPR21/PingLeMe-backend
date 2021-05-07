@@ -14,8 +14,8 @@ type HomeworkService struct {
 	Type         uint8         `json:"type" binding:"required"`
 	Title        string        `json:"title" binding:"required"`
 	Content      string        `json:"content" binding:"required"`
-	StartTime    time.Time     `json:"start_time" binding:"required"`
-	EndTime      time.Time     `json:"end_time" binding:"required"`
+	StartTime    time.Time     `json:"start_time"`
+	EndTime      time.Time     `json:"end_time"`
 	ScoringItems []ScoringItem `json:"scoring_items"`
 }
 
