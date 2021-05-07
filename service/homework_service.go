@@ -17,6 +17,13 @@ type HomeworkService struct {
 	ScoringItems []ScoringItem `json:"scoring_items"`
 }
 
+type HomeworkListService struct {
+	model.HomeworkRepositoryInterface
+	ClassID		uint			`json:"class_id" binding:"required"`
+	PageSize	int				`json:"page_size" binding:"required"`
+	Page		int				`json:"page" binding:"required"`
+}
+
 type HomeworkDetailService struct {
 	model.HomeworkRepositoryInterface
 }
@@ -53,7 +60,19 @@ func (service *HomeworkService) CreateHomework() serializer.Response {
 	}
 }
 
-// ViewHomework 查看作业
+// ViewHomeworkList 查看作业列表
+func (service *HomeworkListService) ViewHomeworkList() serializer.Response {
+	homework, err := service.GetAllHomeworkByPage(service.ClassID, service.Page, service.PageSize)
+	if err != nil {
+		return serializer.ParamErr("", err)
+	}
+	return serializer.Response{
+		Code: 0,
+		Data: serializer.BuildHomeworkList(homework),
+	}
+}
+
+// ViewHomework 查看作业详情
 func (service *HomeworkDetailService) ViewHomework(ID uint) serializer.Response {
 	homework, err := service.GetHomeworkByID(ID)
 	if err != nil {

@@ -17,6 +17,16 @@ type Homework struct {
 	ScoringItems []ScoringItem `json:"scoring_items"`
 }
 
+// HomeworkList 作业列表序列化器
+type HomeworkListItem struct {
+	ClassID		 uint		   `json:"class_id"`
+	Type         uint8         `json:"type"`
+	Title        string        `json:"title"`
+	Content      string        `json:"content"`
+	StartTime    time.Time     `json:"start_time"`
+	EndTime      time.Time     `json:"end_time"`
+}
+
 // ScoringItem 评分项序列化器
 type ScoringItem struct {
 	Description string `json:"description"`
@@ -25,6 +35,20 @@ type ScoringItem struct {
 	Note        string `json:"note"`
 	//AssistantID       uint          `json:"assistant_id"`
 	ChildScoringItems []ScoringItem `json:"child_scoring_items"`
+}
+
+// BuildHomeworkList 序列化作业列表
+func BuildHomeworkList(homeworkList []model.Homework) []HomeworkListItem {
+	items := make([]HomeworkListItem, len(homeworkList))
+	for i := range items {
+		items[i].ClassID = homeworkList[i].ClassID
+		items[i].Type = homeworkList[i].Type
+		items[i].Title = homeworkList[i].Title
+		items[i].Content = homeworkList[i].Content
+		items[i].StartTime = homeworkList[i].StartTime
+		items[i].EndTime = homeworkList[i].EndTime
+	}
+	return items
 }
 
 // BuildHomework 序列化作业

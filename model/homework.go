@@ -35,6 +35,7 @@ type ScoringItem struct {
 type HomeworkRepositoryInterface interface {
 	GetHomeworkByID(ID uint) (Homework, error)
 	SetHomework(homework Homework) error
+	GetAllHomeworkByPage(classID uint, page int, pageSize int) ([]Homework, error)
 }
 
 // GetHomeworkByID 获得某个特定ID的作业
@@ -66,6 +67,15 @@ func (scoringItem *ScoringItem) AssignedToAssistant(assistantID uint) (ScoringIt
 	scoringItem.AssistantID = assistantID
 	return *scoringItem, nil
 }
+
+// GetAllHomeworkByPage 获得某个班级布置的所有作业中的一页
+func (Repo *Repository) GetAllHomeworkByPage(classID uint, page int, pageSize int) ([]Homework, error) {
+	var homework []Homework
+	result := Repo.DB.Limit(pageSize).Offset((page-1)*pageSize).Where("class_id = ?", classID).Find(&homework)
+	return homework, result.Error
+}
+
+
 
 // GetAllHomework 获得某个班级布置的所有作业
 func (class *Class) GetAllHomework() ([]Homework, error) {
