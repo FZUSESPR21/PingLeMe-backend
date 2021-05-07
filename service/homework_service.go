@@ -65,7 +65,7 @@ func (service *HomeworkDetailService) ViewHomework(ID uint) serializer.Response 
 	}
 }
 
-// GetChildrenItems 递归获取子项
+// GetChildScoringItems 递归获取子项
 func GetChildScoringItems(target []ScoringItem, level int) []model.ScoringItem {
 	items := make([]model.ScoringItem, 0)
 	for _, item := range target {
