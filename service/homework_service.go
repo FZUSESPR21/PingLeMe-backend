@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+const PAGESIZE = 6
+
 type HomeworkService struct {
 	model.HomeworkRepositoryInterface
 	ClassID      uint          `json:"class_id" binding:"required"`
@@ -19,9 +21,8 @@ type HomeworkService struct {
 
 type HomeworkListService struct {
 	model.HomeworkRepositoryInterface
-	ClassID		uint			`json:"class_id" binding:"required"`
-	PageSize	int				`json:"page_size" binding:"required"`
-	Page		int				`json:"page" binding:"required"`
+	ClassID uint `json:"class_id" binding:"required"`
+	Page    int  `json:"page" binding:"required"`
 }
 
 type HomeworkDetailService struct {
@@ -62,13 +63,14 @@ func (service *HomeworkService) CreateHomework() serializer.Response {
 
 // ViewHomeworkList 查看作业列表
 func (service *HomeworkListService) ViewHomeworkList() serializer.Response {
-	homework, err := service.GetAllHomeworkByPage(service.ClassID, service.Page, service.PageSize)
+	sum := service.CountHomework(service.ClassID)
+	homework, err := service.GetAllHomeworkByPage(service.ClassID, service.Page, PAGESIZE)
 	if err != nil {
 		return serializer.ParamErr("", err)
 	}
 	return serializer.Response{
 		Code: 0,
-		Data: serializer.BuildHomeworkList(homework),
+		Data: serializer.BuildHomeworkList(homework, (sum/PAGESIZE)+1, service.Page),
 	}
 }
 

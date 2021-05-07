@@ -36,6 +36,7 @@ type HomeworkRepositoryInterface interface {
 	GetHomeworkByID(ID uint) (Homework, error)
 	SetHomework(homework Homework) error
 	GetAllHomeworkByPage(classID uint, page int, pageSize int) ([]Homework, error)
+	CountHomework(classID uint) int
 }
 
 // GetHomeworkByID 获得某个特定ID的作业
@@ -75,7 +76,12 @@ func (Repo *Repository) GetAllHomeworkByPage(classID uint, page int, pageSize in
 	return homework, result.Error
 }
 
-
+// CountHomework 获得某个班级作业总数
+func (Repo *Repository) CountHomework(classID uint) int {
+	var sum int
+	Repo.DB.Raw("select count(id) from homework where class_id = ? ", classID).Scan(&sum)
+	return sum
+}
 
 // GetAllHomework 获得某个班级布置的所有作业
 func (class *Class) GetAllHomework() ([]Homework, error) {

@@ -24,7 +24,7 @@ func ViewHomework(c *gin.Context) {
 	var homeworkDetailService service.HomeworkDetailService
 	if err := c.ShouldBind(&homeworkDetailService); err == nil {
 		homeworkDetailService.HomeworkRepositoryInterface = &model.Repo
-		intID,_ := strconv.Atoi(c.Param("id"))
+		intID, _ := strconv.Atoi(c.Param("id"))
 		uintID := uint(intID)
 		res := homeworkDetailService.ViewHomework(uintID)
 		c.JSON(200, res)
@@ -33,7 +33,7 @@ func ViewHomework(c *gin.Context) {
 	}
 }
 
-// ViewHomeworkList 查看作业的接口
+// ViewHomeworkList 查看作业列表的接口
 func ViewHomeworkList(c *gin.Context) {
 	var homeworkListService service.HomeworkListService
 	if err := c.ShouldBind(&homeworkListService); err == nil {
