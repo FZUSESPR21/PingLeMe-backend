@@ -27,6 +27,7 @@ type HomeworkListService struct {
 
 type HomeworkDetailService struct {
 	model.HomeworkRepositoryInterface
+	HomeworkID	 uint			`json:"homework_id"`
 }
 
 // ScoringItem 评分项模型

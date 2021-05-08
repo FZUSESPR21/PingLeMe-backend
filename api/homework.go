@@ -4,7 +4,6 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 // CreateHomework 创建作业的接口
@@ -24,9 +23,7 @@ func ViewHomework(c *gin.Context) {
 	var homeworkDetailService service.HomeworkDetailService
 	if err := c.ShouldBind(&homeworkDetailService); err == nil {
 		homeworkDetailService.HomeworkRepositoryInterface = &model.Repo
-		intID, _ := strconv.Atoi(c.Param("homework_id"))
-		uintID := uint(intID)
-		res := homeworkDetailService.ViewHomework(uintID)
+		res := homeworkDetailService.ViewHomework(homeworkDetailService.HomeworkID)
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, ErrorResponse(err))

@@ -22,6 +22,19 @@ type TeamBlogScore struct {
 	Grade         int `gorm:"type:int;not null"`
 }
 
+type BlogScoreRepositoryInterface interface {
+	SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error
+}
+
+// SetPersonalBlogScore 保存作业
+func (Repo *Repository) SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error {
+	result := Repo.DB.Create(&personalBlogScore)
+	return result.Error
+}
+
+
+
+
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {
 	var personalBlogScore PersonalBlogScore
