@@ -22,21 +22,49 @@ type Homework struct {
 // ScoringItem 评分项模型
 type ScoringItem struct {
 	gorm.Model
-	HomeworkID   uint   `gorm:"type:int;not null"`
-	Description  string `gorm:"type:varchar(255);not null"`
-	Score        int    `gorm:"type:int;not null"`
-	Option       uint8  `gorm:"type:int;not null"`
-	Note         string `gorm:"type:varchar(255)"`
-	AssistantID  uint   `gorm:"type:int;not null"`
-	ParentItemID uint   `gorm:"type:int;not null"`
-	Sequence     int    `gorm:"type:int;not null"`
+	HomeworkID  uint   `gorm:"type:int;not null"`
+	Description string `gorm:"type:varchar(255);not null"`
+	Score       int    `gorm:"type:int;not null;default:-1"`
+	Option      uint8  `gorm:"type:int;not null"`
+	Note        string `gorm:"type:varchar(255)"`
+	AssistantID uint   `gorm:"type:int;not null"`
+	Level       int    `gorm:"not null;default:0"`
+	Index       int    `gorm:"type:int;not null"`
+}
+
+type HomeworkRepositoryInterface interface {
+	GetHomeworkByID(ID uint) (Homework, error)
+	SetHomework(homework Homework) error
 }
 
 // GetHomeworkByID 获得某个特定ID的作业
-func (Repo *Repository) GetHomeworkByID(ID interface{}) (Homework, error) {
+func (Repo *Repository) GetHomeworkByID(ID uint) (Homework, error) {
 	var homework Homework
 	result := Repo.DB.First(&homework, ID)
-	return homework, result.Error
+	if result.Error != nil {
+		return Homework{}, result.Error
+	}
+
+	var items []ScoringItem
+	result = Repo.DB.Order("index desc").Where("homework_id = ?", ID).Find(&items)
+	if result.Error != nil {
+		return Homework{}, result.Error
+	}
+	homework.ScoringItems = items
+
+	return homework, nil
+}
+
+// SetHomework 保存作业
+func (Repo *Repository) SetHomework(homework Homework) error {
+	result := Repo.DB.Create(&homework)
+	return result.Error
+}
+
+// AssignedToAssistant 分配给助教
+func (scoringItem *ScoringItem) AssignedToAssistant(assistantID uint) (ScoringItem, error) {
+	scoringItem.AssistantID = assistantID
+	return *scoringItem, nil
 }
 
 // GetAllHomework 获得某个班级布置的所有作业
@@ -60,12 +88,12 @@ func (user *User) GetAssignedScoringItem() ([]ScoringItem, error) {
 	return scoringItem, result.Error
 }
 
-// GetSonScoringItems 获得某个评分项的所有下层子项
-func (scoringItem *ScoringItem) GetSonScoringItems() ([]ScoringItem, error) {
-	var scoringItems []ScoringItem
-	result := Repo.DB.Where("parent_item_id = ?", scoringItem.ID).Find(scoringItem)
-	return scoringItems, result.Error
-}
+//// GetSonScoringItems 获得某个评分项的所有下层子项
+//func (scoringItem *ScoringItem) GetSonScoringItems() ([]ScoringItem, error) {
+//	var scoringItems []ScoringItem
+//	result := Repo.DB.Where("parent_item_id = ?", scoringItem.ID).Find(scoringItem)
+//	return scoringItems, result.Error
+//}
 
 // AddHomework 布置新作业
 func (Repo *Repository) AddHomework(homework Homework) error {
@@ -73,11 +101,11 @@ func (Repo *Repository) AddHomework(homework Homework) error {
 	return result.Error
 }
 
-// AddScoringItem 增加评分项
-func (homework *Homework) AddScoringItem(scoringItem ScoringItem) error {
-	result := Repo.DB.Create(&scoringItem)
-	return result.Error
-}
+//// AddScoringItem 增加评分项
+//func (homework *Homework) AddScoringItem(scoringItem ScoringItem) error {
+//	result := Repo.DB.Create(&scoringItem)
+//	return result.Error
+//}
 
 // DeleteHomework 删除某个作业
 func (Repo *Repository) DeleteHomework(homeworkID uint) error {
@@ -85,11 +113,11 @@ func (Repo *Repository) DeleteHomework(homeworkID uint) error {
 	return result.Error
 }
 
-// DeleteScoringItem 删除该作业的某个评分项
-func (homework *Homework) DeleteScoringItem(scoringItemID uint) error {
-	result := Repo.DB.Delete(&ScoringItem{}, scoringItemID)
-	return result.Error
-}
+//// DeleteScoringItem 删除该作业的某个评分项
+//func (homework *Homework) DeleteScoringItem(scoringItemID uint) error {
+//	result := Repo.DB.Delete(&ScoringItem{}, scoringItemID)
+//	return result.Error
+//}
 
 // UpdateHomework 更改作业信息
 func (Repo *Repository) UpdateHomework(homework Homework) error {
