@@ -41,7 +41,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 	}
 
 	tmpMap := make(map[string]model.Class)
-	errMsgs := make(map[int]ErrorRecord, 0)
+	errMsgs := make(map[int]ErrorRecord)
 
 	for index, row := range rows {
 		var class model.Class
@@ -75,7 +75,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 				class = c
 			}
 		} else {
-			class, _ = tmpMap[row[2]]
+			class = tmpMap[row[2]]
 		}
 
 		user := model.User{
