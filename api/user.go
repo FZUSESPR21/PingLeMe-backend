@@ -38,3 +38,33 @@ func UserLogout(c *gin.Context) {
 		Msg:  "登出成功",
 	})
 }
+
+func GetTeacherList(c *gin.Context)  {
+	var service service.GetTeacherListService
+	res := service.GetTeacherList()
+	c.JSON(200, res)
+}
+
+
+
+func AddTeachers(c *gin.Context)  {
+	var service service.AddTeacherService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.AddTeacher()
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}
+
+func GetTeachers(c *gin.Context)  {
+	var service service.GetTeacherListService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.GetTeacherList()
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}
