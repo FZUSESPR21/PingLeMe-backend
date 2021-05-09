@@ -8,11 +8,11 @@ import (
 type CreateTeamService struct {
 	model.TeamRepositoryInterface
 	Name          string `form:"name" json:"name"`
-	GroupLeaderId int `form:"group_leader_id" json:"group_leader_id"`
-	ClassId       int `form:"class_id" json:"class_id"`
+	GroupLeaderId int    `form:"group_leader_id" json:"group_leader_id"`
+	ClassId       int    `form:"class_id" json:"class_id"`
 }
 
-func makeTeam(name string, groupLeaderId int, classId int) model.Team{
+func makeTeam(name string, groupLeaderId int, classId int) model.Team {
 	var team model.Team
 	team.Name = name
 	team.GroupLeaderID = groupLeaderId

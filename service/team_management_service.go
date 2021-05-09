@@ -7,8 +7,6 @@ import (
 	"PingLeMe-Backend/serializer"
 	"errors"
 	"gorm.io/gorm"
-
-	"github.com/gin-gonic/gin"
 )
 
 // TeamChargeService 组长管理团队的服务
@@ -22,7 +20,8 @@ type TeamManagementService struct {
 }
 
 // Create 组长创建团队
-func (service *TeamManagementService) Create(c *gin.Context, team model.Team) serializer.Response {
+func (service *TeamManagementService) Create() serializer.Response {
+	var team model.Team
 	team.Number = service.Number
 	team.Name = service.Name
 	team.GroupLeaderID = service.GroupLeaderID
@@ -45,7 +44,7 @@ func (service *TeamManagementService) Create(c *gin.Context, team model.Team) se
 }
 
 //Add 组长添加组员
-func (service *TeamManagementService) Add(c *gin.Context, ID interface{}, user model.User) serializer.Response {
+func (service *TeamManagementService) Add(ID interface{}, user model.User) serializer.Response {
 	team, err := service.GetTeam(ID)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return serializer.ParamErr("创建团队错误", nil)
@@ -57,7 +56,7 @@ func (service *TeamManagementService) Add(c *gin.Context, ID interface{}, user m
 }
 
 //Delete 组长删除组员
-func (service *TeamManagementService) Delete(c *gin.Context, ID interface{}, user model.User, index int) serializer.Response {
+func (service *TeamManagementService) Delete(ID interface{}, user model.User, index int) serializer.Response {
 	team, err := service.GetTeam(ID)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return serializer.ParamErr("创建团队错误", nil)
@@ -69,7 +68,7 @@ func (service *TeamManagementService) Delete(c *gin.Context, ID interface{}, use
 }
 
 //Edit 组长修改团队信息
-func (service *TeamManagementService) Edit(c *gin.Context, ID interface{}, name string) serializer.Response {
+func (service *TeamManagementService) Edit(ID interface{}, name string) serializer.Response {
 	team, err := service.GetTeam(ID)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return serializer.ParamErr("获取团队信息错误", nil)

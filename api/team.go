@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateTeam(c *gin.Context)  {
+func CreateTeam(c *gin.Context) {
 	var service service.CreateTeamService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
@@ -17,7 +17,7 @@ func CreateTeam(c *gin.Context)  {
 	}
 }
 
-func AddTeammate(c *gin.Context)  {
+func AddTeammate(c *gin.Context) {
 	var service service.TeammateSetService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
@@ -29,7 +29,7 @@ func AddTeammate(c *gin.Context)  {
 	}
 }
 
-func DeleteTeammate(c *gin.Context)  {
+func DeleteTeammate(c *gin.Context) {
 	var service service.TeammateSetService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo

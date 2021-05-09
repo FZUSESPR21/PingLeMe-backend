@@ -10,11 +10,11 @@ type TeammateSetService struct {
 	model.TeamRepositoryInterface
 	model.UserRepositoryInterface
 	gorm.Model
-	UID string `form:"uid" json:"uid"`
-	TeamNumber int `form:"teamNumber" json:"teamNumber"`
+	UID        string `form:"uid" json:"uid"`
+	TeamNumber int    `form:"teamNumber" json:"teamNumber"`
 }
 
-func makeStu(uid string) model.User{
+func makeStu(uid string) model.User {
 	var student model.User
 	student.UID = uid
 	return student
@@ -30,7 +30,7 @@ func (service *TeammateSetService) AddTeammate() serializer.Response {
 		return serializer.DBErr("数据获取错误", err)
 	}
 
-	if has, err = service.AddTeammateByID(int(user.ID),service.TeamNumber); err != nil {
+	if has, err = service.AddTeammateByID(int(user.ID), service.TeamNumber); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	}
 
