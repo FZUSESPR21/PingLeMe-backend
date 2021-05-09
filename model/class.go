@@ -17,23 +17,25 @@ type Class struct {
 
 // TeacherClass 教师-班级
 type TeacherClass struct {
-	TeacherID	uint
-	ClassID		uint
+	TeacherID uint
+	ClassID   uint
 }
 
 // StudentClass 学生-班级
 type StudentClass struct {
-	StudentID 	uint
-	ClassID		uint
+	StudentID uint
+	ClassID   uint
 }
 
 type ClassRepositoryInterface interface {
 	GetClassByID(ID interface{}) (Class, error)
 	AddClass(name string) (Class, error)
 	DeleteClass(classID interface{}) error
-	UpdateClassName(name string) error
+	UpdateClassName(class Class, name string) error
 	GetClassByName(name string) (Class, error)
 	AddStudent(class Class, student User) error
+	AddTeacher(class Class, teacher User) error
+	DeleteTeacher(class Class, teacher User) error
 }
 
 // GetClassByID 通过班级ID获取班级

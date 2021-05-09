@@ -3,7 +3,7 @@ module PingLeMe-Backend
 go 1.15
 
 require (
-	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0 // indirect
+	github.com/360EntSecGroup-Skylar/excelize/v2 v2.4.0
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.3

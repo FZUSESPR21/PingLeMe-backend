@@ -149,7 +149,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 		}
 	}
 	return serializer.Response{
-		Code:  0,
-		Data:  errMsgs,
+		Code: 0,
+		Data: errMsgs,
 	}
 }

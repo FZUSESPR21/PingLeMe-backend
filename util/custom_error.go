@@ -17,6 +17,5 @@ func (err *InterfaceTypeErr) Error() string {
 }
 
 func (err *RecordAlreadyExistErr) Error() string {
-	return "record already exist in " + "row :" + strconv.Itoa(err.Row + 2) + "."
+	return "record already exist in " + "row :" + strconv.Itoa(err.Row+2) + "."
 }
-

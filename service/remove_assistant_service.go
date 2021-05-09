@@ -27,7 +27,7 @@ func (service *RemoveAssistantService) RemoveAssistant() serializer.Response {
 		return serializer.ParamErr("获取助教失败", err2)
 	}
 
-	err3 := class.DeleteTeacher(assistant)
+	err3 := service.DeleteTeacher(class, assistant)
 	if err3 != nil {
 		return serializer.DBErr("移除助教失败", err3)
 	}
