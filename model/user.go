@@ -13,8 +13,8 @@ type User struct {
 	UID            string `gorm:"type:varchar(9);not null;unique"`
 	PasswordDigest string `gorm:"type:varchar(30);not null"`
 	Nickname       string `gorm:"type:varchar(20);not null;unique"`
-	PairStatus       string `gorm:"type:varchar(20);default:'暂无结对';unique"`
-	TeamStatus       string `gorm:"type:varchar(20);default:'暂无团队';unique"`
+	PairStatus     string `gorm:"type:varchar(20);default:'暂无结对';unique"`
+	TeamStatus     string `gorm:"type:varchar(20);default:'暂无团队';unique"`
 	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
@@ -50,7 +50,7 @@ func (Repo *Repository) GetUser(ID interface{}) (User, error) {
 }
 
 // GetUserID 返回用户ID
-func (Repo *Repository) GetUserID(user User) uint{
+func (Repo *Repository) GetUserID(user User) uint {
 	return user.ID
 }
 

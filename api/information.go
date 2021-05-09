@@ -10,7 +10,7 @@ import (
 )
 
 // Information 学生、助教、老师信息
-func Information(c *gin.Context) serializer.Response{
+func Information(c *gin.Context) serializer.Response {
 
 	if user, _ := c.Get("user"); user != nil {
 		if u, ok := user.(model.User); ok {
@@ -22,7 +22,7 @@ func Information(c *gin.Context) serializer.Response{
 }
 
 // FillInPairInformation 填写结对信息
-func FillInPairInformation(c *gin.Context,stuUID int) {
+func FillInPairInformation(c *gin.Context, stuUID int) {
 	var service service.EditPairIndormationService
 	if user, _ := c.Get("user"); user != nil {
 		if u, ok := user.(model.User); ok {
