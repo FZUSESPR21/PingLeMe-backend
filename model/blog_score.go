@@ -24,16 +24,20 @@ type TeamBlogScore struct {
 
 type BlogScoreRepositoryInterface interface {
 	SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error
+	SetTeamBlogScore(teamBlogScore []TeamBlogScore) error
 }
 
-// SetPersonalBlogScore 保存作业
+// SetPersonalBlogScore 保存个人作业成绩
 func (Repo *Repository) SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error {
 	result := Repo.DB.Create(&personalBlogScore)
 	return result.Error
 }
 
-
-
+// SetTeamBlogScore 保存团队作业成绩
+func (Repo *Repository) SetTeamBlogScore(teamBlogScore []TeamBlogScore) error {
+	result := Repo.DB.Create(&teamBlogScore)
+	return result.Error
+}
 
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {
