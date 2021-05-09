@@ -31,7 +31,7 @@ func (service *CreateClassService) CreateClass(teacherID int) serializer.Respons
 		return serializer.ParamErr("", err2)
 	}
 
-	err1 = class.AddTeacher(teacher)
+	err1 = service.AddTeacher(class, teacher)
 	if err1 != nil {
 		return serializer.DBErr("", err1)
 	}
@@ -42,7 +42,7 @@ func (service *CreateClassService) CreateClass(teacherID int) serializer.Respons
 			return serializer.ParamErr("", err3)
 		}
 
-		err1 = class.AddTeacher(assistant)
+		err1 = service.AddTeacher(class, assistant)
 		if err1 != nil {
 			return serializer.DBErr("分配助教失败", err1)
 		}

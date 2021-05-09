@@ -14,6 +14,9 @@ type User struct {
 	Password  string `json:"password"`
 	CreatedAt int64  `json:"created_at"`
 	Role 	  uint8  `json:"role"`
+	UID      uint   `json:"uid"`
+	UserName string `json:"user_name"`
+	Role     uint8  `json:"role"`
 }
 
 // BuildUser 序列化用户
@@ -43,5 +46,4 @@ func BuildUserResponse(user model.User)Response {
 	return Response{
 		Data: BuildUser(user),
 	}
-
 }
