@@ -9,7 +9,7 @@ import (
 )
 
 // GetHomeworkList 获取作业列表的接口
-func GetHomeworkList(c *gin.Context){
+func GetHomeworkList(c *gin.Context) {
 	var service service.HomeworkListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.HomeworkRepositoryInterface = &model.Repo

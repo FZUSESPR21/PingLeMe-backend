@@ -11,8 +11,8 @@ import (
 type HomeworkListService struct {
 	model.HomeworkRepositoryInterface
 	model.ClassRepositoryInterface
-	ClassID      uint          `json:"class_id" binding:"required"`
-	Page		 int		   `json:"page"`
+	ClassID uint `json:"class_id" binding:"required"`
+	Page    int  `json:"page"`
 }
 
 // GetHomeworkList 获取作业列表函数
@@ -28,7 +28,7 @@ func (service *HomeworkListService) GetHomeworkList() serializer.Response {
 	}
 
 	pages := len(homeworks) / 5
-	homeworks = homeworks[(service.Page - 1) * 5 : (service.Page - 1) * 5 + 5]
+	homeworks = homeworks[(service.Page-1)*5 : (service.Page-1)*5+5]
 
 	return serializer.Response{
 		Code: 0,

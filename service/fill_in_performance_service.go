@@ -10,16 +10,16 @@ import (
 // FillInPerformanceService 填写绩效的服务
 type FillInPerformanceService struct {
 	model.PerformanceRepositoryInterface
-	HomeworkID	int	`form:"homework_id" json:"homework_id" binding:"required"`
-	StudentID	int `form:"student_id" json:"student_id" binding:"required"`
-	Percentage	int	`form:"percentage" json:"percentage" binding:"required"`
+	HomeworkID int `form:"homework_id" json:"homework_id" binding:"required"`
+	StudentID  int `form:"student_id" json:"student_id" binding:"required"`
+	Percentage int `form:"percentage" json:"percentage" binding:"required"`
 }
 
 // FillInPerformance 填写绩效函数
-func (service *FillInPerformanceService) FillInPerformance() serializer.Response{
+func (service *FillInPerformanceService) FillInPerformance() serializer.Response {
 	performance := model.Performance{
 		HomeworkID: service.HomeworkID,
-		StudentID: service.StudentID,
+		StudentID:  service.StudentID,
 		Percentage: service.Percentage,
 	}
 	_, err := service.SetPerformance(performance)

@@ -7,11 +7,12 @@ import (
 
 type SetClassInfoService struct {
 	model.ClassRepositoryInterface
-	Name  string `form:"class_name" json:"class_name"`
+	Name string `form:"class_name" json:"class_name"`
 }
+
 //TODO 接口缺失 form:"class_name"
 func (service *SetClassInfoService) SetClassInfo() serializer.Response {
-	if has,err := service.GetClassByName(service.Name); err != nil {
+	if has, err := service.GetClassByName(service.Name); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	} else if has == 1 {
 		return serializer.DBErr("班级名称已存在！", err)
@@ -24,4 +25,3 @@ func (service *SetClassInfoService) SetClassInfo() serializer.Response {
 		Msg:  "Success",
 	}
 }
-

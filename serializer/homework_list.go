@@ -6,9 +6,9 @@ import "PingLeMe-Backend/model"
 
 // HomeworkList 作业列表序列化器
 type HomeworkList struct {
-	TotalPage		int			`json:"total_page"`
-	CurrentPage		int			`json:"current_page"`
-	List			[]Homework	`json:"list"`
+	TotalPage   int        `json:"total_page"`
+	CurrentPage int        `json:"current_page"`
+	List        []Homework `json:"list"`
 }
 
 // BuildHomeworkList 序列化作业列表
