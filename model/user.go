@@ -13,6 +13,8 @@ type User struct {
 	UID            string `gorm:"type:varchar(9);not null;unique"`
 	PasswordDigest string `gorm:"type:varchar(30);not null"`
 	Nickname       string `gorm:"type:varchar(20);not null;unique"`
+	PairStatus       string `gorm:"type:varchar(20);default:'暂无结对';unique"`
+	TeamStatus       string `gorm:"type:varchar(20);default:'暂无团队';unique"`
 	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
@@ -37,6 +39,7 @@ type UserRepositoryInterface interface {
 	SetUser(user User) error
 	SetUsers(user []User) error
 	DeleteUser(ID interface{}) error
+	GetUserID(user User) uint
 }
 
 // GetUser 用ID获取用户
@@ -44,6 +47,11 @@ func (Repo *Repository) GetUser(ID interface{}) (User, error) {
 	var user User
 	result := Repo.DB.First(&user, ID)
 	return user, result.Error
+}
+
+// GetUserID 返回用户ID
+func (Repo *Repository) GetUserID(user User) uint{
+	return user.ID
 }
 
 // GetUserByUID 用UID获取用户

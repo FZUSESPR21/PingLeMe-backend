@@ -21,6 +21,7 @@ type PairRepositoryInterface interface {
 	DeletePair(ID int) error
 	DeletePairByStudentID(ID int) error
 	UpdatePair(ID int, student1ID int, student2ID int) (Pair, error)
+	UpdatePairByStu(student1ID int, student2ID int) (int, error)
 }
 
 // GetPair 用ID获取结对
@@ -96,4 +97,55 @@ func (Repo *Repository) UpdatePair(ID int, student1ID int, student2ID int) (Pair
 		return Pair{}, result.Error
 	}
 	return pair, nil
+}
+
+// UpdatePair 更新Pair
+func (Repo *Repository) UpdatePairByStu(student1ID int, student2UID int) (int, error) {
+	//0为查询错误
+	//1为成功
+	//2为对方已与别人结对
+	//3为保存错误
+	var user UserRepositoryInterface
+	user1, err := user.GetUserByUID(string(student2UID))
+	if err != nil {
+		return 0, err
+	}
+	var student2IDu uint
+	student2IDu = user.GetUserID(user1)
+	var student2ID int
+	student2ID = int(student2IDu)
+
+	var pair1 Pair
+	result1 := Repo.DB.Where("student1_id = ?", student1ID).Or("student2_id = ?", student1ID).First(&pair1)
+	if result1.Error != nil {
+		return 0, result1.Error
+	}
+
+	var pair2 Pair
+	result2 := Repo.DB.Where("student1_id = ?", student2ID).Or("student2_id = ?", student2ID).First(&pair2)
+	if result2.Error != nil {
+		return 0, result2.Error
+	}
+	var t int
+	t = 0
+	if pair2.Student1ID == student2ID && (pair2.Student2ID == 0 || pair2.Student2ID == student1ID) {
+		t = 1
+	}
+	if (pair2.Student1ID == 0 || pair2.Student1ID == student1ID) && pair2.Student2ID == student2ID {
+		t = 1
+	}
+
+	if pair1.Student1ID == student1ID && t == 1{
+		pair1.Student2ID = student2ID
+	} else if pair1.Student2ID == student1ID && t == 1{
+		pair1.Student1ID = student2ID
+	} else {
+		return 2, nil//对方已和别人结对
+
+	}
+	result1 = Repo.DB.Save(&pair1)
+	if result1.Error != nil {
+		return 3, result1.Error
+	}
+	return 1, nil
 }
