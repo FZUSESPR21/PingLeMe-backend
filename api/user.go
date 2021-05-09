@@ -16,7 +16,7 @@ import (
 	"time"
 )
 
-var StudentImportFileDst string
+const StudentImportFileDst = "./.student_import/"
 
 // UserLogin 用户登录接口
 func UserLogin(c *gin.Context) {

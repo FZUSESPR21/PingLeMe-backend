@@ -3,7 +3,6 @@
 package conf
 
 import (
-	"PingLeMe-Backend/api"
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/util"
 	"fmt"
@@ -88,14 +87,6 @@ func Init() {
 		DBLogLevel = logger.Error
 	case "info":
 		DBLogLevel = logger.Info
-	}
-
-	// 学生导入Excel文件上传路径
-	dst := os.Getenv("STUDENT_IMPORT_DST")
-	if dst == "" {
-		api.StudentImportFileDst = "./.student_import/"
-	} else {
-		api.StudentImportFileDst = dst
 	}
 
 	// 连接数据库
