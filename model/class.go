@@ -18,7 +18,7 @@ type ClassRepositoryInterface interface {
 	GetClassByID(ID interface{}) (Class, error)
 	AddClass(name string) (Class, error)
 	DeleteClass(classID interface{}) error
-	UpdateClassName(name string) error
+	UpdateClassName(name string, class Class) error
 	GetClassByName(name string) (int64, error)
 }
 
@@ -95,6 +95,12 @@ func (class *Class) DeleteStudent(student User) error {
 
 // UpdateClassName 修改班级名字
 func (class *Class) UpdateClassName(name string) error {
+	result := Repo.DB.Model(&class).Update("name", name)
+	return result.Error
+}
+
+// UpdateClassName 修改班级名字
+func (Repo *Repository) UpdateClassName(name string, class Class) error {
 	result := Repo.DB.Model(&class).Update("name", name)
 	return result.Error
 }

@@ -37,6 +37,7 @@ func RemoveAssistant(c *gin.Context) {
 	var service service.RemoveAssistantService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
 		res := service.RemoveAssistant()
 		c.JSON(200, res)
 	} else {
