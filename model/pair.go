@@ -4,6 +4,7 @@ package model
 
 import (
 	"errors"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -106,7 +107,7 @@ func (Repo *Repository) UpdatePairByStu(student1ID int, student2UID int) (int, e
 	//2为对方已与别人结对
 	//3为保存错误
 	var user UserRepositoryInterface
-	user1, err := user.GetUserByUID(string(student2UID))
+	user1, err := user.GetUserByUID(fmt.Sprint(student2UID))
 	if err != nil {
 		return 0, err
 	}
@@ -135,12 +136,12 @@ func (Repo *Repository) UpdatePairByStu(student1ID int, student2UID int) (int, e
 		t = 1
 	}
 
-	if pair1.Student1ID == student1ID && t == 1{
+	if pair1.Student1ID == student1ID && t == 1 {
 		pair1.Student2ID = student2ID
-	} else if pair1.Student2ID == student1ID && t == 1{
+	} else if pair1.Student2ID == student1ID && t == 1 {
 		pair1.Student1ID = student2ID
 	} else {
-		return 2, nil//对方已和别人结对
+		return 2, nil //对方已和别人结对
 
 	}
 	result1 = Repo.DB.Save(&pair1)

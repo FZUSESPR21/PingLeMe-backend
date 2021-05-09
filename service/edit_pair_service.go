@@ -16,7 +16,7 @@ type EditPairIndormationService struct {
 // Edit 填写结对信息
 func (service *EditPairIndormationService) EditPairInformation() (int, error){
 	res, err := service.UpdatePairByStu(service.Student1ID, service.Student2ID)
-	if err.Error != nil {
+	if err != nil {
 		return 0, err
 	}
 	return res,nil
