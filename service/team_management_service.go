@@ -40,12 +40,7 @@ func (service *TeamManagementService) Create() serializer.Response {
 		return serializer.ParamErr("创建团队错误", nil)
 	}
 
-	team1, err := service.GetLastTeam()
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return serializer.ParamErr("查找团队错误", nil)
-	}
-
-	return serializer.BuildTeamResponse(team1)
+	return serializer.BuildTeamResponse(team)
 }
 
 //Add 组长添加组员
