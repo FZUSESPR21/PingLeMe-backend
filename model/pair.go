@@ -111,10 +111,8 @@ func (Repo *Repository) UpdatePairByStu(student1ID int, student2UID int) (int, e
 	if err != nil {
 		return 0, err
 	}
-	var student2IDu uint
-	student2IDu = user.GetUserID(user1)
-	var student2ID int
-	student2ID = int(student2IDu)
+	student2IDu := user.GetUserID(user1)
+	student2ID := int(student2IDu)
 
 	var pair1 Pair
 	result1 := Repo.DB.Where("student1_id = ?", student1ID).Or("student2_id = ?", student1ID).First(&pair1)
