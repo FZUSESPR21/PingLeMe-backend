@@ -4,6 +4,7 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // CreateHomework 创建作业的接口
@@ -12,9 +13,9 @@ func CreateHomework(c *gin.Context) {
 	if err := c.ShouldBind(&homeworkService); err == nil {
 		homeworkService.HomeworkRepositoryInterface = &model.Repo
 		res := homeworkService.CreateHomework()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -24,9 +25,9 @@ func ViewHomework(c *gin.Context) {
 	if err := c.ShouldBind(&homeworkDetailService); err == nil {
 		homeworkDetailService.HomeworkRepositoryInterface = &model.Repo
 		res := homeworkDetailService.ViewHomework(homeworkDetailService.HomeworkID)
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -36,8 +37,8 @@ func ViewHomeworkList(c *gin.Context) {
 	if err := c.ShouldBind(&homeworkListService); err == nil {
 		homeworkListService.HomeworkRepositoryInterface = &model.Repo
 		res := homeworkListService.ViewHomeworkList()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

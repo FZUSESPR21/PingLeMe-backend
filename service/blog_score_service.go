@@ -47,7 +47,7 @@ func (service *BlogScoreService) StorePersonalBlogScore() serializer.Response {
 	}
 }
 
-// StoreTeamBlogScore 存储个人博客成绩
+// StoreTeamBlogScore 存储博客团队成绩
 func (service *BlogScoreService) StoreTeamBlogScore() serializer.Response {
 	items := service.Items
 	var result []model.TeamBlogScore
@@ -68,3 +68,4 @@ func (service *BlogScoreService) StoreTeamBlogScore() serializer.Response {
 		Msg:  "Success",
 	}
 }
+

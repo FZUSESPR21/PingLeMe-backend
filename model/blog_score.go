@@ -27,7 +27,7 @@ type BlogScoreRepositoryInterface interface {
 	SetTeamBlogScore(teamBlogScore []TeamBlogScore) error
 }
 
-// SetPersonalBlogScore 保存个人作业成绩
+// SetPersonalBlogScore 保存个人作业成绩（接收前端发来的评分结果项）
 func (Repo *Repository) SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error {
 	result := Repo.DB.Create(&personalBlogScore)
 	return result.Error
@@ -39,19 +39,28 @@ func (Repo *Repository) SetTeamBlogScore(teamBlogScore []TeamBlogScore) error {
 	return result.Error
 }
 
+// CountPersonalBlogScoreItem 通过累加其所有下一级子项得到自身的得分
+//func (Repo *Repository) CountPersonalBlogScoreItem(fatherItem PersonalBlogScore, keeperID uint) error {
+//	return nil
+//}
+
+
+
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {
 	var personalBlogScore PersonalBlogScore
-	result := Repo.DB.Where("ID = ?", ID).Find(&personalBlogScore)
+	result := Repo.DB.Where("id = ?", ID).Find(&personalBlogScore)
 	return personalBlogScore, result.Error
 }
 
 // GetTeamBlogScoreByID 用ID获取团队博客成绩
 func (Repo *Repository) GetTeamBlogScoreByID(ID interface{}) (TeamBlogScore, error) {
 	var teamBlogScore TeamBlogScore
-	result := Repo.DB.Where("ID = ?", ID).Find(&teamBlogScore)
+	result := Repo.DB.Where("id = ?", ID).Find(&teamBlogScore)
 	return teamBlogScore, result.Error
 }
+
+
 
 // GetPersonalBlogScores 获取全部个人博客成绩    仍需修改！
 func (Repo *Repository) GetPersonalBlogScores(ID interface{}) (PersonalBlogScore, error) {

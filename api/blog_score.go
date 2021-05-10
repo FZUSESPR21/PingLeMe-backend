@@ -4,6 +4,7 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // SetPersonalBlogScore 保存个人博客得分项的接口
@@ -12,9 +13,9 @@ func SetPersonalBlogScore(c *gin.Context) {
 	if err := c.ShouldBind(&personalBlogScoreService); err == nil {
 		personalBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
 		res := personalBlogScoreService.StorePersonalBlogScore()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -24,8 +25,8 @@ func SetTeamBlogScore(c *gin.Context) {
 	if err := c.ShouldBind(&teamBlogScoreService); err == nil {
 		teamBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
 		res := teamBlogScoreService.StoreTeamBlogScore()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
