@@ -47,7 +47,7 @@ func UserLogout(c *gin.Context) {
 func GetTeacherList(c *gin.Context) {
 	var service service.GetTeacherListService
 	res := service.GetTeacherList()
-	c.JSON(200, res)
+	c.JSON(http.StatusOK, res)
 }
 
 func AddTeachers(c *gin.Context) {
@@ -55,9 +55,9 @@ func AddTeachers(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.AddTeacher()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -66,9 +66,9 @@ func GetTeachers(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.GetTeacherList()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
