@@ -39,6 +39,8 @@ type UserRepositoryInterface interface {
 	SetUser(user User) error
 	SetUsers(user []User) error
 	DeleteUser(ID interface{}) error
+	GetAllTeacher() (int64, []User, error)
+	AddTeacherByUser(teacher User) (int64, error)
 	GetUserID(user User) uint
 }
 
@@ -107,4 +109,15 @@ func (user *User) SetPassword(password string) error {
 func (user *User) CheckPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(user.PasswordDigest), []byte(password))
 	return err == nil
+}
+
+func (Repo *Repository) GetAllTeacher() (int64, []User, error) {
+	var user []User
+	result := Repo.DB.Where("role = 1").Find(&user)
+	return result.RowsAffected, user, result.Error
+}
+
+func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {
+	result := Repo.DB.Create(&teacher)
+	return result.RowsAffected, result.Error
 }
