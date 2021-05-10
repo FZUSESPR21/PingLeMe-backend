@@ -14,12 +14,6 @@ type TeammateSetService struct {
 	TeamNumber int    `form:"teamNumber" json:"teamNumber"`
 }
 
-func makeStu(uid string) model.User {
-	var student model.User
-	student.UID = uid
-	return student
-}
-
 func (service *TeammateSetService) AddTeammate() serializer.Response {
 	//TODO 1.对学生身份判断 2.是否已有团队判断 3.团队是否存在
 	var has int64
