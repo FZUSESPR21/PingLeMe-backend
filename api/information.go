@@ -28,14 +28,14 @@ func FillInPairInformation(c *gin.Context, stuUID int) {
 		if u, ok := user.(model.User); ok {
 			res, err := service.UpdatePairByStu(int(u.ID), stuUID)
 			if err != nil {
-				c.JSON(200, ErrorResponse(err))
+				c.JSON(http.StatusOK, ErrorResponse(err))
 			}
 			if res == 2 {
-				c.JSON(200, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
+				c.JSON(http.StatusOK, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
 			}
 		}
 	}
-	c.JSON(200, serializer.Response{
+	c.JSON(http.StatusOK, serializer.Response{
 		Code: 0,
 		Msg:  "修改成功",
 	})

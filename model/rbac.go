@@ -65,7 +65,7 @@ func (Repo *Repository) SetUserRole(roleType uint8, user User) error {
 	var role Role
 	result := Repo.DB.Where("type = ?", roleType).First(&role)
 	if result.Error != nil {
-		util.Log().Error("rbac.go/SetUserRole", zap.Error(result.Error))
+		util.Log().Error(result.Error.Error())
 		return result.Error
 	}
 

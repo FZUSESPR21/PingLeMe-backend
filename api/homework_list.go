@@ -15,8 +15,8 @@ func GetHomeworkList(c *gin.Context) {
 		service.HomeworkRepositoryInterface = &model.Repo
 		service.ClassRepositoryInterface = &model.Repo
 		res := service.GetHomeworkList()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

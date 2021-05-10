@@ -14,9 +14,9 @@ func CreateAssistant(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.CreateAssistant()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -26,9 +26,9 @@ func DeleteAssistant(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.DeleteAssistant()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -39,8 +39,8 @@ func RemoveAssistant(c *gin.Context) {
 		service.UserRepositoryInterface = &model.Repo
 		service.ClassRepositoryInterface = &model.Repo
 		res := service.RemoveAssistant()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

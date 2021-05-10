@@ -24,9 +24,9 @@ func UserLogin(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.Login(c)
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -38,7 +38,7 @@ func UserLogout(c *gin.Context) {
 	if err != nil {
 		util.Log().Error("保存Session错误", zap.Error(err))
 	}
-	c.JSON(200, serializer.Response{
+	c.JSON(http.StatusOK, serializer.Response{
 		Code: 0,
 		Msg:  "登出成功",
 	})
