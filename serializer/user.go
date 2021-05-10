@@ -35,7 +35,6 @@ func BuildUser(user model.User) User {
 			CreatedAt:  user.CreatedAt.Unix(),
 		}
 	}
-
 }
 
 // BuildUserResponse 序列化用户响应
