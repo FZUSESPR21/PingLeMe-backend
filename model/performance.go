@@ -14,6 +14,12 @@ type Performance struct {
 	Percentage int `gorm:"type:int;not null"`
 }
 
+type PerformanceRepositoryInterface interface {
+	GetPerformance(ID interface{}) (Performance, error)
+	SetPerformance(performance Performance) (int64, error)
+	SetPercentageByID(ID interface{}, percentage int) error
+}
+
 func (Repo *Repository) GetPerformance(ID interface{}) (Performance, error) {
 	var performance Performance
 	result := Repo.DB.First(&performance, ID)
