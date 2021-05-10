@@ -23,7 +23,7 @@ type Role struct {
 type Permission struct {
 	gorm.Model
 	Desc string `gorm:"unique;"`
-	Type uint8  `gorm:"type:int;not null;unique"`
+	Type uint  `gorm:"type:int;not null;unique"`
 	Role []Role `gorm:"many2many:role_permission;"`
 }
 
@@ -47,7 +47,7 @@ func (Repo *Repository) SetRole(roleType uint8, roleDesc string) error {
 }
 
 // SetPermission 新增权限
-func (Repo *Repository) SetPermission(permissionType uint8, permissionDesc string) error {
+func (Repo *Repository) SetPermission(permissionType uint, permissionDesc string) error {
 	result := Repo.DB.Create(Permission{
 		Type: permissionType,
 		Desc: permissionDesc,
