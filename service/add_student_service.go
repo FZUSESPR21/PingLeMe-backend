@@ -5,16 +5,18 @@ import (
 	"PingLeMe-Backend/serializer"
 )
 
-type AddStudentService struct {
+type AddStudentsService struct {
 	model.UserRepositoryInterface
-	UserList []StuInfo `form:"userList" json:"userList"`
+	model.ClassRepositoryInterface
+	Students []StuInfo `form:"students" json:"students"`
 	//TODO 接口需要修改，不是数组
 }
 
 type StuInfo struct {
-	UID      string `form:"uid" json:"uid"`
-	Nickname string `form:"nickname" json:"nickname"`
-	ClassID  string `form:"classid" json:"classid"`
+	UID      	string `form:"uid" json:"uid"`
+	Nickname 	string `form:"name" json:"name"`
+	ClassId     int    `form:"class_id" json:"class_id" binding:"required"`
+	Password	string `form:"password" json:"password" binding:"required,min=8,max=40"`
 	//TODO ClassID 没地方存
 }
 
@@ -22,20 +24,32 @@ func transformStruct(stuInfo StuInfo) model.User {
 	var user model.User
 	user.UID = stuInfo.UID
 	user.Nickname = stuInfo.Nickname
+	user.SetPassword(stuInfo.Password)
 	return user
 }
 
 //TODO UID相同判断,但接口中没有要求
-func (service *AddStudentService) AddStudent() serializer.Response {
-	var length = len(service.UserList)
+func (service *AddStudentsService) AddStudents() serializer.Response {
 	var user []model.User
-	for i := 0; i < length; i++ {
-		a := service.UserList[i]
+	for _, a := range service.Students {
 		user = append(user, transformStruct(a))
 	}
+
 	if err := service.SetUsers(user); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	}
+
+	for i, a := range user {
+		class, err1 := service.GetClassByID(service.Students[i].ClassId)
+		if err1 != nil {
+			return serializer.ParamErr("该班级不存在", err1)
+		}
+		err1 = service.AddStudent(class, a)
+		if err1 != nil {
+			return serializer.DBErr("添加学生失败", err1)
+		}
+	}
+
 	return serializer.Response{
 		Code: 0,
 		Msg:  "Success",
