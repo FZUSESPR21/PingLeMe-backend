@@ -34,6 +34,7 @@ func NewRouter() *gin.Engine {
 		v1.POST("team/member/add", api.AddTeammate)
 		v1.POST("team/member/remove", api.DeleteTeammate)
 		v1.POST("user/teacher/add", api.AddTeachers)
+		v1.POST("user/assistant/add",api.AddAss)
 
 		// 需要登录保护的
 		auth := v1.Group("")

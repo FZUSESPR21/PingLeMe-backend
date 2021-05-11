@@ -3,7 +3,7 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
-	"fmt"
+	"PingLeMe-Backend/util"
 )
 
 type AddTeacherService struct {
@@ -18,22 +18,29 @@ type TeacherInfo struct {
 	Password string `form:"password" json:"password"`
 }
 
-func transformTeacher(teacherInfo TeacherInfo) model.User {
+func transformTeacher(teacherInfo TeacherInfo, isAss bool) model.User {
 	var user model.User
 	user.UID = teacherInfo.UID
 	user.PasswordDigest = teacherInfo.Password
+	//TODO 加密
+	if isAss {
+		user.Role = 2
+	} else {
+		user.Role = 1
+	}
+
 	return user
 }
 
-func (service *AddTeacherService) AddTeacher() serializer.Response {
+func (service *AddTeacherService) AddTeacher(isAss bool) serializer.Response {
 	var errMes string
 	var length = len(service.Teachers)
 	//fmt.Println(length)
 	for i := 0; i < length; i++ {
 		a := service.Teachers[i]
-		if _, err := service.AddTeacherByUser(transformTeacher(a)); err != nil {
+		if _, err := service.AddTeacherByUser(transformTeacher(a,isAss)); err != nil {
 			errMes += "账号" + a.UID + "添加时发生错误！"
-			fmt.Println(err)
+			util.Log().Error(err.Error())
 		}
 	}
 	if len(errMes) == 0 {

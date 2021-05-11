@@ -54,7 +54,18 @@ func AddTeachers(c *gin.Context) {
 	var service service.AddTeacherService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
-		res := service.AddTeacher()
+		res := service.AddTeacher(false)
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}
+
+func AddAss(c *gin.Context) {
+	var service service.AddTeacherService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.AddTeacher(true)
 		c.JSON(200, res)
 	} else {
 		c.JSON(200, ErrorResponse(err))
