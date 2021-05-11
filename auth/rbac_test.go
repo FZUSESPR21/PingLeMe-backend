@@ -71,7 +71,7 @@ func TestRBACAuth_CheckUserRole(t *testing.T) {
 		PasswordDigest: "1",
 		UserName:       "1",
 		Role:           1,
-	}, uint8(1))
+	}, "2")
 
 	if err != nil {
 		t.Error(err)
@@ -96,7 +96,7 @@ func TestRBACAuth_CheckUserPermission(t *testing.T) {
 		PasswordDigest: "1",
 		UserName:       "1",
 		Role:           1,
-	}, uint8(1))
+	}, "test")
 
 	if err != nil {
 		t.Error(err)
