@@ -41,7 +41,7 @@ func TestRBAC(t *testing.T) {
 			},
 			UID:            "1",
 			PasswordDigest: "1",
-			Nickname:       "1",
+			UserName:       "1",
 			Role:           1,
 		}}
 

@@ -69,7 +69,7 @@ func TestRBACAuth_CheckUserRole(t *testing.T) {
 		},
 		UID:            "1",
 		PasswordDigest: "1",
-		Nickname:       "1",
+		UserName:       "1",
 		Role:           1,
 	}, uint8(1))
 
@@ -94,7 +94,7 @@ func TestRBACAuth_CheckUserPermission(t *testing.T) {
 		},
 		UID:            "1",
 		PasswordDigest: "1",
-		Nickname:       "1",
+		UserName:       "1",
 		Role:           1,
 	}, uint8(1))
 
