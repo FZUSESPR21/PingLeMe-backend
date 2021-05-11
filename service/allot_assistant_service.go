@@ -11,8 +11,8 @@ import (
 type AllotAssistantService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
-	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
-	ClassId       int    `form:"class_id" json:"class_id" binding:"required"`
+	UID     string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
+	ClassId int    `form:"class_id" json:"class_id" binding:"required"`
 }
 
 // AddAssistant 设置助教班级函数
@@ -34,6 +34,6 @@ func (service *AllotAssistantService) AllotAssistant() serializer.Response {
 
 	return serializer.Response{
 		Code: 0,
-		Msg: "Success",
+		Msg:  "Success",
 	}
 }

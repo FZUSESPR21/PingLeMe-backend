@@ -8,6 +8,7 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/util"
 	"go.uber.org/zap"
+	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"

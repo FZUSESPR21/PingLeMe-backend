@@ -13,10 +13,10 @@ type AddStudentsService struct {
 }
 
 type StuInfo struct {
-	UID      	string `form:"uid" json:"uid"`
-	Nickname 	string `form:"name" json:"name"`
-	ClassId     int    `form:"class_id" json:"class_id" binding:"required"`
-	Password	string `form:"password" json:"password" binding:"required,min=8,max=40"`
+	UID      string `form:"uid" json:"uid"`
+	Nickname string `form:"name" json:"name"`
+	ClassId  int    `form:"class_id" json:"class_id" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required,min=8,max=40"`
 	//TODO ClassID 没地方存
 }
 

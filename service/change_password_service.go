@@ -12,10 +12,10 @@ import (
 // ChangePasswordService 修改密码的服务
 type ChangePasswordService struct {
 	model.UserRepositoryInterface
-	UID      			 string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
-	OldPassword 		 string `form:"old_password" json:"old_password" binding:"required,min=8,max=40"`
-	NewPassword 		 string `form:"new_password" json:"new_password" binding:"required,min=8,max=40"`
-	NewPasswordConfirm	 string `form:"new_password_confirm	" json:"new_password_confirm" binding:"required,min=8,max=40"`
+	UID                string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
+	OldPassword        string `form:"old_password" json:"old_password" binding:"required,min=8,max=40"`
+	NewPassword        string `form:"new_password" json:"new_password" binding:"required,min=8,max=40"`
+	NewPasswordConfirm string `form:"new_password_confirm	" json:"new_password_confirm" binding:"required,min=8,max=40"`
 }
 
 // ChangePassword 修改密码函数
