@@ -37,7 +37,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		var pair model.User
 		if pairID != 0 {
 			pair, err = service.GetUser(pairID)
-			if err != nil{
+			if err != nil {
 				return serializer.ParamErr("", err)
 			}
 		}

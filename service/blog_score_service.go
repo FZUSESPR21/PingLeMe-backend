@@ -21,9 +21,7 @@ type BlogScoreService struct {
 // BlogScoreListService 获取作业列表和对应成绩服务
 type BlogScoreListService struct {
 	model.BlogScoreRepositoryInterface
-
 }
-
 
 // StorePersonalBlogScore 存储个人博客成绩
 func (service *BlogScoreService) StorePersonalBlogScore() serializer.Response {
@@ -68,4 +66,3 @@ func (service *BlogScoreService) StoreTeamBlogScore() serializer.Response {
 		Msg:  "Success",
 	}
 }
-

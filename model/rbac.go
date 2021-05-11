@@ -23,7 +23,7 @@ type Role struct {
 type Permission struct {
 	gorm.Model
 	Desc string `gorm:"unique;"`
-	Type uint  `gorm:"type:int;not null;unique"`
+	Type uint   `gorm:"type:int;not null;unique"`
 	Role []Role `gorm:"many2many:role_permission;"`
 }
 

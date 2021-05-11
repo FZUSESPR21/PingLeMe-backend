@@ -38,7 +38,7 @@ func (Repo *Repository) CountPersonalFinalScore(homework Homework, keeperID uint
 	finalBlogScore.ScorekeeperID = keeperID
 	deleteResult := Repo.DB.Where("homework_id = ? and scorekeeper_id = ? ", homework.ID, keeperID).Delete(FinalBlogScore{})
 	finalResult := Repo.DB.Create(&finalBlogScore)
-	return result.Error,deleteResult.Error, finalResult.Error
+	return result.Error, deleteResult.Error, finalResult.Error
 }
 
 // GetFinalBlogScore 获取博客最终成绩

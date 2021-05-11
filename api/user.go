@@ -57,7 +57,7 @@ func UserInfo(c *gin.Context) {
 		if err != nil {
 			res := serializer.ParamErr("", err)
 			c.JSON(http.StatusOK, res)
-		} else if user < 0{
+		} else if user < 0 {
 			res := serializer.ParamErr("用户ID错误", nil)
 			c.JSON(http.StatusOK, res)
 		} else {
