@@ -1,0 +1,39 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
+package service
+
+import (
+	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
+)
+
+// AddAssistantService 设置助教班级的服务
+type AddAssistantService struct {
+	model.ClassRepositoryInterface
+	model.UserRepositoryInterface
+	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
+	ClassId       int    `form:"class_id" json:"class_id" binding:"required"`
+}
+
+// AddAssistant 设置助教班级函数
+func (service *AddAssistantService) AddAssistant() serializer.Response {
+	class, err := service.GetClassByID(service.ClassId)
+	if err != nil {
+		return serializer.ParamErr("该班级不存在", err)
+	}
+
+	assistant, err1 := service.GetUserByUID(service.UID)
+	if err1 != nil {
+		return serializer.ParamErr("该助教不存在", err1)
+	}
+
+	err = service.AddTeacher(class, assistant)
+	if err != nil {
+		return serializer.DBErr("设置助教班级失败", err)
+	}
+
+	return serializer.Response{
+		Code: 0,
+		Msg: "Success",
+	}
+}
