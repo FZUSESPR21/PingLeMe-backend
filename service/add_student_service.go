@@ -12,16 +12,16 @@ type AddStudentService struct {
 }
 
 type StuInfo struct {
-	UID            string `form:"uid" json:"uid"`
-	Nickname       string `form:"nickname" json:"nickname"`
-	ClassID        string `form:"classid" json:"classid"`
+	UID      string `form:"uid" json:"uid"`
+	Nickname string `form:"nickname" json:"nickname"`
+	ClassID  string `form:"classid" json:"classid"`
 	//TODO ClassID 没地方存
 }
 
 func transformStruct(stuInfo StuInfo) model.User {
 	var user model.User
 	user.UID = stuInfo.UID
-	user.Nickname = stuInfo.Nickname
+	user.UserName = stuInfo.Nickname
 	return user
 }
 
@@ -30,7 +30,7 @@ func (service *AddStudentService) AddStudent() serializer.Response {
 	var length = len(service.UserList)
 	var user []model.User
 	for i := 0; i < length; i++ {
-		a:=service.UserList[i]
+		a := service.UserList[i]
 		user = append(user, transformStruct(a))
 	}
 	if err := service.SetUsers(user); err != nil {

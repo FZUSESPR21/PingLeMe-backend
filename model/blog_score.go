@@ -44,8 +44,6 @@ func (Repo *Repository) SetTeamBlogScore(teamBlogScore []TeamBlogScore) error {
 //	return nil
 //}
 
-
-
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {
 	var personalBlogScore PersonalBlogScore
@@ -59,8 +57,6 @@ func (Repo *Repository) GetTeamBlogScoreByID(ID interface{}) (TeamBlogScore, err
 	result := Repo.DB.Where("id = ?", ID).Find(&teamBlogScore)
 	return teamBlogScore, result.Error
 }
-
-
 
 // GetPersonalBlogScores 获取全部个人博客成绩    仍需修改！
 func (Repo *Repository) GetPersonalBlogScores(ID interface{}) (PersonalBlogScore, error) {
