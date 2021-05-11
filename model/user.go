@@ -39,6 +39,7 @@ type UserRepositoryInterface interface {
 	DeleteUser(ID interface{}) error
 	GetAllTeacher() (int64, []User, error)
 	AddTeacherByUser(teacher User) (int64, error)
+	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
 }
 
