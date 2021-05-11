@@ -25,7 +25,7 @@ func (service *ChangePasswordService) ChangePassword() serializer.Response {
 		return serializer.ParamErr("该用户不存在", err)
 	}
 
-	if user.CheckPassword(service.OldPassword) == false {
+	if !user.CheckPassword(service.OldPassword) {
 		err = errors.New("旧密码错误")
 		return serializer.ParamErr("旧密码错误", err)
 	}
