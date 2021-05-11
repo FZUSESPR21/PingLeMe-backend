@@ -42,6 +42,7 @@ type UserRepositoryInterface interface {
 	GetAllTeacher() (int64, []User, error)
 	AddTeacherByUser(teacher User) (int64, error)
 	GetUserID(user User) uint
+	ChangeUserPassword(user User, newPasswordDigest string) error
 }
 
 // GetUser 用ID获取用户
@@ -120,4 +121,10 @@ func (Repo *Repository) GetAllTeacher() (int64, []User, error) {
 func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {
 	result := Repo.DB.Create(&teacher)
 	return result.RowsAffected, result.Error
+}
+
+// UpdateUser 修改用户密码
+func (Repo *Repository) ChangeUserPassword(user User, newPasswordDigest string) error {
+	result := Repo.DB.Model(&user).Update("password_digest", newPasswordDigest)
+	return result.Error
 }
