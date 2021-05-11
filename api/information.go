@@ -11,11 +11,11 @@ import (
 )
 
 // FillInPairInformation 填写结对信息
-func FillInPairInformation(c *gin.Context, stuUID int) {
+func FillInPairInformation(c *gin.Context, stuUID uint) {
 	var service service.EditPairIndormationService
 	if user, _ := c.Get("user"); user != nil {
 		if u, ok := user.(model.User); ok {
-			res, err := service.UpdatePairByStu(int(u.ID), stuUID)
+			res, err := service.UpdatePairByStu(u.ID, stuUID)
 			if err != nil {
 				c.JSON(http.StatusOK, ErrorResponse(err))
 			}
