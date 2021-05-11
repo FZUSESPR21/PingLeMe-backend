@@ -48,11 +48,11 @@ func RemoveAssistant(c *gin.Context) {
 
 // AddAssistant 设置助教班级接口
 func AddAssistant(c *gin.Context) {
-	var service service.AddAssistantService
+	var service service.AllotAssistantService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		service.ClassRepositoryInterface = &model.Repo
-		res := service.AddAssistant()
+		res := service.AllotAssistant()
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))

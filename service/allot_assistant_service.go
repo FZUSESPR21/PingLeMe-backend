@@ -7,8 +7,8 @@ import (
 	"PingLeMe-Backend/serializer"
 )
 
-// AddAssistantService 设置助教班级的服务
-type AddAssistantService struct {
+// AllotAssistantService 设置助教班级的服务
+type AllotAssistantService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
 	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
@@ -16,7 +16,7 @@ type AddAssistantService struct {
 }
 
 // AddAssistant 设置助教班级函数
-func (service *AddAssistantService) AddAssistant() serializer.Response {
+func (service *AllotAssistantService) AllotAssistant() serializer.Response {
 	class, err := service.GetClassByID(service.ClassId)
 	if err != nil {
 		return serializer.ParamErr("该班级不存在", err)
