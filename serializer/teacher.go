@@ -11,7 +11,7 @@ type Teacher struct {
 func BuildTeacher(user model.User) Teacher {
 	var teacher Teacher
 	teacher.ID = user.UID
-	teacher.TeacherName = user.Nickname
+	teacher.TeacherName = user.UserName
 	return teacher
 }
 

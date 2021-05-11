@@ -23,7 +23,7 @@ type StuInfo struct {
 func transformStruct(stuInfo StuInfo) model.User {
 	var user model.User
 	user.UID = stuInfo.UID
-	user.Nickname = stuInfo.Nickname
+	user.UserName = stuInfo.Nickname
 	user.SetPassword(stuInfo.Password)
 	return user
 }
