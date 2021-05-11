@@ -20,19 +20,23 @@ type StuInfo struct {
 	//TODO ClassID 没地方存
 }
 
-func transformStruct(stuInfo StuInfo) model.User {
+func transformStruct(stuInfo StuInfo) (model.User, error) {
 	var user model.User
 	user.UID = stuInfo.UID
 	user.UserName = stuInfo.Nickname
-	user.SetPassword(stuInfo.Password)
-	return user
+	err := user.SetPassword(stuInfo.Password)
+	return user, err
 }
 
 //TODO UID相同判断,但接口中没有要求
 func (service *AddStudentsService) AddStudents() serializer.Response {
 	var user []model.User
 	for _, a := range service.Students {
-		user = append(user, transformStruct(a))
+		u, err := transformStruct(a)
+		if err!= nil {
+			return serializer.ParamErr("", err)
+		}
+		user = append(user, u)
 	}
 
 	if err := service.SetUsers(user); err != nil {
