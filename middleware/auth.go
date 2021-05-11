@@ -38,34 +38,34 @@ func LoginRequired() gin.HandlerFunc {
 			}
 		}
 
-		c.JSON(200, serializer.CheckLogin())
+		c.JSON(http.StatusOK, serializer.CheckLogin())
 		c.Abort()
 	}
 }
 
 // PermissionRequired 需要权限
-func PermissionRequired(permissionTypeOrDesc interface{}) gin.HandlerFunc {
+func PermissionRequired(permissionDesc string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if user, _ := c.Get("user"); user != nil {
 			if u, ok := user.(*model.User); ok {
 				authService := auth.RBACAuth{RBACRepositoryInterface: &model.Repo}
-				has, err := authService.CheckUserPermission(*u, permissionTypeOrDesc)
+				has, err := authService.CheckUserPermission(*u, permissionDesc)
 				if err != nil {
 					util.Log().Error("middleware/authService.go/PermissionRequired", zap.Error(err))
-					c.JSON(200, serializer.ServerInnerErr("", err))
+					c.JSON(http.StatusOK, serializer.ServerInnerErr("", err))
 					c.Abort()
 				}
 				if has {
 					c.Next()
 					return
 				} else {
-					c.JSON(200, serializer.PermissionDenied())
+					c.JSON(http.StatusOK, serializer.PermissionDenied())
 					c.Abort()
 				}
 			}
 		}
 
-		c.JSON(200, serializer.CheckLogin())
+		c.JSON(http.StatusOK, serializer.CheckLogin())
 		c.Abort()
 	}
 }
