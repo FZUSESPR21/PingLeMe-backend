@@ -102,7 +102,7 @@ func TestRBACAuth_CheckUserPermission(t *testing.T) {
 		t.Error(err)
 	}
 
-	assert.Equal(t, true, has)
+	assert.Equal(t, false, has)
 
 	repo.AssertExpectations(t)
 }
