@@ -116,3 +116,28 @@ func StudentImport(c *gin.Context) {
 	res := service.Import(StudentImportFileDst + file.Filename)
 	c.JSON(http.StatusOK, res)
 }
+
+// ChangePassword 修改密码
+func ChangePassword(c *gin.Context) {
+	var service service.ChangePasswordService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.ChangePassword()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// AddStudents 批量添加学生
+func AddStudents(c *gin.Context) {
+	var service service.AddStudentsService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
+		res := service.AddStudents()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
