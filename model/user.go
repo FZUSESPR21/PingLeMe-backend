@@ -12,7 +12,7 @@ type User struct {
 	gorm.Model
 	UID            string `gorm:"not null;unique"`
 	PasswordDigest string `gorm:"not null"`
-	UserName       string `gorm:"type:varchar(20);not null;unique"`
+	UserName       string `gorm:"type:varchar(20);not null"`
 	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
