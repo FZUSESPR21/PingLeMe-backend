@@ -7,7 +7,6 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 // Information 学生、助教、老师信息
@@ -23,16 +22,16 @@ func Information(c *gin.Context) serializer.Response {
 }
 
 // FillInPairInformation 填写结对信息
-func EditPairIndormationService(c *gin.Context, stuUID int) {
+func FillInPairInformation(c *gin.Context, stuUID int) {
 	var service service.EditPairIndormationService
 	if user, _ := c.Get("user"); user != nil {
 		if u, ok := user.(model.User); ok {
 			res, err := service.UpdatePairByStu(int(u.ID), stuUID)
 			if err != nil {
-				c.JSON(http.StatusOK, ErrorResponse(err))
+				c.JSON(200, ErrorResponse(err))
 			}
 			if res == 2 {
-				c.JSON(http.StatusOK, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
+				c.JSON(200, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
 			}
 		}
 	}
