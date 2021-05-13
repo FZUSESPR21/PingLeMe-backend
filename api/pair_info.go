@@ -5,6 +5,7 @@ package api
 import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -18,7 +19,7 @@ func PairInfo(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK,  serializer.Response{
 			Code: 0,
-			Msg:  string(res),
+			Msg:  fmt.Sprint(res),
 		})
 	}
 }
