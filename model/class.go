@@ -36,6 +36,8 @@ type ClassRepositoryInterface interface {
 	AddStudent(class Class, student User) error
 	AddTeacher(class Class, teacher User) error
 	DeleteTeacher(class Class, teacher User) error
+	EditStuClass(studentID int, newClassID int) error
+	GetStusByClassName(name string) ([]User, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -85,7 +87,7 @@ func (Repo *Repository) AddTeacher(class Class, teacher User) error {
 func (Repo *Repository) AddStudent(class Class, student User) error {
 	var classID = class.ID
 	var studentID = student.ID
-	result := Repo.DB.Exec("insert into student_class(class_id,teacher_id) values(?,?)", classID, studentID)
+	result := Repo.DB.Exec("insert into student_class(class_id,student_id) values(?,?)", classID, studentID)
 	return result.Error
 }
 
@@ -115,4 +117,17 @@ func (Repo *Repository) DeleteStudent(class Class, student User) error {
 func (Repo *Repository) UpdateClassName(class Class, name string) error {
 	result := Repo.DB.Model(&class).Update("name", name)
 	return result.Error
+}
+
+// EditStuClass 修改学生班级
+func (Repo *Repository) EditStuClass(studentID int, newClassID int) error {
+	result := Repo.DB.Exec("update student_class set class_id = ? where student_id = ?", newClassID, studentID)
+	return result.Error
+}
+
+// GetStusByClassID 查看班级学生列表
+func (Repo *Repository) GetStusByClassName(name string) ([]User, error) {
+	var class Class
+	result := Repo.DB.Where("Name = ?", name).First(&class)
+	return class.Students, result.Error
 }
