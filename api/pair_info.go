@@ -18,7 +18,7 @@ func PairInfo(c *gin.Context) {
 	} else {
 		c.JSON(http.StatusOK,  serializer.Response{
 			Code: 0,
-			Msg:  "修改结对信息成功！",
+			Msg:  string(res),
 		})
 	}
 }
