@@ -29,7 +29,7 @@ func TestPair(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, pair.Student2ID, 2)
+			assert.Equal(t, uint(2), pair.Student2ID)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
@@ -49,7 +49,7 @@ func TestPair(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, studentID, 1)
+			assert.Equal(t, uint(1), studentID)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {

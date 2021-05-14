@@ -1,0 +1,1 @@
+2021-05-11T16:31:37.661+0800	error	model/migration.go:19	auto migrate error:	{"error": "Error 3780: Referencing column 'evaluation_table_id' and referenced column 'id' in foreign key constraint 'fk_evaluation_tables_table_item' are incompatible."}
