@@ -5,11 +5,11 @@ import (
 	"PingLeMe-Backend/serializer"
 )
 
-type GetTeacherListService struct {
+type TeacherListService struct {
 	model.UserRepositoryInterface
 }
 
-func (service *GetTeacherListService) GetTeacherList() serializer.Response {
+func (service *TeacherListService) GetTeacherList() serializer.Response {
 	var teacherList []model.User
 	var err error
 	var has int64

@@ -33,13 +33,26 @@ func DeleteAssistant(c *gin.Context) {
 	}
 }
 
-//RemoveAssistant 移除助教接口
+// RemoveAssistant 移除助教接口
 func RemoveAssistant(c *gin.Context) {
 	var service service.RemoveAssistantService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		service.ClassRepositoryInterface = &model.Repo
 		res := service.RemoveAssistant()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// AddAssistant 设置助教班级接口
+func AddAssistant(c *gin.Context) {
+	var service service.AllotAssistantService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
+		res := service.AllotAssistant()
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))

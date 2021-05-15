@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// TeamChargeService 组长管理团队的服务
+// TeamManagementService 组长管理团队的服务
 type TeamManagementService struct {
 	model.TeamRepositoryInterface
 	Number        int    `form:"Number" json:"Number" binding:"required"`

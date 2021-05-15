@@ -12,7 +12,7 @@ type User struct {
 	gorm.Model
 	UID            string `gorm:"not null;unique"`
 	PasswordDigest string `gorm:"not null"`
-	UserName       string `gorm:"type:varchar(20);not null;unique"`
+	UserName       string `gorm:"type:varchar(20);not null"`
 	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
@@ -39,6 +39,7 @@ type UserRepositoryInterface interface {
 	DeleteUser(ID interface{}) error
 	GetAllTeacher() (int64, []User, error)
 	AddTeacherByUser(teacher User) (int64, error)
+	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
 }
 
@@ -69,7 +70,7 @@ func (Repo *Repository) SetUser(user User) error {
 	return nil
 }
 
-// SetUsers 添加用户组
+// SetUsers 添加用户组,
 func (Repo *Repository) SetUsers(users []User) error {
 	result := Repo.DB.Create(&users)
 	if result.Error != nil {
@@ -115,6 +116,11 @@ func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {
 	return result.RowsAffected, result.Error
 }
 
+// UpdateUser 修改用户密码
+func (Repo *Repository) ChangeUserPassword(user User, newPasswordDigest string) error {
+	result := Repo.DB.Model(&user).Update("password_digest", newPasswordDigest)
+	return result.Error
+}
 func (Repo *Repository) GetUserTeamID(user User) (uint, error) {
 	var teamID uint
 	row := Repo.DB.Table("student_team").Where("student_id = ?", user.ID).Select("team_id").Row()

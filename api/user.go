@@ -44,6 +44,14 @@ func UserLogout(c *gin.Context) {
 	})
 }
 
+func UserMe(c *gin.Context) {
+	var service service.UserInfoService
+	service.PairRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	res := service.Information(CurrentUser(c).ID)
+	c.JSON(http.StatusOK, res)
+}
+
 // UserInfo 用户信息接口
 func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
@@ -68,7 +76,7 @@ func UserInfo(c *gin.Context) {
 }
 
 func GetTeacherList(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	res := service.GetTeacherList()
 	c.JSON(http.StatusOK, res)
 }
@@ -85,7 +93,7 @@ func AddTeachers(c *gin.Context) {
 }
 
 func GetTeachers(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.GetTeacherList()
@@ -115,4 +123,29 @@ func StudentImport(c *gin.Context) {
 	var service service.StudentImportService
 	res := service.Import(StudentImportFileDst + file.Filename)
 	c.JSON(http.StatusOK, res)
+}
+
+// ChangePassword 修改密码
+func ChangePassword(c *gin.Context) {
+	var service service.ChangePasswordService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.ChangePassword()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// AddStudents 批量添加学生
+func AddStudents(c *gin.Context) {
+	var service service.AddStudentsService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
+		res := service.AddStudents()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
 }
