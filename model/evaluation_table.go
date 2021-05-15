@@ -49,6 +49,12 @@ func (Repo *Repository) GetEvaluationTable(ID uint) (EvaluationTable, error) {
 
 // SetEvaluationTable 保存评审表
 func (Repo *Repository) SetEvaluationTable(table EvaluationTable) error {
+	Repo.RemoveEvaluationTable(table.TeamID, table.HomeworkID)
 	result := Repo.DB.Create(&table)
 	return result.Error
+}
+
+// RemoveEvaluationTable 删除评审表
+func (Repo *Repository) RemoveEvaluationTable(teamID, homeworkID uint)  {
+	Repo.DB.Where("team_id = ? AND homework_id = ?", teamID, homeworkID).Unscoped().Delete(&EvaluationTable{})
 }

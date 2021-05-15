@@ -11,7 +11,7 @@ import (
 
 // FillInPerformance 填写绩效的接口
 func FillInPerformance(c *gin.Context) {
-	var service service.FillInPerformanceService
+	var service service.TeamPerformanceService
 	if err := c.ShouldBind(&service); err == nil {
 		service.PerformanceRepositoryInterface = &model.Repo
 		res := service.FillInPerformance()
