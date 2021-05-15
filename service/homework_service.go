@@ -10,6 +10,7 @@ const PAGESIZE = 6
 
 type HomeworkService struct {
 	model.HomeworkRepositoryInterface
+	ID 			 uint		   `json:"id" binding:"required"`
 	ClassID      uint          `json:"class_id" binding:"required"`
 	Type         uint8         `json:"type" binding:"required"`
 	Title        string        `json:"title" binding:"required"`
@@ -33,6 +34,7 @@ type HomeworkDetailService struct {
 
 // ScoringItem 评分项模型
 type ScoringItem struct {
+	ID 			  uint			`json:"id" binding:"required"`
 	Description   string        `json:"description" binding:"required"`
 	Score         int           `json:"score" binding:"required"`
 	Option        uint8         `json:"option" binding:"required"`
@@ -77,8 +79,8 @@ func (service *HomeworkListService) ViewHomeworkList() serializer.Response {
 }
 
 // ViewHomework 查看作业详情
-func (service *HomeworkDetailService) ViewHomework(ID uint) serializer.Response {
-	homework, err := service.GetHomeworkByID(ID)
+func (service *HomeworkDetailService) ViewHomework() serializer.Response {
+	homework, err := service.GetHomeworkByID(service.HomeworkID)
 	if err != nil {
 		return serializer.ParamErr("", err)
 	}

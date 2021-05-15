@@ -9,17 +9,17 @@ import (
 // PersonalBlogScore 个人博客成绩模型
 type PersonalBlogScore struct {
 	gorm.Model
-	ScoringItemID int `gorm:"type:int;not null"`
-	ScorekeeperID int `gorm:"type:int;not null"`
-	Grade         int `gorm:"type:int;not null"`
+	ScoringItemID uint `gorm:"type:int;not null"`
+	ScorekeeperID uint `gorm:"type:int;not null"`
+	Grade         int  `gorm:"type:int;not null"`
 }
 
 // TeamBlogScore 团队博客成绩模型
 type TeamBlogScore struct {
 	gorm.Model
-	ScoringItemID int `gorm:"type:int;not null"`
-	ScorekeeperID int `gorm:"type:int;not null"`
-	Grade         int `gorm:"type:int;not null"`
+	ScoringItemID uint `gorm:"type:int;not null"`
+	ScorekeeperID uint `gorm:"type:int;not null"`
+	Grade         int  `gorm:"type:int;not null"`
 }
 
 type BlogScoreRepositoryInterface interface {
@@ -39,10 +39,6 @@ func (Repo *Repository) SetTeamBlogScore(teamBlogScore []TeamBlogScore) error {
 	return result.Error
 }
 
-// CountPersonalBlogScoreItem 通过累加其所有下一级子项得到自身的得分
-//func (Repo *Repository) CountPersonalBlogScoreItem(fatherItem PersonalBlogScore, keeperID uint) error {
-//	return nil
-//}
 
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
 func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {

@@ -2,67 +2,50 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
-	"PingLeMe-Backend/serializer"
 )
 
-type BlogScoreItem struct {
+// PersonalBlogScoreService 个人博客成绩模型
+type PersonalBlogScoreService struct {
 	model.BlogScoreRepositoryInterface
-	ScoringItemID int `json:"scoring_item_id"`
-	ScorekeeperID int `json:"scorekeeper_id"`
-	Grade         int `json:"grade"`
+	FirstLevelItemID uint `json:"first_level_item_id"`
+	ScorekeeperID    uint `json:"scorekeeper_id"`
+	PersonalBlogScoreItems []PersonalBlogScoreItem  `json:"personal_blog_score_items"`
 }
 
-// BlogScoreService 博客成绩评分录入服务(一整个一级项下所有的最子项)
-type BlogScoreService struct {
+// PersonalBlogScoreItem 个人博客成绩项
+type PersonalBlogScoreItem struct {
+	ScoringItemID    uint `json:"scoring_item_id"`
+	Grade            int  `json:"grade"`
+}
+
+// TeamBlogScoreService 团队博客成绩模型
+type TeamBlogScoreService struct {
 	model.BlogScoreRepositoryInterface
-	Items []BlogScoreItem `json:"items"`
+	FirstLevelItemID uint `json:"first_level_item_id"`
+	ScorekeeperID    uint `json:"scorekeeper_id"`
+	TeamBlogScoreItems []TeamBlogScoreItem `json:"team_blog_score_items"`
 }
 
-// BlogScoreListService 获取作业列表和对应成绩服务
-type BlogScoreListService struct {
-	model.BlogScoreRepositoryInterface
+// TeamBlogScoreItem 个人博客成绩项
+type TeamBlogScoreItem struct {
+	ScoringItemID    uint `json:"scoring_item_id"`
+	Grade            int  `json:"grade"`
 }
 
-// StorePersonalBlogScore 存储个人博客成绩
-func (service *BlogScoreService) StorePersonalBlogScore() serializer.Response {
-	items := service.Items
-	var result []model.PersonalBlogScore
-	for _, item := range items {
-		temp := model.PersonalBlogScore{
-			ScoringItemID: item.ScoringItemID,
-			ScorekeeperID: item.ScorekeeperID,
-			Grade:         item.Grade,
-		}
-		result = append(result, temp)
+// CountFirstLevelScoreItem 通过累加第一级其下所有最子项(叶节点)得到第一级评分项自身的得分
+func (service *PersonalBlogScoreService) CountFirstLevelScoreItem() ([]model.PersonalBlogScore, error) {
+	var firstLevelItem model.PersonalBlogScore
+	firstLevelItem.ID = service.FirstLevelItemID
+	firstLevelItem.ScorekeeperID = service.ScorekeeperID
+	leaves := make([]model.PersonalBlogScore,0)
+	for _, scoreItem := range service.PersonalBlogScoreItems{
+		var item model.PersonalBlogScore
+		item.ScorekeeperID = service.ScorekeeperID
+		item.ScoringItemID = scoreItem.ScoringItemID
+		item.Grade = scoreItem.Grade
+		firstLevelItem.Grade += item.Grade
+		leaves = append(leaves, item)
 	}
-	err := service.SetPersonalBlogScore(result)
-	if err != nil {
-		return serializer.ParamErr("", err)
-	}
-	return serializer.Response{
-		Code: 0,
-		Msg:  "Success",
-	}
-}
-
-// StoreTeamBlogScore 存储博客团队成绩
-func (service *BlogScoreService) StoreTeamBlogScore() serializer.Response {
-	items := service.Items
-	var result []model.TeamBlogScore
-	for _, item := range items {
-		temp := model.TeamBlogScore{
-			ScoringItemID: item.ScoringItemID,
-			ScorekeeperID: item.ScorekeeperID,
-			Grade:         item.Grade,
-		}
-		result = append(result, temp)
-	}
-	err := service.SetTeamBlogScore(result)
-	if err != nil {
-		return serializer.ParamErr("", err)
-	}
-	return serializer.Response{
-		Code: 0,
-		Msg:  "Success",
-	}
+	leaves = append(leaves, firstLevelItem)
+	return leaves, nil
 }

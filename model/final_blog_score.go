@@ -10,11 +10,6 @@ type FinalBlogScore struct {
 	BlogGrade     int  `gorm:"type:int;not null"`
 }
 
-// FinalScore 一次作业的最终成绩模型
-type FinalScore struct {
-	gorm.Model
-}
-
 type FinalBlogScoreRepositoryInterface interface {
 	CountPersonalFinalScore(homework Homework, keeperID uint) (error, error)
 	GetFinalBlogScore(homeworkID uint, keeperID uint) (FinalBlogScore, error)
