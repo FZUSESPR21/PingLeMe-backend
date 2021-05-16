@@ -21,9 +21,19 @@ type EvaluationTableDetailService struct {
 
 type EvaluationTableItem struct {
 	Content       string                `json:"content"`
-	Score         int                   `json:"score" binding:"gte=0"`
-	ActualScore   int                   `json:"actual_score" binding:"gte=0"`
+	Score         float32               `json:"score" binding:"gte=0"`
+	ActualScore   float32               `json:"actual_score" binding:"gte=0"`
 	ChildrenItems []EvaluationTableItem `json:"children_items"`
+}
+
+type EvaluationTableScoreService struct {
+	EvaluationTableScoreItems []EvaluationTableScoreItem `json:"score_items" binding:"required"`
+}
+
+type EvaluationTableScoreItem struct {
+	TeamID uint    `json:"team_id" binding:"required;gte=0"`
+	ItemID uint    `json:"item_id" binding:"required;gte=0"`
+	Score  float32 `json:"score" binding:"required;"`
 }
 
 // CreateEvaluationTable 创建评审表
@@ -58,8 +68,9 @@ func (service *EvaluationTableDetailService) ViewEvaluationTable(ID uint) serial
 	}
 }
 
-// MarkEvaluationTable 评审表评分
-func (service *EvaluationTableService) MarkEvaluationTable() {
+// CorrectEvaluationTable 评审表评分
+func (service *EvaluationTableScoreService) CorrectEvaluationTable() {
+
 }
 
 // GetChildrenItems 递归获取子项

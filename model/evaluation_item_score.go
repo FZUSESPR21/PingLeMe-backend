@@ -9,10 +9,9 @@ import (
 // EvaluationItemScore 评审表项成绩模型
 type EvaluationItemScore struct {
 	gorm.Model
-	ItemID int    `gorm:"type:int;not null"`
-	TeamID int    `gorm:"type:int;not null"`
-	UID    string `gorm:"type:varchar(9);not null"`
-	Score  int    `gorm:"type:int;not null"`
+	ItemID uint    `gorm:"type:int;not null"`
+	TeamID uint    `gorm:"type:int;not null"`
+	Score  float32 `gorm:"type:int;not null"`
 }
 
 type EvaluationItemScoreRepositoryInterface interface {
@@ -21,6 +20,35 @@ type EvaluationItemScoreRepositoryInterface interface {
 	DeleteEvaluationItemScore(ID int) error
 	UpdateEvaluationItemScore(ID int, score int) error
 	GetEvaluationItemScores(scoringItemID int, teamID int) ([]EvaluationItemScore, error)
+}
+
+// CreateEvaluationItemScores 创建评审表项成绩
+func (Repo *Repository) CreateEvaluationItemScores(items EvaluationItemScore) error {
+	result := Repo.DB.Model(&EvaluationItemScore{}).Select("Score").Updates(items)
+	if result.Error != nil {
+		return result.Error
+	} else {
+		return nil
+	}
+}
+
+// InitEvaluationItems 初始化成绩
+func (Repo *Repository) InitEvaluationItems(teamID, tableID uint) error {
+	var table EvaluationTable
+	result := Repo.DB.Preload("EvaluationTableItem").First(&table, tableID)
+	if result.Error != nil {
+		return result.Error
+	}
+	scores := make([]EvaluationItemScore, 0)
+	for _, item := range table.TableItem {
+		scores = append(scores, EvaluationItemScore{
+			ItemID:      item.ID,
+			TeamID: teamID,
+			Score:  0,
+		})
+	}
+	result = Repo.DB.Create(scores)
+	return result.Error
 }
 
 // CreateEvaluationItemScore 创建评审表项成绩

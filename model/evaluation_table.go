@@ -19,9 +19,9 @@ type EvaluationTable struct {
 type EvaluationTableItem struct {
 	gorm.Model
 	EvaluationTableID uint
-	Content           string `gorm:"type:varchar(255);not null"`
-	Score             int    `gorm:"type:int;not null;default:-1"`
-	Level             int    `gorm:"not null;default:0"`
+	Content           string  `gorm:"type:varchar(255);not null"`
+	Score             float32 `gorm:"type:int;not null;default:-1"`
+	Level             int     `gorm:"not null;default:0"`
 }
 
 type EvaluationTableRepositoryInterface interface {
@@ -55,6 +55,6 @@ func (Repo *Repository) SetEvaluationTable(table EvaluationTable) error {
 }
 
 // RemoveEvaluationTable 删除评审表
-func (Repo *Repository) RemoveEvaluationTable(teamID, homeworkID uint)  {
+func (Repo *Repository) RemoveEvaluationTable(teamID, homeworkID uint) {
 	Repo.DB.Where("team_id = ? AND homework_id = ?", teamID, homeworkID).Unscoped().Delete(&EvaluationTable{})
 }
