@@ -2,7 +2,16 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 )
+
+// CheckLoadedBlogService 判断成绩是否已预先存零的模型
+type CheckLoadedBlogService struct {
+	model.BlogScoreRepositoryInterface
+	HomeworkID  uint  `json:"homework_id"`
+	ScorekeeperID uint `json:"scorekeeper_id"`
+}
+
 
 // PersonalBlogScoreService 个人博客成绩模型
 type PersonalBlogScoreService struct {
@@ -15,7 +24,7 @@ type PersonalBlogScoreService struct {
 // PersonalBlogScoreItem 个人博客成绩项
 type PersonalBlogScoreItem struct {
 	ScoringItemID    uint `json:"scoring_item_id"`
-	Grade            int  `json:"grade"`
+	Grade            float32  `json:"grade"`
 }
 
 // TeamBlogScoreService 团队博客成绩模型
@@ -26,10 +35,28 @@ type TeamBlogScoreService struct {
 	TeamBlogScoreItems []TeamBlogScoreItem `json:"team_blog_score_items"`
 }
 
-// TeamBlogScoreItem 个人博客成绩项
+// TeamBlogScoreItem 团队博客成绩项
 type TeamBlogScoreItem struct {
 	ScoringItemID    uint `json:"scoring_item_id"`
 	Grade            int  `json:"grade"`
+}
+
+// CheckLoadedPersonalBlogService
+func (service *CheckLoadedBlogService) CheckLoadedPersonalBlog() serializer.Response{
+	model.Repo.LoadPersonalZeroScore(service.HomeworkID, service.ScorekeeperID)
+	return serializer.Response{
+		Code: 0,
+		Msg:  "Success",
+	}
+}
+
+// CheckLoadedTeamBlogService
+func (service *CheckLoadedBlogService) CheckLoadedTeamBlog() serializer.Response{
+	model.Repo.LoadTeamZeroScore(service.HomeworkID, service.ScorekeeperID)
+	return serializer.Response{
+		Code: 0,
+		Msg:  "Success",
+	}
 }
 
 // CountFirstLevelScoreItem 通过累加第一级其下所有最子项(叶节点)得到第一级评分项自身的得分

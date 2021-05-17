@@ -7,7 +7,7 @@ type FinalBlogScore struct {
 	gorm.Model
 	HomeworkID    uint `gorm:"type:int;not null"`
 	ScorekeeperID uint `gorm:"type:int;not null"`
-	BlogGrade     int  `gorm:"type:int;not null"`
+	BlogGrade     float32  `gorm:"type:float;not null"`
 }
 
 type FinalBlogScoreRepositoryInterface interface {

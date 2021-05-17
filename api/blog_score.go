@@ -7,24 +7,24 @@ import (
 	"net/http"
 )
 
-// SetPersonalBlogScore 保存个人博客得分项的接口
-func SetPersonalBlogScore(c *gin.Context) {
-	var personalBlogScoreService service.BlogScoreService
-	if err := c.ShouldBind(&personalBlogScoreService); err == nil {
-		personalBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
-		res := personalBlogScoreService.StorePersonalBlogScore()
+// CheckLoadedPersonalZeroScore 判断成绩是否已预先存零
+func CheckLoadedPersonalZeroScore(c *gin.Context) {
+	var checkZeroService service.CheckLoadedBlogService
+	if err := c.ShouldBind(&checkZeroService); err == nil {
+		checkZeroService.BlogScoreRepositoryInterface = &model.Repo
+		res := checkZeroService.CheckLoadedPersonalBlog()
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
-// SetTeamBlogScore 保存团队博客得分项的接口
-func SetTeamBlogScore(c *gin.Context) {
-	var teamBlogScoreService service.BlogScoreService
-	if err := c.ShouldBind(&teamBlogScoreService); err == nil {
-		teamBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
-		res := teamBlogScoreService.StoreTeamBlogScore()
+// CheckLoadedTeamZeroScore 判断成绩是否已预先存零
+func CheckLoadedTeamZeroScore(c *gin.Context) {
+	var checkZeroService service.CheckLoadedBlogService
+	if err := c.ShouldBind(&checkZeroService); err == nil {
+		checkZeroService.BlogScoreRepositoryInterface = &model.Repo
+		res := checkZeroService.CheckLoadedTeamBlog()
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
