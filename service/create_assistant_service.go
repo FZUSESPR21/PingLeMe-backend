@@ -19,7 +19,7 @@ type CreateAssistantService struct {
 func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 	assistant := model.User{
 		UID:      service.UID,
-		Nickname: service.Name,
+		UserName: service.Name,
 		Role:     model.RoleAssistant,
 	}
 	err := assistant.SetPassword(service.Password)

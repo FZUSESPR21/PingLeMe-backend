@@ -9,8 +9,8 @@ import (
 // EditPairIndormation 填写结对信息
 type EditPairIndormationService struct {
 	model.PairRepositoryInterface
-	Student1ID int `gorm:"type:int;not null;index:studentID"`
-	Student2ID int `gorm:"type:int;index:studentID"`
+	Student1ID uint `gorm:"type:int;not null;index:studentID"`
+	Student2ID uint `gorm:"type:int;index:studentID"`
 }
 
 // Edit 填写结对信息
