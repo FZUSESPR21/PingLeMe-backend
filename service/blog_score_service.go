@@ -47,7 +47,16 @@ type TeamBlogScoreItem struct {
 
 // CheckLoadedPersonalBlogService
 func (service *CheckLoadedBlogService) CheckLoadedPersonalBlog() serializer.Response{
-	model.Repo.LoadPersonalZeroScore(service.HomeworkID, service.ScorekeeperID)
+	err1, err2, err3 := model.Repo.LoadPersonalZeroScore(service.HomeworkID, service.ScorekeeperID)
+	if err1 != nil {
+		fmt.Println("ERROR")
+	}
+	if err2 != nil {
+		fmt.Println("ERROR")
+	}
+	if err3 != nil {
+		fmt.Println("ERROR")
+	}
 	return serializer.Response{
 		Code: 0,
 		Msg:  "Success",
@@ -56,7 +65,16 @@ func (service *CheckLoadedBlogService) CheckLoadedPersonalBlog() serializer.Resp
 
 // CheckLoadedTeamBlogService
 func (service *CheckLoadedBlogService) CheckLoadedTeamBlog() serializer.Response{
-	model.Repo.LoadTeamZeroScore(service.HomeworkID, service.ScorekeeperID)
+	err1, err2, err3 := model.Repo.LoadTeamZeroScore(service.HomeworkID, service.ScorekeeperID)
+	if err1 != nil {
+		fmt.Println("ERROR")
+	}
+	if err2 != nil {
+		fmt.Println("ERROR")
+	}
+	if err3 != nil {
+		fmt.Println("ERROR")
+	}
 	return serializer.Response{
 		Code: 0,
 		Msg:  "Success",
