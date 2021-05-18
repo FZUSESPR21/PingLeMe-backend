@@ -8,7 +8,6 @@ import (
 	"PingLeMe-Backend/serializer"
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -16,7 +15,7 @@ import (
 
 // Ping 状态检查页面
 func Ping(c *gin.Context) {
-	c.JSON(http.StatusOK, serializer.Response{
+	c.JSON(200, serializer.Response{
 		Code: 0,
 		Msg:  "Pong",
 	})

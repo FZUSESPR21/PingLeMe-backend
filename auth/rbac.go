@@ -4,6 +4,8 @@ package auth
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/util"
+	"reflect"
 )
 
 type RBACAuth struct {
@@ -11,30 +13,55 @@ type RBACAuth struct {
 }
 
 // CheckUserRole 检查用户角色
-func (rbac RBACAuth) CheckUserRole(user model.User, roleDesc string) (bool, error) {
+func (rbac RBACAuth) CheckUserRole(user model.User, roleDescOrType interface{}) (bool, error) {
 	roles, err := rbac.GetUserRoles(user.ID)
 	if err != nil {
 		return false, err
 	}
 
-	for _, r := range roles {
-		if r.Desc == roleDesc {
-			return true, nil
+	switch roleDescOrType.(type) {
+	case uint8:
+		for _, r := range roles {
+			if r.Type == roleDescOrType {
+				return true, nil
+			}
 		}
+		return false, nil
+	case string:
+		for _, r := range roles {
+			if r.Desc == roleDescOrType {
+				return true, nil
+			}
+		}
+		return false, nil
+	default:
+		return false, &util.InterfaceTypeErr{Name: reflect.TypeOf(roleDescOrType).String()}
 	}
-	return false, nil
 }
 
 // CheckUserPermission 检查用户权限
-func (rbac RBACAuth) CheckUserPermission(user model.User, permissionDesc string) (bool, error) {
+func (rbac RBACAuth) CheckUserPermission(user model.User, permissionDescOrType interface{}) (bool, error) {
 	permissions, err := rbac.GetUserPermissions(user.ID)
 	if err != nil {
 		return false, err
 	}
-	for _, p := range permissions {
-		if p.Desc == permissionDesc {
-			return true, nil
+
+	switch permissionDescOrType.(type) {
+	case uint8:
+		for _, p := range permissions {
+			if p.Type == permissionDescOrType {
+				return true, nil
+			}
 		}
+		return false, nil
+	case string:
+		for _, p := range permissions {
+			if p.Desc == permissionDescOrType {
+				return true, nil
+			}
+		}
+		return false, nil
+	default:
+		return false, &util.InterfaceTypeErr{Name: reflect.TypeOf(permissionDescOrType).String()}
 	}
-	return false, nil
 }

@@ -6,29 +6,19 @@ import (
 	"time"
 )
 
-const PAGESIZE = 6
-
 type HomeworkService struct {
 	model.HomeworkRepositoryInterface
 	ClassID      uint          `json:"class_id" binding:"required"`
 	Type         uint8         `json:"type" binding:"required"`
 	Title        string        `json:"title" binding:"required"`
 	Content      string        `json:"content" binding:"required"`
-	StartTime    time.Time     `json:"start_time"`
-	EndTime      time.Time     `json:"end_time"`
+	StartTime    time.Time     `json:"start_time" binding:"required"`
+	EndTime      time.Time     `json:"end_time" binding:"required"`
 	ScoringItems []ScoringItem `json:"scoring_items"`
-}
-
-type HomeworkListService struct {
-	model.HomeworkRepositoryInterface
-	model.ClassRepositoryInterface
-	ClassID uint `json:"class_id" binding:"required"`
-	Page    int  `json:"page" binding:"required"`
 }
 
 type HomeworkDetailService struct {
 	model.HomeworkRepositoryInterface
-	HomeworkID uint `json:"homework_id"`
 }
 
 // ScoringItem 评分项模型
@@ -63,20 +53,7 @@ func (service *HomeworkService) CreateHomework() serializer.Response {
 	}
 }
 
-// ViewHomeworkList 查看作业列表
-func (service *HomeworkListService) ViewHomeworkList() serializer.Response {
-	sum := service.CountHomework(service.ClassID)
-	homework, err := service.GetAllHomeworkByPage(service.ClassID, service.Page, PAGESIZE)
-	if err != nil {
-		return serializer.ParamErr("", err)
-	}
-	return serializer.Response{
-		Code: 0,
-		Data: serializer.BuildHomeworkList(homework, (sum/PAGESIZE)+1, service.Page),
-	}
-}
-
-// ViewHomework 查看作业详情
+// ViewHomework 查看作业
 func (service *HomeworkDetailService) ViewHomework(ID uint) serializer.Response {
 	homework, err := service.GetHomeworkByID(ID)
 	if err != nil {
@@ -88,7 +65,7 @@ func (service *HomeworkDetailService) ViewHomework(ID uint) serializer.Response 
 	}
 }
 
-// GetChildScoringItems 递归获取子项
+// GetChildrenItems 递归获取子项
 func GetChildScoringItems(target []ScoringItem, level int) []model.ScoringItem {
 	items := make([]model.ScoringItem, 0)
 	for _, item := range target {
@@ -115,25 +92,4 @@ func (scoringItem *ScoringItem) AssignedToAssistantService(assistantID uint) []m
 		result[i].AssistantID = assistantID
 	}
 	return result
-}
-
-// GetHomeworkList 获取作业列表函数
-func (service *HomeworkListService) GetHomeworkList() serializer.Response {
-	class, err := service.GetClassByID(service.ClassID)
-	if err != nil {
-		return serializer.ParamErr("该班级不存在", err)
-	}
-
-	homeworks, err1 := class.GetAllHomework()
-	if err1 != nil {
-		return serializer.ParamErr("获取作业列表失败", err)
-	}
-
-	pages := len(homeworks) / 5
-	homeworks = homeworks[(service.Page-1)*5 : (service.Page-1)*5+5]
-
-	return serializer.Response{
-		Code: 0,
-		Data: serializer.BuildHomeworkList(homeworks, pages, service.Page),
-	}
 }

@@ -45,7 +45,7 @@ jobs:
 
 workflows:
   version: 2
-  check-build:
+  install-run:
     jobs:
       - build:
         filters:
@@ -53,8 +53,6 @@ workflows:
             only:
               - /*main/
               - /release-.*/
-  check-lint:
-    jobs:
       - lint:
         filters:
           branches:

@@ -11,18 +11,18 @@ import (
 // Pair 结对模型
 type Pair struct {
 	gorm.Model
-	Student1ID uint `gorm:"type:int;not null;index:studentID"`
-	Student2ID uint `gorm:"type:int;index:studentID"`
+	Student1ID int `gorm:"type:int;not null;index:studentID"`
+	Student2ID int `gorm:"type:int;index:studentID"`
 }
 
 type PairRepositoryInterface interface {
 	GetPair(ID interface{}) (Pair, error)
 	CreatePair(pair Pair) (Pair, error)
-	GetPairByStudentID(ID uint) (uint, error)
+	GetPairByStudentID(ID int) (int, error)
 	DeletePair(ID int) error
 	DeletePairByStudentID(ID int) error
-	UpdatePair(ID int, student1ID uint, student2ID uint) (Pair, error)
-	UpdatePairByStu(student1ID uint, student2ID uint) (int, error)
+	UpdatePair(ID int, student1ID int, student2ID int) (Pair, error)
+	UpdatePairByStu(student1ID int, student2ID int) (int, error)
 }
 
 // GetPair 用ID获取结对
@@ -54,7 +54,7 @@ func (Repo *Repository) CreatePair(pair Pair) (Pair, error) {
 }
 
 // GetPairByStudentID 根据学生ID获取结对
-func (Repo *Repository) GetPairByStudentID(ID uint) (uint, error) {
+func (Repo *Repository) GetPairByStudentID(ID int) (int, error) {
 	var pair Pair
 	result := Repo.DB.Where("student1_id = ?", ID).Or("student2_id = ?", ID).First(&pair)
 	if result.Error != nil {
@@ -80,7 +80,7 @@ func (Repo *Repository) DeletePairByStudentID(ID int) error {
 }
 
 // UpdatePair 更新Pair
-func (Repo *Repository) UpdatePair(ID int, student1ID uint, student2ID uint) (Pair, error) {
+func (Repo *Repository) UpdatePair(ID int, student1ID int, student2ID int) (Pair, error) {
 	var pair Pair
 	result := Repo.DB.First(&pair, ID)
 	if result.Error != nil {
@@ -100,17 +100,19 @@ func (Repo *Repository) UpdatePair(ID int, student1ID uint, student2ID uint) (Pa
 	return pair, nil
 }
 
-// UpdatePairByStu 更新Pair
-func (Repo *Repository) UpdatePairByStu(student1ID uint, student2UID uint) (int, error) {
+// UpdatePair 更新Pair
+func (Repo *Repository) UpdatePairByStu(student1ID int, student2UID int) (int, error) {
 	//0为查询错误
 	//1为成功
 	//2为对方已与别人结对
 	//3为保存错误
-	user1, err := Repo.GetUserByUID(fmt.Sprint(student2UID))
+	var user UserRepositoryInterface
+	user1, err := user.GetUserByUID(fmt.Sprint(student2UID))
 	if err != nil {
 		return 0, err
 	}
-	student2ID := user1.ID
+	student2IDu := user.GetUserID(user1)
+	student2ID := int(student2IDu)
 
 	var pair1 Pair
 	result1 := Repo.DB.Where("student1_id = ?", student1ID).Or("student2_id = ?", student1ID).First(&pair1)

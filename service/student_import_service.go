@@ -80,7 +80,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 
 		user := model.User{
 			UID:      row[0],
-			UserName: row[1],
+			Nickname: row[1],
 			Role:     model.RoleStudent,
 		}
 		if err := user.SetPassword(row[3]); err != nil {
