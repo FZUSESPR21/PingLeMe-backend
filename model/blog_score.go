@@ -83,14 +83,14 @@ func (Repo *Repository) SetTeamBlogScore(teamBlogScore []TeamBlogScore) error {
 
 
 // GetPersonalBlogScoreByID 用ID获取个人博客成绩
-func (Repo *Repository) GetPersonalBlogScoreByID(ID interface{}) (PersonalBlogScore, error) {
+func (Repo *Repository) GetPersonalBlogScoreByID(ID uint) (PersonalBlogScore, error) {
 	var personalBlogScore PersonalBlogScore
 	result := Repo.DB.Where("id = ?", ID).Find(&personalBlogScore)
 	return personalBlogScore, result.Error
 }
 
 // GetTeamBlogScoreByID 用ID获取团队博客成绩
-func (Repo *Repository) GetTeamBlogScoreByID(ID interface{}) (TeamBlogScore, error) {
+func (Repo *Repository) GetTeamBlogScoreByID(ID uint) (TeamBlogScore, error) {
 	var teamBlogScore TeamBlogScore
 	result := Repo.DB.Where("id = ?", ID).Find(&teamBlogScore)
 	return teamBlogScore, result.Error
