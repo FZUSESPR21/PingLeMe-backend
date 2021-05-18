@@ -29,6 +29,12 @@ func NewRouter() *gin.Engine {
 		// 用户登录
 		v1.POST("user/login", api.UserLogin)
 
+		v1.GET("teacher/list", api.GetTeachers)
+		v1.POST("team/create", api.CreateTeam)
+		v1.POST("team/member/add", api.AddTeammate)
+		v1.POST("team/member/remove", api.DeleteTeammate)
+		v1.POST("user/teacher/add", api.AddTeachers)
+
 		// 需要登录保护的
 		auth := v1.Group("")
 		auth.Use(middleware.LoginRequired())

@@ -44,6 +44,57 @@ func UserLogout(c *gin.Context) {
 	})
 }
 
+// UserInfo 用户信息接口
+func UserInfo(c *gin.Context) {
+	var service service.UserInfoService
+	service.PairRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	userID := c.DefaultQuery("user", "-1")
+	if userID == "-1" {
+		// 404
+	} else {
+		user, err := strconv.Atoi(userID)
+		if err != nil {
+			res := serializer.ParamErr("", err)
+			c.JSON(http.StatusOK, res)
+		} else if user < 0 {
+			res := serializer.ParamErr("用户ID错误", nil)
+			c.JSON(http.StatusOK, res)
+		} else {
+			res := service.Information(uint(user))
+			c.JSON(http.StatusOK, res)
+		}
+	}
+}
+
+func GetTeacherList(c *gin.Context) {
+	var service service.GetTeacherListService
+	res := service.GetTeacherList()
+	c.JSON(http.StatusOK, res)
+}
+
+func AddTeachers(c *gin.Context) {
+	var service service.AddTeacherService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.AddTeacher()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+func GetTeachers(c *gin.Context) {
+	var service service.GetTeacherListService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.GetTeacherList()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
 // StudentImport 文件导入学生（Excel）
 func StudentImport(c *gin.Context) {
 	file, _ := c.FormFile("file")
@@ -64,4 +115,29 @@ func StudentImport(c *gin.Context) {
 	var service service.StudentImportService
 	res := service.Import(StudentImportFileDst + file.Filename)
 	c.JSON(http.StatusOK, res)
+}
+
+// ChangePassword 修改密码
+func ChangePassword(c *gin.Context) {
+	var service service.ChangePasswordService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.ChangePassword()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// AddStudents 批量添加学生
+func AddStudents(c *gin.Context) {
+	var service service.AddStudentsService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
+		res := service.AddStudents()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
 }
