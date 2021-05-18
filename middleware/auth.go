@@ -8,7 +8,6 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/util"
 	"go.uber.org/zap"
-	"net/http"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -39,34 +38,34 @@ func LoginRequired() gin.HandlerFunc {
 			}
 		}
 
-		c.JSON(http.StatusOK, serializer.CheckLogin())
+		c.JSON(200, serializer.CheckLogin())
 		c.Abort()
 	}
 }
 
 // PermissionRequired 需要权限
-func PermissionRequired(permissionDesc string) gin.HandlerFunc {
+func PermissionRequired(permissionTypeOrDesc interface{}) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if user, _ := c.Get("user"); user != nil {
 			if u, ok := user.(*model.User); ok {
 				authService := auth.RBACAuth{RBACRepositoryInterface: &model.Repo}
-				has, err := authService.CheckUserPermission(*u, permissionDesc)
+				has, err := authService.CheckUserPermission(*u, permissionTypeOrDesc)
 				if err != nil {
 					util.Log().Error("middleware/authService.go/PermissionRequired", zap.Error(err))
-					c.JSON(http.StatusOK, serializer.ServerInnerErr("", err))
+					c.JSON(200, serializer.ServerInnerErr("", err))
 					c.Abort()
 				}
 				if has {
 					c.Next()
 					return
 				} else {
-					c.JSON(http.StatusOK, serializer.PermissionDenied())
+					c.JSON(200, serializer.PermissionDenied())
 					c.Abort()
 				}
 			}
 		}
 
-		c.JSON(http.StatusOK, serializer.CheckLogin())
+		c.JSON(200, serializer.CheckLogin())
 		c.Abort()
 	}
 }

@@ -10,12 +10,12 @@ import (
 // DeleteAssistantService 删除助教的服务
 type DeleteAssistantService struct {
 	model.UserRepositoryInterface
-	AssistantID int `form:"assistant_id" json:"assistant_id" binding:"required"`
+	ID int `form:"uid" json:"uid" binding:"required"`
 }
 
 // DeleteAssistant 删除助教函数
 func (service *DeleteAssistantService) DeleteAssistant() serializer.Response {
-	err := service.DeleteUser(service.AssistantID)
+	err := service.DeleteUser(service.ID)
 	if err != nil {
 		return serializer.DBErr("删除助教失败", err)
 	}

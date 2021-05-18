@@ -69,9 +69,9 @@ func TestRBACAuth_CheckUserRole(t *testing.T) {
 		},
 		UID:            "1",
 		PasswordDigest: "1",
-		UserName:       "1",
+		Nickname:       "1",
 		Role:           1,
-	}, "2")
+	}, uint8(1))
 
 	if err != nil {
 		t.Error(err)
@@ -94,15 +94,15 @@ func TestRBACAuth_CheckUserPermission(t *testing.T) {
 		},
 		UID:            "1",
 		PasswordDigest: "1",
-		UserName:       "1",
+		Nickname:       "1",
 		Role:           1,
-	}, "test")
+	}, uint8(1))
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	assert.Equal(t, false, has)
+	assert.Equal(t, true, has)
 
 	repo.AssertExpectations(t)
 }

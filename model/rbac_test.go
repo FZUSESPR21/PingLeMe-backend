@@ -41,7 +41,7 @@ func TestRBAC(t *testing.T) {
 			},
 			UID:            "1",
 			PasswordDigest: "1",
-			UserName:       "1",
+			Nickname:       "1",
 			Role:           1,
 		}}
 
@@ -113,7 +113,7 @@ func TestRBAC(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, uint(1), permissions[0].Type)
+			assert.Equal(t, uint8(1), permissions[0].Type)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
