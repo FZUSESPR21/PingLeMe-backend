@@ -64,7 +64,7 @@ func (service *EvaluationTableService) CreateEvaluationTable() serializer.Respon
 	}
 
 	table.TableItem = GetChildrenItems(service.TableItems, 1)
-	for index, _ := range table.TableItem {
+	for index := range table.TableItem {
 		table.TableItem[index].Index = index
 	}
 
@@ -116,12 +116,12 @@ func (service *EvaluationTableScoreService) AddEvaluationTableScore() serializer
 	if err != nil {
 		return serializer.ParamErr("", err)
 	}
-	tableMap := make(map[uint]model.EvaluationTableItem, 0)
+	tableMap := make(map[uint]model.EvaluationTableItem)
 	for _, t := range table.TableItem {
 		tableMap[t.ID] = t
 	}
 
-	scoreItems := make(map[uint]model.EvaluationItemScore, 0)
+	scoreItems := make(map[uint]model.EvaluationItemScore)
 	for _, i := range service.EvaluationTableScoreItems {
 		item, ok := tableMap[i.ItemID]
 		if !ok {

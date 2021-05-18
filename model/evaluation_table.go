@@ -92,7 +92,6 @@ func (Repo *Repository) SetEvaluationTable(table EvaluationTable) error {
 		Repo.RemoveEvaluationTable(table.TeamID, table.HomeworkID)
 		result := Repo.DB.Create(&table)
 		return result.Error
-		return nil
 	}
 }
 
