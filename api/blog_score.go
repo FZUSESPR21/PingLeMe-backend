@@ -30,3 +30,27 @@ func CheckLoadedTeamZeroScore(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
+
+// UpdatePersonalBlogScore 更新(即评分后载入)个人博客成绩(即助教点击保存评分后)
+func UpdatePersonalBlogScore(c *gin.Context) {
+	var personalBlogScoreService service.PersonalBlogScoreService
+	if err := c.ShouldBind(&personalBlogScoreService); err == nil {
+		personalBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
+		res := personalBlogScoreService.CountPersonalBlogScore()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// UpdatePersonalBlogScore 更新(即评分后载入)团队博客成绩(即助教点击保存评分后)
+func UpdateTeamBlogScore(c *gin.Context) {
+	var teamBlogScoreService service.TeamBlogScoreService
+	if err := c.ShouldBind(&teamBlogScoreService); err == nil {
+		teamBlogScoreService.BlogScoreRepositoryInterface = &model.Repo
+		res := teamBlogScoreService.CountTeamBlogScore()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}

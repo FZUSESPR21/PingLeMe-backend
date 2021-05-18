@@ -69,7 +69,7 @@ func (Repo *Repository) LoadTeamZeroScore(homeworkID uint, scorekeeperID uint) (
 	return result1.Error, result2.Error, result3.Error
 }
 
-// SetPersonalBlogScore 保存个人作业成绩（接收前端发来的评分结果项）
+// SetPersonalBlogScore 保存个人作业成绩（接收前端发来的评分结果项）(useless)
 func (Repo *Repository) SetPersonalBlogScore(personalBlogScore []PersonalBlogScore) error {
 	result := Repo.DB.Create(&personalBlogScore)
 	return result.Error
