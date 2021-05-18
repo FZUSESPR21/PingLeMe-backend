@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package service
 
 import (
@@ -33,7 +35,7 @@ func (service *AddStudentsService) AddStudents() serializer.Response {
 	var user []model.User
 	for _, a := range service.Students {
 		u, err := transformStruct(a)
-		if err!= nil {
+		if err != nil {
 			return serializer.ParamErr("", err)
 		}
 		user = append(user, u)
