@@ -70,7 +70,7 @@ func (Repo *Repository) SetUser(user User) error {
 	return nil
 }
 
-// SetUsers 添加用户组
+// SetUsers 添加用户组,
 func (Repo *Repository) SetUsers(users []User) error {
 	result := Repo.DB.Create(&users)
 	if result.Error != nil {

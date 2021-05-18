@@ -6,12 +6,14 @@ import "PingLeMe-Backend/model"
 
 // EvaluationTable 评审表序列化器
 type EvaluationTable struct {
+	TableID	   uint					 `json:"table_id"`
 	TableName  string                `json:"table_name"`
 	TableItems []EvaluationTableItem `json:"table_items"`
 }
 
 // EvaluationTableItem 评审表项序列化器
 type EvaluationTableItem struct {
+	ItemID			uint				  `json:"item_id"`
 	Content         string                `json:"content"`
 	Score           int                   `json:"score"`
 	Description     string                `json:"description"`
@@ -24,6 +26,7 @@ func BuildEvaluationTable(tableModel model.EvaluationTable) EvaluationTable {
 	table.TableName = tableModel.TableName
 	items := BuildTableItems(0, len(tableModel.TableItem)-1, tableModel.TableItem)
 	return EvaluationTable{
+		TableID: tableModel.ID,
 		TableName:  tableModel.TableName,
 		TableItems: items,
 	}
@@ -48,6 +51,7 @@ func BuildTableItems(begin, end int, tableItems []model.EvaluationTableItem) []E
 		if tableItems[i].Level == level {
 			if b != -1 {
 				items = append([]EvaluationTableItem{{
+					ItemID: 		 tableItems[i].ID,
 					Content:         tableItems[i].Content,
 					Score:           tableItems[i].Score,
 					ChildTableItems: BuildTableItems(b, e, tableItems),

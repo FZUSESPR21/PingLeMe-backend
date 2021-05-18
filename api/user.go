@@ -44,31 +44,35 @@ func UserLogout(c *gin.Context) {
 	})
 }
 
+func UserMe(c *gin.Context) {
+	var service service.UserInfoService
+	service.PairRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	res := service.Information(CurrentUser(c).ID)
+	c.JSON(http.StatusOK, res)
+}
+
 // UserInfo 用户信息接口
 func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
 	service.PairRepositoryInterface = &model.Repo
 	service.UserRepositoryInterface = &model.Repo
-	userID := c.DefaultQuery("user", "-1")
-	if userID == "-1" {
-		// 404
+	userID := c.Param("user")
+	user, err := strconv.Atoi(userID)
+	if err != nil {
+		res := serializer.ParamErr("", err)
+		c.JSON(http.StatusOK, res)
+	} else if user < 0 {
+		res := serializer.ParamErr("用户ID错误", nil)
+		c.JSON(http.StatusOK, res)
 	} else {
-		user, err := strconv.Atoi(userID)
-		if err != nil {
-			res := serializer.ParamErr("", err)
-			c.JSON(http.StatusOK, res)
-		} else if user < 0 {
-			res := serializer.ParamErr("用户ID错误", nil)
-			c.JSON(http.StatusOK, res)
-		} else {
-			res := service.Information(uint(user))
-			c.JSON(http.StatusOK, res)
-		}
+		res := service.Information(uint(user))
+		c.JSON(http.StatusOK, res)
 	}
 }
 
 func GetTeacherList(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	res := service.GetTeacherList()
 	c.JSON(http.StatusOK, res)
 }
@@ -85,7 +89,7 @@ func AddTeachers(c *gin.Context) {
 }
 
 func GetTeachers(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.GetTeacherList()

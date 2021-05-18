@@ -6,13 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type SetTeamInfoService struct {
+type TeamInfoService struct {
 	model.TeamRepositoryInterface
 	Name string `form:"name" json:"name"`
 	gorm.Model
 }
 
-func (service *SetTeamInfoService) TeamInfoSet() serializer.Response {
+func (service *TeamInfoService) TeamInfoSet() serializer.Response {
 	if has, err := service.GetTeamByName(service.Name); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	} else if has == 1 {

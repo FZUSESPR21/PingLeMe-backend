@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type TeammateSetService struct {
+type TeammateAddService struct {
 	model.TeamRepositoryInterface
 	model.UserRepositoryInterface
 	gorm.Model
@@ -14,7 +14,7 @@ type TeammateSetService struct {
 	TeamNumber int    `form:"teamNumber" json:"teamNumber"`
 }
 
-func (service *TeammateSetService) AddTeammate() serializer.Response {
+func (service *TeammateAddService) AddTeammate() serializer.Response {
 	//TODO 1.对学生身份判断 2.是否已有团队判断 3.团队是否存在
 	var has int64
 	var err error
@@ -39,7 +39,7 @@ func (service *TeammateSetService) AddTeammate() serializer.Response {
 
 }
 
-func (service *TeammateSetService) DeleteTeammate() serializer.Response {
+func (service *TeammateAddService) DeleteTeammate() serializer.Response {
 	//TODO 1.对学生身份判断 2.是否已有团队判断 3.团队是否存在
 	var has int64
 	var err error
