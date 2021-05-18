@@ -30,6 +30,7 @@ type TeamRepositoryInterface interface {
 	TestFunc() int
 	AddTeammateByID(uid int, teamID int) (int64, error)
 	DeleteTeammateByID(uid int) (int64, error)
+	GetTeamByTeamLeader(leaderID uint) (Team, error)
 }
 
 func (Repo *Repository) TestFunc() int {

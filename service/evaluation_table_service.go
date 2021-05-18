@@ -30,6 +30,7 @@ type EvaluationTableDetailService struct {
 
 type EvaluationTableListService struct {
 	model.EvaluationTableRepositoryInterface
+	model.TeamRepositoryInterface
 	TeamID     uint `json:"team_id" binding:"required;gte=0"`
 	HomeworkID uint `json:"homework_id" binding:"required;gte=0"`
 }
@@ -182,10 +183,30 @@ func GetChildrenItems(target []EvaluationTableItem, level int) []model.Evaluatio
 }
 
 // GetTableList 获取评审表列表
-func (service *EvaluationTableListService) GetTableList(teamID uint) serializer.Response {
-	list, err := service.GetEvaluationTableList(service.HomeworkID, teamID)
-	if err != nil {
-		return serializer.ServerInnerErr("", err)
+func (service *EvaluationTableListService) GetTableList(user model.User) serializer.Response {
+	var teamID uint
+	switch user.Role {
+	case model.RoleStudent:
+		if team, err := service.GetTeamByTeamLeader(user.ID); err != nil {
+			return serializer.ParamErr("", err)
+		} else {
+			teamID = team.ID
+		}
+		if list, err := service.GetEvaluationTableList(service.HomeworkID, teamID); err != nil {
+			return serializer.ServerInnerErr("", err)
+		} else {
+			return serializer.BuildEvaluationTableListResponse(list)
+		}
+	case model.RoleTeacher, model.RoleAssistant:
+		if list, err := service.GetEvaluationTableList(service.HomeworkID, 0); err != nil {
+			return serializer.ServerInnerErr("", err)
+		} else {
+			return serializer.BuildEvaluationTableListResponse(list)
+		}
+	default:
+		return serializer.Response{
+			Code:  40001,
+			Msg:   "User Role Err",
+		}
 	}
-	return serializer.BuildEvaluationTableListResponse(list)
 }

@@ -55,7 +55,8 @@ func GetEvaluationTableList(c *gin.Context) {
 	var service service.EvaluationTableListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.EvaluationTableRepositoryInterface = &model.Repo
-		res := service.GetTableList()
+		user := CurrentUser(c)
+		res := service.GetTableList(*user)
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, serializer.ParamErr("", err))
