@@ -22,8 +22,8 @@ type HomeworkService struct {
 type HomeworkListService struct {
 	model.HomeworkRepositoryInterface
 	model.ClassRepositoryInterface
-	ClassID uint `json:"class_id" binding:"required"`
-	Page    int  `json:"page" binding:"required"`
+	ClassID uint `form:"class_id" json:"class_id" binding:"required"`
+	Page    int  `form:"page" json:"page" binding:"required"`
 }
 
 type HomeworkDetailService struct {

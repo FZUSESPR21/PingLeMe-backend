@@ -23,7 +23,7 @@ type Assistant struct {
 func (service *CreateAssistantService) CreateAssistant() serializer.Response {
 	assistants := make([]model.User, len(service.Assistants))
 	i := 0
-	for _, a:= range service.Assistants{
+	for _, a := range service.Assistants {
 		assistant := model.User{
 			UID:      a.UID,
 			UserName: a.Name,
