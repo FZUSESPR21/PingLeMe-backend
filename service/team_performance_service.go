@@ -7,8 +7,8 @@ import (
 	"PingLeMe-Backend/serializer"
 )
 
-// FillInPerformanceService 填写绩效的服务
-type FillInPerformanceService struct {
+// TeamPerformanceService 填写绩效的服务
+type TeamPerformanceService struct {
 	model.PerformanceRepositoryInterface
 	HomeworkID int `form:"homework_id" json:"homework_id" binding:"required"`
 	StudentID  int `form:"student_id" json:"student_id" binding:"required"`
@@ -16,7 +16,7 @@ type FillInPerformanceService struct {
 }
 
 // FillInPerformance 填写绩效函数
-func (service *FillInPerformanceService) FillInPerformance() serializer.Response {
+func (service *TeamPerformanceService) FillInPerformance() serializer.Response {
 	performance := model.Performance{
 		HomeworkID: service.HomeworkID,
 		StudentID:  service.StudentID,

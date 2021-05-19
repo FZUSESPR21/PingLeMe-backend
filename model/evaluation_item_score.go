@@ -9,17 +9,17 @@ import (
 // EvaluationItemScore 评审表项成绩模型
 type EvaluationItemScore struct {
 	gorm.Model
-	ScoringItemID int    `gorm:"type:int;not null"`
-	TeamID        int    `gorm:"type:int;not null"`
-	UID           string `gorm:"type:varchar(9);not null"`
-	Grade         int    `gorm:"type:int;not null"`
+	ItemID int    `gorm:"type:int;not null"`
+	TeamID int    `gorm:"type:int;not null"`
+	UID    string `gorm:"type:varchar(9);not null"`
+	Score  int    `gorm:"type:int;not null"`
 }
 
 type EvaluationItemScoreRepositoryInterface interface {
 	CreateEvaluationItemScore(evaluationItemScore EvaluationItemScore) (EvaluationItemScore, error)
 	GetEvaluationItemScore(ID int) (EvaluationItemScore, error)
 	DeleteEvaluationItemScore(ID int) error
-	UpdateEvaluationItemScore(ID int, grade int) error
+	UpdateEvaluationItemScore(ID int, score int) error
 	GetEvaluationItemScores(scoringItemID int, teamID int) ([]EvaluationItemScore, error)
 }
 
@@ -49,8 +49,8 @@ func (Repo *Repository) DeleteEvaluationItemScore(ID int) error {
 }
 
 // UpdateEvaluationItemScore 更新评审表项成绩
-func (Repo *Repository) UpdateEvaluationItemScore(ID int, grade int) error {
-	result := Repo.DB.Model(&EvaluationItemScore{}).Where("id = ?", ID).Update("grade", grade)
+func (Repo *Repository) UpdateEvaluationItemScore(ID int, score int) error {
+	result := Repo.DB.Model(&EvaluationItemScore{}).Where("id = ?", ID).Update("score", score)
 	return result.Error
 }
 

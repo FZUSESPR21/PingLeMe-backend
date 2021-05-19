@@ -19,7 +19,7 @@ func CreateTeam(c *gin.Context) {
 }
 
 func AddTeammate(c *gin.Context) {
-	var service service.TeammateSetService
+	var service service.TeammateAddService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
@@ -31,7 +31,7 @@ func AddTeammate(c *gin.Context) {
 }
 
 func DeleteTeammate(c *gin.Context) {
-	var service service.TeammateSetService
+	var service service.TeammateAddService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
