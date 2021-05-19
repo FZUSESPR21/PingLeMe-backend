@@ -114,13 +114,13 @@ func NewRouter() *gin.Engine {
 		//v1.POST("homework/correct", )
 
 		// 获取评审表
-		//v1.GET("evaluation_table/:id", )
+		v1.GET("evaluation-table/detail/:id", api.GetEvaluationTable)
 
 		// 填写评审表
-		//v1.POST("evaluation_table/edit", )
+		v1.POST("evaluation-table/fill", api.FillEvaluationTable)
 
 		// 创建评审表
-		//v1.POST("evaluation-table/create/:team_id", )
+		v1.POST("evaluation-table/create", api.CreateEvaluationTable)
 
 		// 需要登录保护的
 		auth := v1.Group("")

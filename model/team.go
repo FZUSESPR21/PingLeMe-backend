@@ -30,6 +30,7 @@ type TeamRepositoryInterface interface {
 	TestFunc() int
 	AddTeammateByID(uid int, teamID int) (int64, error)
 	DeleteTeammateByID(uid int) (int64, error)
+	GetTeamByTeamLeader(leaderID uint) (Team, error)
 }
 
 func (Repo *Repository) TestFunc() int {
@@ -81,4 +82,10 @@ func (Repo *Repository) DeleteTeammateByID(uid int) (int64, error) {
 	//TODO 一大堆判断
 	result := Repo.DB.Exec("delete from student_team where user_id = ?", uid)
 	return result.RowsAffected, result.Error
+}
+
+func (Repo *Repository) GetTeamByTeamLeader(leaderID uint) (Team, error) {
+	var team Team
+	result := Repo.DB.Where("team_leader_id", leaderID).First(&team)
+	return team, result.Error
 }
