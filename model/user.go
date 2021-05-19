@@ -3,7 +3,6 @@
 package model
 
 import (
-	"fmt"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -74,19 +73,13 @@ func (Repo *Repository) SetUser(user User) error {
 // SetUsers 添加用户组,
 func (Repo *Repository) SetUsers(users []User) error {
 	result := Repo.DB.Create(&users)
-	fmt.Println(1)
 	if result.Error != nil {
-		fmt.Println(2)
 		return result.Error
 	}
-	fmt.Println(3)
 	err := Repo.SetUsersRole(users[0].Role, users)
-	fmt.Println(4)
 	if err != nil {
-		fmt.Println(5)
 		return err
 	}
-	fmt.Println(6)
 	return nil
 }
 
