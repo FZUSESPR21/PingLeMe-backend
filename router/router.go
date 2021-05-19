@@ -72,7 +72,7 @@ func NewRouter() *gin.Engine {
 		v1.POST("class/assistant/add", api.AddAssistant)
 
 		// 获取班级作业列表
-		v1.GET("class/homework/list/:id", api.GetHomeworkList)
+		v1.GET("class/homework/list/", api.GetHomeworkList)
 
 		// 创建班级
 		//v1.GET("class/create", )
@@ -102,7 +102,7 @@ func NewRouter() *gin.Engine {
 		//v1.POST("class/team/end/:class_id", )
 
 		// 查看作业列表
-		v1.POST("homework/list", api.ViewHomework)
+		v1.POST("homework/list", api.ViewHomeworkList)
 
 		// 创建作业
 		v1.POST("homework/create", api.CreateHomework)

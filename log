@@ -1,1 +1,9 @@
 2021-05-11T16:31:37.661+0800	error	model/migration.go:19	auto migrate error:	{"error": "Error 3780: Referencing column 'evaluation_table_id' and referenced column 'id' in foreign key constraint 'fk_evaluation_tables_table_item' are incompatible."}
+2021-05-16T21:38:39.799+0800	error	model/migration.go:19	auto migrate error:	{"error": "Error 3780: Referencing column 'evaluation_table_id' and referenced column 'id' in foreign key constraint 'fk_evaluation_tables_table_item' are incompatible."}
+2021-05-16T21:44:17.919+0800	panic	model/init.go:40	连接数据库不成功	{"error": "Error 1049: Unknown database 'pingleme'"}
+2021-05-19T18:50:36.904+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
+2021-05-19T18:57:06.920+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
+2021-05-19T18:58:49.994+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
+2021-05-19T18:59:48.084+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
+2021-05-19T19:03:30.307+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
+2021-05-19T19:05:51.470+0800	error	model/rbac.go:82	rbac.go/SetUserRole	{"error": "record not found"}
