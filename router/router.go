@@ -72,7 +72,7 @@ func NewRouter() *gin.Engine {
 		v1.POST("class/assistant/add", api.AddAssistant)
 
 		// 获取班级作业列表
-		v1.GET("class/homework/list/:id", api.GetHomeworkList)
+		v1.GET("class/homework/list/", api.GetHomeworkList)
 
 		// 创建班级
 		//v1.GET("class/create", )
@@ -102,7 +102,7 @@ func NewRouter() *gin.Engine {
 		//v1.POST("class/team/end/:class_id", )
 
 		// 查看作业列表
-		v1.POST("homework/list", api.ViewHomework)
+		v1.POST("homework/list", api.ViewHomeworkList)
 
 		// 创建作业
 		v1.POST("homework/create", api.CreateHomework)
@@ -114,13 +114,13 @@ func NewRouter() *gin.Engine {
 		//v1.POST("homework/correct", )
 
 		// 获取评审表
-		//v1.GET("evaluation_table/:id", )
+		v1.GET("evaluation-table/detail/:id", api.GetEvaluationTable)
 
 		// 填写评审表
-		//v1.POST("evaluation_table/edit", )
+		v1.POST("evaluation-table/fill", api.FillEvaluationTable)
 
 		// 创建评审表
-		//v1.POST("evaluation-table/create/:team_id", )
+		v1.POST("evaluation-table/create", api.CreateEvaluationTable)
 
 		// 需要登录保护的
 		auth := v1.Group("")

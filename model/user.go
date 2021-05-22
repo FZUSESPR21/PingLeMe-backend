@@ -116,7 +116,7 @@ func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {
 	return result.RowsAffected, result.Error
 }
 
-// UpdateUser 修改用户密码
+// ChangeUserPassword 修改用户密码
 func (Repo *Repository) ChangeUserPassword(user User, newPasswordDigest string) error {
 	result := Repo.DB.Model(&user).Update("password_digest", newPasswordDigest)
 	return result.Error

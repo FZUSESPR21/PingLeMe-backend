@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package api
 
 import (
@@ -36,6 +38,7 @@ func ViewHomeworkList(c *gin.Context) {
 	var homeworkListService service.HomeworkListService
 	if err := c.ShouldBind(&homeworkListService); err == nil {
 		homeworkListService.HomeworkRepositoryInterface = &model.Repo
+		homeworkListService.ClassRepositoryInterface = &model.Repo
 		res := homeworkListService.ViewHomeworkList()
 		c.JSON(http.StatusOK, res)
 	} else {

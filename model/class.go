@@ -79,7 +79,7 @@ func (Repo *Repository) ClassAddStudents(stuClasses []StudentClass) []error {
 func (Repo *Repository) AddTeacher(class Class, teacher User) error {
 	var classID = class.ID
 	var teacherID = teacher.ID
-	result := Repo.DB.Exec("insert into teacher_class(class_id,teacher_id) values(?,?)", classID, teacherID)
+	result := Repo.DB.Exec("insert into teacher_class(class_id,user_id) values(?,?)", classID, teacherID)
 	return result.Error
 }
 
@@ -87,7 +87,7 @@ func (Repo *Repository) AddTeacher(class Class, teacher User) error {
 func (Repo *Repository) AddStudent(class Class, student User) error {
 	var classID = class.ID
 	var studentID = student.ID
-	result := Repo.DB.Exec("insert into student_class(class_id,student_id) values(?,?)", classID, studentID)
+	result := Repo.DB.Exec("insert into student_class(class_id,user_id) values(?,?)", classID, studentID)
 	return result.Error
 }
 
@@ -101,7 +101,7 @@ func (Repo *Repository) DeleteClass(classID interface{}) error {
 func (Repo *Repository) DeleteTeacher(class Class, teacher User) error {
 	var classID = class.ID
 	var teacherID = teacher.ID
-	result := Repo.DB.Exec("delete from teacher_class where class_id = ? and teacher_id = ?", classID, teacherID)
+	result := Repo.DB.Exec("delete from teacher_class where class_id = ? and user_id = ?", classID, teacherID)
 	return result.Error
 }
 
