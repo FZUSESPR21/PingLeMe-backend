@@ -16,8 +16,5 @@ type EditStudentClassService struct {
 // EditStudentClass 改变学生班级
 func (service *EditStudentClassService) EditStudentClass() error {
 	err := service.EditStuClass(service.StudentID, service.NewClass)
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

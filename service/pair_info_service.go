@@ -4,25 +4,24 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
-	"fmt"
 )
 
-// PairIndormation 填写结对信息
+// PairIndormation 结对信息
 type PairInfoService struct {
 	model.PairRepositoryInterface
 	model.UserRepositoryInterface
-	StudentID int `json:"uid"`
 }
 
 // info 结对信息
-func (service *PairInfoService) PairInformation() (int, error) {
-	user, err := service.GetUserByUID(fmt.Sprint(service.StudentID))
+func (service *PairInfoService) PairInformation(ID uint) (string, error) {
+	//user, err := service.GetUserByUID(service.StudentUID)
+	//if err != nil {
+	//	return "0", err
+	//}
+	res, err := service.GetPairByStudentID(ID)
 	if err != nil {
-		return 0, err
+		return "0", err
 	}
-	res, err1 := service.GetPairByStudentID(int(service.GetUserID(user)))
-	if err1 != nil {
-		return 0, err
-	}
-	return res, nil
+	stu, err := service.GetUser(res)
+	return stu.UID, nil
 }

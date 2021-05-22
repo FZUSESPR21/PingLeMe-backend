@@ -9,12 +9,11 @@ import (
 // ClassStuList 班级学生列表
 type ClassStuList struct {
 	model.ClassRepositoryInterface
-	ClassName string `json:"className"`
 }
 
 // StuListOfClass 班级学生列表
-func (service *ClassStuList) StuListOfClass() ([]model.User, error) {
-	stus,err := service.GetStusByClassName(service.ClassName)
+func (service *ClassStuList) StuListOfClass(classID int) ([]model.User, error) {
+	stus,err := service.GetStusByClassName(classID)
 	if err != nil {
 		return nil,err
 	}
