@@ -23,5 +23,8 @@ func (service *PairInfoService) PairInformation(ID uint) (string, error) {
 		return "0", err
 	}
 	stu, err := service.GetUser(res)
+	if err != nil {
+		return "0", err
+	}
 	return stu.UID, nil
 }
