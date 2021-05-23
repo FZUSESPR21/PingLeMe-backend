@@ -23,7 +23,7 @@ type TeacherClass struct {
 
 // StudentClass 学生-班级
 type StudentClass struct {
-	StudentID uint
+	UserID uint
 	ClassID   uint
 }
 
@@ -36,6 +36,8 @@ type ClassRepositoryInterface interface {
 	AddStudent(class Class, student User) error
 	AddTeacher(class Class, teacher User) error
 	DeleteTeacher(class Class, teacher User) error
+	EditStuClass(studentID int, newClassID int) error
+	GetStusByClassName(classID int) ([]User, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -63,7 +65,7 @@ func (Repo *Repository) AddClass(name string) (Class, error) {
 func (Repo *Repository) ClassAddStudents(stuClasses []StudentClass) []error {
 	errs := make([]error, 0)
 	for index, stuClass := range stuClasses {
-		result := Repo.DB.Exec("INSERT IGNORE INTO student_class (class_id, student_id) values(?, ?)", stuClass.ClassID, stuClass.StudentID)
+		result := Repo.DB.Exec("INSERT IGNORE INTO student_class (class_id, student_id) values(?, ?)", stuClass.ClassID, stuClass.UserID)
 		if result.Error != nil {
 			errs = append(errs, result.Error)
 		} else if result.RowsAffected == 0 {
@@ -115,4 +117,24 @@ func (Repo *Repository) DeleteStudent(class Class, student User) error {
 func (Repo *Repository) UpdateClassName(class Class, name string) error {
 	result := Repo.DB.Model(&class).Update("name", name)
 	return result.Error
+}
+
+// EditStuClass 修改学生班级
+func (Repo *Repository) EditStuClass(studentID int, newClassID int) error {
+	result := Repo.DB.Exec("update student_class set class_id = ? where user_id = ?", newClassID, studentID)
+	return result.Error
+}
+
+// GetStusByClassID 查看班级学生列表
+func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
+	var stus []User
+	var studentClass []StudentClass
+	result := Repo.DB.Table("student_class").Where("class_id = ?", classID).Find(&studentClass)
+
+	for i := 0; i < len(studentClass); i++{
+		var stu User
+		result = Repo.DB.Where("id = ?", studentClass[i].UserID).First(&stu)
+		stus = append(stus, stu)
+	}
+	return stus, result.Error
 }

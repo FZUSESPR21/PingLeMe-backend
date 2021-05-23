@@ -36,7 +36,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("user/me", api.UserMe)
 
 		// 结对队友信息
-		//v1.GET("user/pair/:id", )
+		v1.GET("user/pair/:id", api.PairInfo)
 
 		// 创建团队
 		v1.POST("team/create", api.CreateTeam)
@@ -60,7 +60,7 @@ func NewRouter() *gin.Engine {
 		v1.POST("user/assistant/add", api.CreateAssistant)
 
 		// 学生结对
-		//v1.POST("user/pair/add", )
+		v1.POST("user/pair/add", api.FillInPairInformation)
 
 		// 教师列表
 		v1.GET("teacher/list", api.GetTeachers)
@@ -78,10 +78,10 @@ func NewRouter() *gin.Engine {
 		//v1.GET("class/create", )
 
 		// 查看班级学生列表
-		//v1.GET("class/student/list/:class_id", )
+		v1.GET("class/student/list/:class_id", api.ClassStuList)
 
 		// 改变学生班级
-		//v1.POST("class/student/move", )
+		v1.POST("class/student/move",  api.EditStuClass)
 
 		// 移除助教
 		v1.POST("class/assistant/remove", api.RemoveAssistant)
