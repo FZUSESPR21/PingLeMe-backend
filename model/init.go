@@ -83,7 +83,7 @@ func firstInit() {
 		newAdmin = userResult
 	}
 
-	if roles, err := Repo.GetUserRoles(newAdmin); err != nil {
+	if roles, err := Repo.GetUserRoles(newAdmin.ID); err != nil {
 		util.Log().Panic("Default admin account init error.", zap.Error(err))
 	} else {
 		has := false

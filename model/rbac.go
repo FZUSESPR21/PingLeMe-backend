@@ -34,8 +34,8 @@ type Permission struct {
 }
 
 type RBACRepositoryInterface interface {
-	GetUserRoles(ID interface{}) ([]Role, error)
-	GetUserPermissions(ID interface{}) ([]Permission, error)
+	GetUserRoles(ID uint) ([]Role, error)
+	GetUserPermissions(ID uint) ([]Permission, error)
 }
 
 // SetRole 新增角色
@@ -101,7 +101,7 @@ func (Repo *Repository) SetUsersRole(roleType uint8, users []User) error {
 }
 
 // GetUserRoles 获得用户角色
-func (Repo *Repository) GetUserRoles(ID interface{}) ([]Role, error) {
+func (Repo *Repository) GetUserRoles(ID uint) ([]Role, error) {
 	var user User
 	result := Repo.DB.Preload("Roles").Where("id = ?", ID).Find(&user)
 	return user.Roles, result.Error
@@ -150,7 +150,7 @@ func (Repo *Repository) GetRolePermissions(roleDescOrType interface{}) ([]Permis
 }
 
 // GetUserPermissions 获取用户权限
-func (Repo *Repository) GetUserPermissions(ID interface{}) ([]Permission, error) {
+func (Repo *Repository) GetUserPermissions(ID uint) ([]Permission, error) {
 	roles, err := Repo.GetUserRoles(ID)
 	if err != nil {
 		util.Log().Error("model/rbac.go/GetUserPermissions", zap.Error(err))
