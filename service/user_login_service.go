@@ -18,8 +18,8 @@ import (
 // UserLoginService 管理用户登录的服务
 type UserLoginService struct {
 	model.UserRepositoryInterface
-	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=18"`
-	Password string `form:"password" json:"password" binding:"required,min=6,max=18"`
+	UID      string `form:"uid" json:"uid" binding:"required,min=4,max=18"`
+	Password string `form:"password" json:"password" binding:"required,min=8,max=20"`
 }
 
 // setSession 设置session
