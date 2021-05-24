@@ -4,6 +4,7 @@ package model
 
 import (
 	"PingLeMe-Backend/util"
+	"errors"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -18,6 +19,8 @@ type Repository struct {
 }
 
 var Repo Repository
+
+var AdminDefaultPasswd string
 
 // Database 在中间件中初始化mysql链接
 func Database(connString string, logLevel logger.LogLevel) {
@@ -55,4 +58,46 @@ func Database(connString string, logLevel logger.LogLevel) {
 	Repo.DB = db
 
 	migration()
+
+	firstInit()
+}
+
+func firstInit() {
+	newAdmin := User{
+		UID:            "admin",
+		UserName:       "admin",
+		Role:           RoleAdmin,
+	}
+
+	var userResult User
+	if result := Repo.DB.Where("role = ?", RoleAdmin).First(&userResult); result.Error != nil {
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			if err := newAdmin.SetPassword(AdminDefaultPasswd); err != nil {
+				util.Log().Panic("Default admin account init error: SetPassword failed.", zap.Error(err))
+			}
+			Repo.DB.Create(&newAdmin)
+		} else {
+			util.Log().Panic("Default admin account init error.", zap.Error(result.Error))
+		}
+	} else {
+		newAdmin = userResult
+	}
+
+	if roles, err := Repo.GetUserRoles(newAdmin.ID); err != nil {
+		util.Log().Panic("Default admin account init error.", zap.Error(err))
+	} else {
+		has := false
+		for _, role := range roles {
+			if role.Type == RoleAdmin {
+				has = true
+				break
+			}
+		}
+		if !has {
+			err := Repo.SetUserRole(RoleAdmin, newAdmin)
+			if err != nil {
+				util.Log().Panic("Default admin account init error: SetUserRole failed.", zap.Error(err))
+			}
+		}
+	}
 }
