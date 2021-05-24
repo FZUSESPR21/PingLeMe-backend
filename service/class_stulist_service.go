@@ -13,9 +13,9 @@ type ClassStuList struct {
 
 // StuListOfClass 班级学生列表
 func (service *ClassStuList) StuListOfClass(classID int) ([]model.User, error) {
-	stus,err := service.GetStusByClassName(classID)
+	stus, err := service.GetStusByClassName(classID)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 	return stus, nil
 }

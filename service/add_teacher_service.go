@@ -14,7 +14,8 @@ type AddTeacherService struct {
 	//TODO 接口需要修改，不是数组
 }
 
-//添加时重复名称能否通过数据库检查
+// TeacherInfo TODO 添加时重复名称能否通过数据库检查
+// TeacherInfo 教师信息
 type TeacherInfo struct {
 	UID      string `form:"uid" json:"uid"`
 	Password string `form:"password" json:"password"`

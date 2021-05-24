@@ -59,10 +59,9 @@ func PermissionRequired(permissionDesc string) gin.HandlerFunc {
 				if has {
 					c.Next()
 					return
-				} else {
-					c.JSON(http.StatusOK, serializer.PermissionDenied())
-					c.Abort()
 				}
+				c.JSON(http.StatusOK, serializer.PermissionDenied())
+				c.Abort()
 			}
 		}
 

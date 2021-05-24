@@ -16,11 +16,11 @@ type PairEditService struct {
 
 // EditPairInformation 填写结对信息
 func (service *PairEditService) EditPairInformation() (int, error) {
-	stu1, err :=service.GetUserByUID(service.Student1UID)
+	stu1, err := service.GetUserByUID(service.Student1UID)
 	if err != nil {
 		return 0, err
 	}
-	stu2, err :=service.GetUserByUID(service.Student2UID)
+	stu2, err := service.GetUserByUID(service.Student2UID)
 	if err != nil {
 		return 0, err
 	}

@@ -17,7 +17,7 @@ type AddStudentsService struct {
 type StuInfo struct {
 	UID      string `form:"uid" json:"uid"`
 	Name     string `form:"name" json:"name"`
-	ClassId  int    `form:"class_id" json:"class_id" binding:"required"`
+	ClassID  int    `form:"class_id" json:"class_id" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required,min=8,max=40"`
 	//TODO ClassID 没地方存
 }
@@ -30,7 +30,8 @@ func transformStruct(stuInfo StuInfo) (model.User, error) {
 	return user, err
 }
 
-//TODO UID相同判断,但接口中没有要求
+// AddStudents TODO UID相同判断,但接口中没有要求
+// AddStudents 添加学生
 func (service *AddStudentsService) AddStudents() serializer.Response {
 	var user []model.User
 	for _, a := range service.Students {
@@ -47,7 +48,7 @@ func (service *AddStudentsService) AddStudents() serializer.Response {
 	}
 
 	for i, a := range user {
-		class, err1 := service.GetClassByID(service.Students[i].ClassId)
+		class, err1 := service.GetClassByID(service.Students[i].ClassID)
 		if err1 != nil {
 			return serializer.ParamErr("该班级不存在", err1)
 		}

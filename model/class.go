@@ -23,8 +23,8 @@ type TeacherClass struct {
 
 // StudentClass 学生-班级
 type StudentClass struct {
-	UserID uint
-	ClassID   uint
+	UserID  uint
+	ClassID uint
 }
 
 type ClassRepositoryInterface interface {
@@ -125,13 +125,13 @@ func (Repo *Repository) EditStuClass(studentID int, newClassID int) error {
 	return result.Error
 }
 
-// GetStusByClassID 查看班级学生列表
+// GetStusByClassName 查看班级学生列表
 func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
 	var stus []User
 	var studentClass []StudentClass
 	result := Repo.DB.Table("student_class").Where("class_id = ?", classID).Find(&studentClass)
 
-	for i := 0; i < len(studentClass); i++{
+	for i := 0; i < len(studentClass); i++ {
 		var stu User
 		result = Repo.DB.Where("id = ?", studentClass[i].UserID).First(&stu)
 		stus = append(stus, stu)

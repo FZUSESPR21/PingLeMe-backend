@@ -81,7 +81,7 @@ func NewRouter() *gin.Engine {
 		v1.GET("class/student/list/:class_id", api.ClassStuList)
 
 		// 改变学生班级
-		v1.POST("class/student/move",  api.EditStuClass)
+		v1.POST("class/student/move", api.EditStuClass)
 
 		// 移除助教
 		v1.POST("class/assistant/remove", api.RemoveAssistant)

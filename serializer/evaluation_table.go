@@ -66,8 +66,8 @@ func BuildEvaluationTableList(table []model.EvaluationTable) EvaluationTableList
 // BuildEvaluationTableListResponse 序列化评审表列表
 func BuildEvaluationTableListResponse(table []model.EvaluationTable) Response {
 	return Response{
-		Code:  0,
-		Data:  BuildEvaluationTableList(table),
+		Code: 0,
+		Data: BuildEvaluationTableList(table),
 	}
 }
 

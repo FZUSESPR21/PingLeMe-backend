@@ -15,7 +15,7 @@ import (
 // PairInfo 结对信息
 func PairInfo(c *gin.Context) {
 	var service service.PairInfoService
-	ID, err1 :=strconv.Atoi(c.Param("id"))
+	ID, err1 := strconv.Atoi(c.Param("id"))
 	if err1 != nil {
 		c.JSON(http.StatusOK, ErrorResponse(err1))
 	}
@@ -26,7 +26,7 @@ func PairInfo(c *gin.Context) {
 		if err != nil {
 			c.JSON(http.StatusOK, ErrorResponse(err))
 		} else {
-			c.JSON(http.StatusOK,  serializer.Response{
+			c.JSON(http.StatusOK, serializer.Response{
 				Code: 0,
 				Msg:  fmt.Sprint(res),
 			})

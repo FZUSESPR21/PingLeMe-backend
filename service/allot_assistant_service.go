@@ -12,12 +12,12 @@ type AllotAssistantService struct {
 	model.ClassRepositoryInterface
 	model.UserRepositoryInterface
 	UID     string `form:"uid" json:"uid" binding:"required,min=5,max=30"`
-	ClassId int    `form:"class_id" json:"class_id" binding:"required"`
+	ClassID int    `form:"class_id" json:"class_id" binding:"required"`
 }
 
 // AllotAssistant 设置助教班级函数
 func (service *AllotAssistantService) AllotAssistant() serializer.Response {
-	class, err := service.GetClassByID(service.ClassId)
+	class, err := service.GetClassByID(service.ClassID)
 	if err != nil {
 		return serializer.ParamErr("该班级不存在", err)
 	}

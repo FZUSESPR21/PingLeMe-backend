@@ -205,8 +205,8 @@ func (service *EvaluationTableListService) GetTableList(user model.User) seriali
 		}
 	default:
 		return serializer.Response{
-			Code:  40001,
-			Msg:   "User Role Err",
+			Code: 40001,
+			Msg:  "User Role Err",
 		}
 	}
 }

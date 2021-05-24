@@ -19,7 +19,7 @@ func EditStuClass(c *gin.Context) {
 		err1 := service.EditStudentClass()
 		if err1 != nil {
 			c.JSON(http.StatusOK, ErrorResponse(err1))
-		}else {
+		} else {
 			c.JSON(http.StatusOK, serializer.Response{
 				Code: 0,
 				Msg:  "修改学生班级成功！",

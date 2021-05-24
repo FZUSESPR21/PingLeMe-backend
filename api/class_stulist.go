@@ -13,7 +13,7 @@ import (
 // ClassStuList 查看班级学生列表
 func ClassStuList(c *gin.Context) {
 	var service service.ClassStuList
-	classID, err1 :=strconv.Atoi(c.Param("class_id"))
+	classID, err1 := strconv.Atoi(c.Param("class_id"))
 	if err1 != nil {
 		c.JSON(http.StatusOK, ErrorResponse(err1))
 	}

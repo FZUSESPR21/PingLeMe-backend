@@ -29,9 +29,8 @@ func (Repo *Repository) CreateEvaluationItemScores(items EvaluationItemScore) er
 	result := Repo.DB.Model(&EvaluationItemScore{}).Select("Score").Updates(items)
 	if result.Error != nil {
 		return result.Error
-	} else {
-		return nil
 	}
+	return nil
 }
 
 // InitEvaluationItems 初始化成绩
@@ -64,9 +63,9 @@ func (Repo *Repository) InitEvaluationItems(teamID, tableID uint) error {
 		}
 		result = Repo.DB.Create(scores)
 		return result.Error
-	} else {
-		return nil
 	}
+	return nil
+
 }
 
 // CreateEvaluationItemScore 创建评审表项成绩
