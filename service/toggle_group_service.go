@@ -21,7 +21,7 @@ func (service *ToggleGroupService) ToggleGroup(classID uint, duration time.Durat
 		if err != nil {
 			util.Log().Error(zap.Error(err).String)
 			return serializer.ServerInnerErr("Redis error:", err)
-		} else if ok == false {
+		} else if !ok {
 			util.Log().Error("Redis SetNX get false.")
 			return serializer.ServerInnerErr("Redis SetNX get false.", err)
 		}
