@@ -6,13 +6,13 @@ import (
 	"PingLeMe-Backend/model"
 )
 
-// PairIndormation 结对信息
+// PairInfoService 结对信息
 type PairInfoService struct {
 	model.PairRepositoryInterface
 	model.UserRepositoryInterface
 }
 
-// info 结对信息
+// PairInformation 结对信息
 func (service *PairInfoService) PairInformation(ID uint) (string, error) {
 	//user, err := service.GetUserByUID(service.StudentUID)
 	//if err != nil {
