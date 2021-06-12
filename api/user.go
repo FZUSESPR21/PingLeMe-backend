@@ -57,7 +57,7 @@ func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
 	service.PairRepositoryInterface = &model.Repo
 	service.UserRepositoryInterface = &model.Repo
-	userID := c.Param("user")
+	userID := c.Param("id")
 	user, err := strconv.Atoi(userID)
 	if err != nil {
 		res := serializer.ParamErr("", err)

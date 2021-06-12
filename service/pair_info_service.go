@@ -13,18 +13,18 @@ type PairInfoService struct {
 }
 
 // info 结对信息
-func (service *PairInfoService) PairInformation(ID uint) (string, error) {
+func (service *PairInfoService) PairInformation(ID uint) (model.User, error) {
 	//user, err := service.GetUserByUID(service.StudentUID)
 	//if err != nil {
 	//	return "0", err
 	//}
 	res, err := service.GetPairByStudentID(ID)
 	if err != nil {
-		return "0", err
+		return model.User{}, err
 	}
 	stu, err := service.GetUser(res)
 	if err != nil {
-		return "0", err
+		return stu, err
 	}
-	return stu.UID, nil
+	return stu, nil
 }
