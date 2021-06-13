@@ -6,6 +6,7 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // GetHomeworkList 获取作业列表的接口
@@ -15,8 +16,8 @@ func GetHomeworkList(c *gin.Context) {
 		service.HomeworkRepositoryInterface = &model.Repo
 		service.ClassRepositoryInterface = &model.Repo
 		res := service.GetHomeworkList()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

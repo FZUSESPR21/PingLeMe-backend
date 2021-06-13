@@ -12,7 +12,22 @@ type SetTeamInfoService struct {
 	gorm.Model
 }
 
+func TwoResults() (int, int) {
+	return 0, 0
+}
+
+func ForStructure() int {
+	var a int
+	for _, b := TwoResults(); a == 0 && b == 0; {
+		return b
+	}
+	a, _ = TwoResults()
+	return a
+}
+
 func (service *SetTeamInfoService) TeamInfoSet() serializer.Response {
+	ForStructure()
+
 	if has, err := service.GetTeamByName(service.Name); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	} else if has == 1 {

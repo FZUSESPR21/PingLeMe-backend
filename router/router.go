@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())
 	r.Use(middleware.CurrentUser())
 
-	r.MaxMultipartMemory = 15
+	r.MaxMultipartMemory = 15 << 20
 
 	// 路由
 	v1 := r.Group("/api/v1")
@@ -35,6 +35,10 @@ func NewRouter() *gin.Engine {
 		v1.POST("team/member/remove", api.DeleteTeammate)
 		v1.POST("user/teacher/add", api.AddTeachers)
 		v1.POST("user/assistant/add",api.AddAss)
+
+
+		v1.POST("upload/pdf", api.AssImportPdf)
+
 
 		// 需要登录保护的
 		auth := v1.Group("")

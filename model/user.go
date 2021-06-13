@@ -10,11 +10,9 @@ import (
 // User 用户模型
 type User struct {
 	gorm.Model
-	UID            string `gorm:"type:varchar(9);not null;unique"`
-	PasswordDigest string `gorm:"type:varchar(30);not null"`
-	Nickname       string `gorm:"type:varchar(20);not null;unique"`
-	PairStatus     string `gorm:"type:varchar(20);default:'暂无结对';unique"`
-	TeamStatus     string `gorm:"type:varchar(20);default:'暂无团队';unique"`
+	UID            string `gorm:"not null;unique"`
+	PasswordDigest string `gorm:"not null"`
+	UserName       string `gorm:"type:varchar(20);not null"`
 	Role           uint8  `gorm:"type:int;default:0;not null"`
 	Roles          []Role `gorm:"many2many:user_role"`
 }
@@ -41,7 +39,7 @@ type UserRepositoryInterface interface {
 	DeleteUser(ID interface{}) error
 	GetAllTeacher() (int64, []User, error)
 	AddTeacherByUser(teacher User) (int64, error)
-	GetUserID(user User) uint
+	GetUserTeamID(user User) (uint, error)
 }
 
 // GetUser 用ID获取用户
@@ -49,11 +47,6 @@ func (Repo *Repository) GetUser(ID interface{}) (User, error) {
 	var user User
 	result := Repo.DB.First(&user, ID)
 	return user, result.Error
-}
-
-// GetUserID 返回用户ID
-func (Repo *Repository) GetUserID(user User) uint {
-	return user.ID
 }
 
 // GetUserByUID 用UID获取用户
@@ -120,4 +113,15 @@ func (Repo *Repository) GetAllTeacher() (int64, []User, error) {
 func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {
 	result := Repo.DB.Create(&teacher)
 	return result.RowsAffected, result.Error
+}
+
+func (Repo *Repository) GetUserTeamID(user User) (uint, error) {
+	var teamID uint
+	row := Repo.DB.Table("student_team").Where("student_id = ?", user.ID).Select("team_id").Row()
+	err := row.Scan(&teamID)
+	if err != nil {
+		return 0, err
+	} else {
+		return teamID, nil
+	}
 }

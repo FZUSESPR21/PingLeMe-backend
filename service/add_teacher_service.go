@@ -16,12 +16,14 @@ type AddTeacherService struct {
 type TeacherInfo struct {
 	UID      string `form:"uid" json:"uid"`
 	Password string `form:"password" json:"password"`
+	UserName string `form:"user_name" json:"user_name"`
 }
 
 func transformTeacher(teacherInfo TeacherInfo, isAss bool) model.User {
 	var user model.User
 	user.UID = teacherInfo.UID
-	user.PasswordDigest = teacherInfo.Password
+	user.UserName = teacherInfo.UserName
+	_ = user.SetPassword(teacherInfo.Password)
 	//TODO 加密
 	if isAss {
 		user.Role = 2

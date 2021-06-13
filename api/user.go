@@ -7,10 +7,13 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"PingLeMe-Backend/util"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -24,9 +27,9 @@ func UserLogin(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.Login(c)
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -38,16 +41,39 @@ func UserLogout(c *gin.Context) {
 	if err != nil {
 		util.Log().Error("保存Session错误", zap.Error(err))
 	}
-	c.JSON(200, serializer.Response{
+	c.JSON(http.StatusOK, serializer.Response{
 		Code: 0,
 		Msg:  "登出成功",
 	})
 }
 
+// UserInfo 用户信息接口
+func UserInfo(c *gin.Context) {
+	var service service.UserInfoService
+	service.PairRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	userID := c.DefaultQuery("user", "-1")
+	if userID == "-1" {
+		// 404
+	} else {
+		user, err := strconv.Atoi(userID)
+		if err != nil {
+			res := serializer.ParamErr("", err)
+			c.JSON(http.StatusOK, res)
+		} else if user < 0 {
+			res := serializer.ParamErr("用户ID错误", nil)
+			c.JSON(http.StatusOK, res)
+		} else {
+			res := service.Information(uint(user))
+			c.JSON(http.StatusOK, res)
+		}
+	}
+}
+
 func GetTeacherList(c *gin.Context) {
 	var service service.GetTeacherListService
 	res := service.GetTeacherList()
-	c.JSON(200, res)
+	c.JSON(http.StatusOK, res)
 }
 
 func AddTeachers(c *gin.Context) {
@@ -55,9 +81,9 @@ func AddTeachers(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.AddTeacher(false)
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -66,9 +92,9 @@ func AddAss(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.AddTeacher(true)
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -77,9 +103,9 @@ func GetTeachers(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.GetTeacherList()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -104,3 +130,65 @@ func StudentImport(c *gin.Context) {
 	res := service.Import(StudentImportFileDst + file.Filename)
 	c.JSON(http.StatusOK, res)
 }
+
+func AssImportPdf(c *gin.Context) {
+	form, err := c.MultipartForm()
+
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+
+	files := form.File["files"]
+
+
+	_base := "./blog"
+	exist, err := PathExists(_base)
+	if err != nil {
+		fmt.Printf("get dir error![%v]\n", err)
+		return
+	}
+
+	if exist {
+		fmt.Printf("has dir![%v]\n", _base)
+	} else {
+		fmt.Printf("no dir![%v]\n", _base)
+		// 创建文件夹
+		err := os.Mkdir(_base, os.ModePerm)
+		if err != nil {
+			fmt.Printf("mkdir failed![%v]\n", err)
+		} else {
+			fmt.Printf("mkdir success!\n")
+		}
+	}
+
+	for _, file := range files {
+		filename := "blog/" + filepath.Base(file.Filename)
+		if err := c.SaveUploadedFile(file, filename); err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+			return
+
+		}
+		//重命名
+		//newName := "blog/ILikeFuck.jpg"
+		//if er := os.Rename(filename, newName); er != nil {
+		//	c.String(http.StatusBadRequest, fmt.Sprintf("rename file err: %s", er.Error()))
+		//	return
+		//}
+	}
+	c.String(http.StatusOK,
+		fmt.Sprintf("Uploaded successfully %d files",len(files)))
+
+}
+
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
+}
+

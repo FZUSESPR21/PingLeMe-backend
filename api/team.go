@@ -4,6 +4,7 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func CreateTeam(c *gin.Context) {
@@ -11,9 +12,9 @@ func CreateTeam(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
 		res := service.CreateTeam()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -23,9 +24,9 @@ func AddTeammate(c *gin.Context) {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
 		res := service.AddTeammate()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
 
@@ -35,8 +36,8 @@ func DeleteTeammate(c *gin.Context) {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
 		res := service.DeleteTeammate()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

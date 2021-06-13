@@ -6,6 +6,7 @@ import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 // FillInPerformance 填写绩效的接口
@@ -14,8 +15,8 @@ func FillInPerformance(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.PerformanceRepositoryInterface = &model.Repo
 		res := service.FillInPerformance()
-		c.JSON(200, res)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(200, ErrorResponse(err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
