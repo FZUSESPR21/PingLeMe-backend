@@ -14,6 +14,8 @@ import (
 	"github.com/joho/godotenv"
 )
 
+var SystemDebugFlag = false
+
 // Init 初始化配置项
 func Init() {
 	// 从本地读取环境变量
@@ -31,6 +33,10 @@ func Init() {
 		logLevel = util.LevelError
 	default:
 		logLevel = util.LevelInformational
+	}
+
+	if os.Getenv("GIN_MODE") == "debug" {
+		SystemDebugFlag = true
 	}
 
 	adminDefaultPassword := os.Getenv("ADMIN_PASSWD")
