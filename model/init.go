@@ -84,25 +84,6 @@ func firstInit() {
 		} else {
 			util.Log().Panic("Default admin account init error.", zap.Error(result.Error))
 		}
-	} else {
-		newAdmin = userResult
 	}
-
-	if roles, err := Repo.GetUserRoles(newAdmin.ID); err != nil {
-		util.Log().Panic("Default admin account init error.", zap.Error(err))
-	} else {
-		has := false
-		for _, role := range roles {
-			if role.Type == RoleAdmin {
-				has = true
-				break
-			}
-		}
-		if !has {
-			err := Repo.SetUserRole(RoleAdmin, newAdmin)
-			if err != nil {
-				util.Log().Panic("Default admin account init error: SetUserRole failed.", zap.Error(err))
-			}
-		}
-	}
+	util.Log().Info("admin account initialized")
 }
