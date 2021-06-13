@@ -15,6 +15,10 @@ type UserRepoMock struct {
 	mock.Mock
 }
 
+func (mock *UserRepoMock) SetUserRole(roleType uint8, user model.User) error {
+	return nil
+}
+
 func (mock *UserRepoMock) GetUserRoles(ID uint) ([]model.Role, error) {
 	args := mock.Called(ID)
 	roles := []model.Role{
