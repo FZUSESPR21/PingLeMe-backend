@@ -142,7 +142,7 @@ func (Repo *Repository) SetRolePermissions(roleDescOrType interface{}, permissio
 func (Repo *Repository) GetRolePermissions(roleDescOrType interface{}) ([]Permission, error) {
 	var role Role
 	switch roleDescOrType.(type) {
-	case uint8:
+	case uint:
 		Repo.DB.Preload("Permission").Where("type = ?", roleDescOrType).First(&role)
 	case string:
 		Repo.DB.Preload("Permission").Where("desc = ?", roleDescOrType).First(&role)

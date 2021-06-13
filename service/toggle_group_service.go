@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package service
 
 import (
@@ -37,5 +39,6 @@ func (service *ToggleGroupService) ToggleGroup(classID uint, duration time.Durat
 	}
 	return serializer.Response{
 		Code: 0,
+		Msg:  "Success",
 	}
 }

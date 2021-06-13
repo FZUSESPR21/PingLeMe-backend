@@ -27,6 +27,12 @@ func NewRouter() *gin.Engine {
 		debug.POST("ping", api.Ping)
 
 		debug.POST("user/add", api.DebugAddUser)
+
+		debugAuth := debug.Group("/auth")
+		debugAuth.Use(middleware.LoginRequired())
+		{
+			debugAuth.POST("/ping", api.Ping)
+		}
 	}
 
 	// 路由
@@ -34,6 +40,12 @@ func NewRouter() *gin.Engine {
 	{
 		// 用户登录
 		v1.POST("login", api.UserLogin)
+
+		// 班级结对状态
+		v1.GET("class/pair/status/:id", api.PairStatus)
+
+		// 班级团队状态
+		v1.GET("class/team/status/:id", api.TeamStatus)
 
 		// 需要登录保护的
 		auth := v1.Group("")
@@ -49,7 +61,7 @@ func NewRouter() *gin.Engine {
 			auth.GET("user/:id", api.UserInfo)
 
 			// 学生结对
-			//auth.POST("user/pair/add", )
+			auth.POST("user/pair/add", api.FillInPairInformation)
 
 			// 创建团队
 			auth.POST("team/create", api.CreateTeam)
@@ -73,7 +85,7 @@ func NewRouter() *gin.Engine {
 			auth.GET("class/homework/list/:id", api.GetHomeworkList)
 
 			// 查看班级学生列表
-			//auth.GET("class/student/list", )
+			auth.GET("class/student/list/:class_id", api.ClassStuList)
 
 			// 改变学生班级
 			//auth.POST("class/student/move", )
@@ -139,11 +151,11 @@ func NewRouter() *gin.Engine {
 				permissionClassManagement.POST("team/toggle", api.ToggleTeam)
 			}
 
-			permissionHomeworkCorrect := auth.Group("class")
-			permissionHomeworkCorrect.Use(middleware.PermissionRequired("correct_homework"))
+			//permissionHomeworkCorrect := auth.Group("class")
+			//permissionHomeworkCorrect.Use(middleware.PermissionRequired("correct_homework"))
 			{
 				// 提交评分结果
-				//permissionHomeworkCorrect.POST("homework//correct", )
+				//permissionHomeworkCorrect.POST("homework/correct", )
 			}
 		}
 	}
