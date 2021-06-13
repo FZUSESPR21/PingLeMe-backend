@@ -108,7 +108,7 @@ func TestRBAC(t *testing.T) {
 					AddRow(1, time.Now(), time.Now(), time.Now(), 1),
 			)
 
-		permissions, err := tRepo.repo.GetRolePermissions(uint8(1))
+		permissions, err := tRepo.repo.GetRolePermissions(uint(1))
 
 		if err != nil {
 			t.Error(err)
