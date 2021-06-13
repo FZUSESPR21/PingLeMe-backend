@@ -14,15 +14,15 @@ import (
 // Role 角色模型
 type Role struct {
 	gorm.Model
-	Type       uint        `gorm:"type:int;not null;unique"`
+	Type       uint         `gorm:"type:int;not null;unique"`
 	Permission []Permission `gorm:"many2many:role_permission;"`
 	User       []User       `gorm:"many2many:user_role;"`
 	Desc       string       `gorm:"unique;"`
 }
 
 type UserRole struct {
-	RoleID		uint
-	UserID		uint
+	RoleID uint
+	UserID uint
 }
 
 // Permission 权限模型
@@ -36,6 +36,7 @@ type Permission struct {
 type RBACRepositoryInterface interface {
 	GetUserRoles(ID uint) ([]Role, error)
 	GetUserPermissions(ID uint) ([]Permission, error)
+	SetUserRole(roleType uint8, user User) error
 }
 
 // SetRole 新增角色
@@ -68,6 +69,9 @@ func (Repo *Repository) SetPermission(permissionType uint, permissionDesc string
 
 // SetUserRole 设置用户角色
 func (Repo *Repository) SetUserRole(roleType uint8, user User) error {
+	if roleType == 0 {
+		return nil
+	}
 	var role Role
 	result := Repo.DB.Where("type = ?", roleType).First(&role)
 	if result.Error != nil {

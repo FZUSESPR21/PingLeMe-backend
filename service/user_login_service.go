@@ -39,7 +39,7 @@ func (service *UserLoginService) Login(c *gin.Context) serializer.Response {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return serializer.ParamErr("账号或密码错误", nil)
 	}
-	util.Log().Error(strconv.FormatBool(user.CheckPassword(service.Password)))
+	util.Log().Debug(strconv.FormatBool(user.CheckPassword(service.Password)))
 	if !user.CheckPassword(service.Password) {
 		return serializer.ParamErr("账号或密码错误", nil)
 	}

@@ -63,10 +63,11 @@ func Database(connString string, logLevel logger.LogLevel) {
 }
 
 func firstInit() {
+	util.Log().Info("initializing admin account...")
 	newAdmin := User{
-		UID:            "admin",
-		UserName:       "admin",
-		Role:           RoleAdmin,
+		UID:      "admin",
+		UserName: "admin",
+		Role:     RoleAdmin,
 	}
 
 	var userResult User
@@ -75,7 +76,11 @@ func firstInit() {
 			if err := newAdmin.SetPassword(AdminDefaultPasswd); err != nil {
 				util.Log().Panic("Default admin account init error: SetPassword failed.", zap.Error(err))
 			}
-			Repo.DB.Create(&newAdmin)
+			err := Repo.SetUser(newAdmin)
+			if err != nil {
+				util.Log().Panic("Default admin account init error.", zap.Error(result.Error))
+			}
+			util.Log().Info("admin default account successfully created.")
 		} else {
 			util.Log().Panic("Default admin account init error.", zap.Error(result.Error))
 		}
