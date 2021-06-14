@@ -12,6 +12,11 @@ type Team struct {
 	ClassID       int    `json:"classID"`
 }
 
+// TeamList 团队列表序列化器
+type TeamList struct {
+	List 	[]Team 	`json:"list"`
+}
+
 // BuildTeam 序列化用户
 func BuildTeam(team model.Team) Team {
 	return Team{
@@ -19,6 +24,21 @@ func BuildTeam(team model.Team) Team {
 		Name:          team.Name,
 		GroupLeaderID: team.GroupLeaderID,
 		ClassID:       team.ClassID,
+	}
+}
+
+// BuildTeamList 序列化团队列表
+func BuildTeamList(teamList []model.Team) TeamList {
+	items := make([]Team, len(teamList))
+	for i := range items {
+		items[i].Number = teamList[i].Number
+		items[i].Name = teamList[i].Name
+		items[i].GroupLeaderID = teamList[i].GroupLeaderID
+		items[i].ClassID = teamList[i].ClassID
+	}
+
+	return TeamList{
+		List: items,
 	}
 }
 

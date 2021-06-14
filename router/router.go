@@ -76,7 +76,7 @@ func NewRouter() *gin.Engine {
 			auth.POST("team/member/remove", api.DeleteTeammate)
 
 			// 填写绩效
-			//auth.POST("team/performance/edit", )
+			auth.POST("team/performance/edit", api.FillInPerformance)
 
 			// 教师列表
 			auth.GET("teacher/list", api.GetTeachers)

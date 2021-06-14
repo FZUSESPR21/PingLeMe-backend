@@ -45,3 +45,14 @@ func DeleteTeammate(c *gin.Context) {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }
+
+func GetTeamList(c *gin.Context){
+	var service service.TeamListService
+	if err := c.ShouldBind(&service); err == nil {
+		service.TeamRepositoryInterface = &model.Repo
+		res := service.GetTeamList()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
