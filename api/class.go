@@ -27,22 +27,6 @@ func CreateClass(c *gin.Context) {
 	}
 }
 
-func PairStatus(c *gin.Context) {
-	var service service.GroupStatusService
-	service.ClassRepositoryInterface = &model.Repo
-	classID := c.Param("id")
-	res := service.Status(classID, KeyPair)
-	c.JSON(http.StatusOK, res)
-}
-
-func TeamStatus(c *gin.Context) {
-	var service service.GroupStatusService
-	service.ClassRepositoryInterface = &model.Repo
-	classID := c.Param("id")
-	res := service.Status(classID, KeyTeam)
-	c.JSON(http.StatusOK, res)
-}
-
 func TogglePair(c *gin.Context) {
 	var service service.ToggleGroupService
 	classIDStr := c.Query("class_id")
@@ -53,7 +37,7 @@ func TogglePair(c *gin.Context) {
 		c.JSON(http.StatusOK, serializer.ParamErr("class id param error.", nil))
 	}
 
-	timeStr := c.DefaultQuery("duration", "604800")
+	timeStr := c.Query("duration")
 	t, err2 := strconv.ParseInt(timeStr, 10, 64)
 	if timeStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing deadline t.", nil))
@@ -61,7 +45,7 @@ func TogglePair(c *gin.Context) {
 		c.JSON(http.StatusOK, serializer.ParamErr("t param error.", nil))
 	}
 
-	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyPair)
+	res := service.ToggleGroup(uint(classID), time.Duration(t) * time.Second, KeyPair)
 	c.JSON(http.StatusOK, res)
 }
 
@@ -75,7 +59,7 @@ func ToggleTeam(c *gin.Context) {
 		c.JSON(http.StatusOK, serializer.ParamErr("class id param error.", nil))
 	}
 
-	timeStr := c.DefaultQuery("duration", "604800")
+	timeStr := c.Query("duration")
 	t, err2 := strconv.ParseInt(timeStr, 10, 64)
 	if timeStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing deadline t.", nil))
@@ -83,6 +67,6 @@ func ToggleTeam(c *gin.Context) {
 		c.JSON(http.StatusOK, serializer.ParamErr("t param error.", nil))
 	}
 
-	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyTeam)
+	res := service.ToggleGroup(uint(classID), time.Duration(t) * time.Second, KeyTeam)
 	c.JSON(http.StatusOK, res)
 }
