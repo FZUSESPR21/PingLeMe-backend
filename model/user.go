@@ -17,6 +17,20 @@ type User struct {
 	Roles          []Role `gorm:"many2many:user_role"`
 }
 
+type Teacher struct {
+	UID       string `json:"uid"`
+	UserName  string `json:"user_name"`
+	ClassID   uint   `json:"class_id"`
+	ClassName string `json:"class_name"`
+}
+
+type Assistant struct {
+	UID       string `json:"uid"`
+	UserName  string `json:"user_name"`
+	ClassID   uint   `json:"class_id"`
+	ClassName string `json:"class_name"`
+}
+
 const (
 	// PassWordCost 密码加密难度
 	PassWordCost = 12
@@ -37,8 +51,8 @@ type UserRepositoryInterface interface {
 	SetUser(user User) error
 	SetUsers(user []User) error
 	DeleteUser(ID interface{}) error
-	GetAllTeacher() (int64, []User, error)
-	GetAllAssistant() (int64, []User, error)
+	GetAllTeacher() (int64, []Teacher, error)
+	GetAllAssistant() (int64, []Assistant, error)
 	AddTeacherByUser(teacher User) (int64, error)
 	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
@@ -106,16 +120,67 @@ func (user *User) CheckPassword(password string) bool {
 	return err == nil
 }
 
-func (Repo *Repository) GetAllTeacher() (int64, []User, error) {
-	var user []User
-	result := Repo.DB.Where("role = ?", RoleTeacher).Find(&user)
-	return result.RowsAffected, user, result.Error
+func (Repo *Repository) GetAllTeacher() (int64, []Teacher, error) {
+	var users []User
+	var teachers []Teacher
+	result := Repo.DB.Where("role = ?", RoleTeacher).Find(&users)
+	for _, user := range users {
+		row := Repo.DB.Raw("SELECT class_id FROM `teacher_class` WHERE user_id = ? LIMIT 1", user.ID).Row()
+		var classID uint
+		err := row.Scan(&classID)
+		if err == nil {
+			class, err := Repo.GetClassByID(classID)
+			if err != nil {
+				return 0, nil, err
+			}
+			teachers = append(teachers, Teacher{
+				UID:       user.UID,
+				UserName:  user.UserName,
+				ClassID:   class.ID,
+				ClassName: class.Name,
+			})
+		} else {
+			teachers = append(teachers, Teacher{
+				UID:       user.UID,
+				UserName:  user.UserName,
+				ClassID:   0,
+				ClassName: "",
+			})
+		}
+	}
+	return result.RowsAffected, teachers, result.Error
 }
 
-func (Repo *Repository) GetAllAssistant() (int64, []User, error) {
-	var user []User
-	result := Repo.DB.Where("role = ?", RoleAssistant).Find(&user)
-	return result.RowsAffected, user, result.Error
+func (Repo *Repository) GetAllAssistant() (int64, []Assistant, error) {
+	var users []User
+	var assistant []Assistant
+	result := Repo.DB.Where("role = ?", RoleAssistant).Find(&users)
+	for _, user := range users {
+		row := Repo.DB.Raw("SELECT class_id FROM `teacher_class` WHERE user_id = ? LIMIT 1", user.ID).Row()
+		var classID uint
+		err := row.Scan(&classID)
+		if err == nil {
+			class, err := Repo.GetClassByID(classID)
+			if err != nil {
+				return 0, nil, err
+			}
+			assistant = append(assistant, Assistant{
+				UID:       user.UID,
+				UserName:  user.UserName,
+				ClassID:   class.ID,
+				ClassName: class.Name,
+			})
+		} else {
+			assistant = append(assistant, Assistant{
+				UID:       user.UID,
+				UserName:  user.UserName,
+				ClassID:   0,
+				ClassName: "",
+			})
+		}
+
+	}
+	return result.RowsAffected, assistant, result.Error
 }
 
 func (Repo *Repository) AddTeacherByUser(teacher User) (int64, error) {

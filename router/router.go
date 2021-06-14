@@ -164,10 +164,10 @@ func NewRouter() *gin.Engine {
 				permissionClassManagement.POST("team/toggle", api.ToggleTeam)
 
 				// 教师列表
-				permissionClassManagement.POST("teacher/list/all", api.GetTeacherList)
+				permissionClassManagement.GET("teacher/list/all", api.GetTeacherList)
 
 				// 助教列表
-				permissionClassManagement.POST("assistant/list/all", api.GetAssistantList)
+				permissionClassManagement.GET("assistant/list/all", api.GetAssistantList)
 			}
 
 			//permissionHomeworkCorrect := auth.Group("class")
