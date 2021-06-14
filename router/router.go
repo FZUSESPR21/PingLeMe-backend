@@ -75,6 +75,9 @@ func NewRouter() *gin.Engine {
 			// 查看班级助教列表
 			v1.GET("class/assistant/list/:class_id", api.ClassAssisList)
 
+			// 获取班级作业列表
+			v1.GET("class/homework/list/", api.GetHomeworkList)
+
 			// 改变学生班级
 			v1.POST("class/student/move", api.EditStuClass)
 
@@ -106,12 +109,16 @@ func NewRouter() *gin.Engine {
 				v1.POST("user/student/add", api.AddStudents)
 			}
 
+
 			permissionAddAssistants := v1.Group("")
 			permissionAddAssistants.Use(middleware.PermissionRequired("add_assistant"))
 			{
 				// 批量添加助教
 				v1.POST("user/assistant/add", api.CreateAssistant)
 			}
+
+			// 查看作业列表
+			v1.POST("homework/list", api.ViewHomeworkList)
 
 			permissionAddTeacher := v1.Group("")
 			permissionAddTeacher.Use(middleware.PermissionRequired("add_teacher"))
@@ -129,6 +136,7 @@ func NewRouter() *gin.Engine {
 				// 设置助教班级
 				v1.POST("assistant/add", api.AddAssistant)
 
+
 				// 移除助教班级
 				v1.POST("assistant/remove", api.RemoveAssistant)
 
@@ -138,6 +146,16 @@ func NewRouter() *gin.Engine {
 				//开始/结束组队
 				v1.POST("team/toggle", api.ToggleTeam)
 			}
+
+			// 获取评审表
+			v1.GET("evaluation-table/detail/:id", api.GetEvaluationTable)
+
+			// 填写评审表
+			v1.POST("evaluation-table/fill", api.FillEvaluationTable)
+
+			// 创建评审表
+			v1.POST("evaluation-table/create", api.CreateEvaluationTable)
+
 
 			permissionHomeworkCorrect := v1.Group("class")
 			permissionHomeworkCorrect.Use(middleware.PermissionRequired("correct_homework"))

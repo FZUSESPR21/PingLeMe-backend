@@ -5,7 +5,7 @@ import "gorm.io/gorm"
 type FinalEvaluationTableScore struct {
 	gorm.Model
 	TableID    uint `gorm:"not null;"`
-	TeamID     uint `gorm:"not null;"`
+	TeamID	   uint `gorm:"not null;"`
 	FinalScore float32
 }
 
