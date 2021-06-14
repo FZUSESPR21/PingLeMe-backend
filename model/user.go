@@ -38,6 +38,7 @@ type UserRepositoryInterface interface {
 	SetUsers(user []User) error
 	DeleteUser(ID interface{}) error
 	GetAllTeacher() (int64, []User, error)
+	GetAllAssistant() (int64, []User, error)
 	AddTeacherByUser(teacher User) (int64, error)
 	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
@@ -107,7 +108,13 @@ func (user *User) CheckPassword(password string) bool {
 
 func (Repo *Repository) GetAllTeacher() (int64, []User, error) {
 	var user []User
-	result := Repo.DB.Where("role = 1").Find(&user)
+	result := Repo.DB.Where("role = ?", RoleTeacher).Find(&user)
+	return result.RowsAffected, user, result.Error
+}
+
+func (Repo *Repository) GetAllAssistant() (int64, []User, error) {
+	var user []User
+	result := Repo.DB.Where("role = ?", RoleAssistant).Find(&user)
 	return result.RowsAffected, user, result.Error
 }
 

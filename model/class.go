@@ -27,6 +27,21 @@ type StudentClass struct {
 	ClassID uint
 }
 
+type AssistantInfo struct {
+	AssistantID   uint
+	AssistantName string
+}
+
+type ClassInfo struct {
+	ClassID     uint            `json:"class_id"`
+	ClassName   string          `json:"class_name"`
+	TeacherID   uint            `json:"teacher_id"`
+	TeacherName string          `json:"teacher_name"`
+	Assistants  []AssistantInfo `json:"assistants"`
+	PairStatus  bool            `json:"pair_status"`
+	TeamStatus  bool            `json:"team_status"`
+}
+
 type ClassRepositoryInterface interface {
 	GetClassByID(ID interface{}) (Class, error)
 	AddClass(name string) (Class, error)
@@ -38,6 +53,7 @@ type ClassRepositoryInterface interface {
 	DeleteTeacher(class Class, teacher User) error
 	EditStuClass(studentID int, newClassID int) error
 	GetStusByClassName(classID int) ([]User, error)
+	GetClassInfoList() ([]ClassInfo, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -137,4 +153,37 @@ func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
 		stus = append(stus, stu)
 	}
 	return stus, result.Error
+}
+
+func (Repo *Repository) GetClassInfoList() ([]ClassInfo, error) {
+	var classes []Class
+	_ = Repo.DB.Find(&classes)
+
+	classInfo := make([]ClassInfo, len(classes))
+	for index, class := range classes {
+		classInfo[index].ClassID = class.ID
+		classInfo[index].ClassName = class.Name
+		classInfo[index].Assistants = make([]AssistantInfo, 0)
+		rows, err := Repo.DB.Raw("SELECT * FROM `users` WHERE id IN (SELECT user_id FROM `teacher_class` WHERE class_id = ?)", class.ID).Rows()
+		if err != nil {
+			return nil, err
+		}
+		for rows.Next() {
+			var user User
+			err := Repo.DB.ScanRows(rows, &user)
+			if err != nil {
+				return nil, err
+			}
+			if user.Role == RoleTeacher {
+				classInfo[index].TeacherName = user.UserName
+				classInfo[index].TeacherID = user.ID
+			} else {
+				classInfo[index].Assistants = append(classInfo[index].Assistants, AssistantInfo{
+					AssistantID:   user.ID,
+					AssistantName: user.UserName,
+				})
+			}
+		}
+	}
+	return classInfo, nil
 }

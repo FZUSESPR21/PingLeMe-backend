@@ -76,7 +76,15 @@ func UserInfo(c *gin.Context) {
 
 func GetTeacherList(c *gin.Context) {
 	var service service.TeacherListService
+	service.UserRepositoryInterface = &model.Repo
 	res := service.GetTeacherList()
+	c.JSON(http.StatusOK, res)
+}
+
+func GetAssistantList(c *gin.Context) {
+	var service service.TeacherListService
+	service.UserRepositoryInterface = &model.Repo
+	res := service.GetAssistantList()
 	c.JSON(http.StatusOK, res)
 }
 
@@ -124,10 +132,7 @@ func StudentImport(c *gin.Context) {
 
 	err := c.SaveUploadedFile(file, StudentImportFileDst)
 	if err != nil {
-		c.JSON(http.StatusOK, serializer.Response{
-			Code:  serializer.CodeInnerError,
-			Error: err.Error(),
-		})
+		c.JSON(http.StatusOK, serializer.ServerInnerErr("", err))
 	}
 
 	var service service.StudentImportService
@@ -135,7 +140,7 @@ func StudentImport(c *gin.Context) {
 	c.JSON(http.StatusOK, res)
 }
 
-func AssImportPdf(c *gin.Context) {
+func SubmitWorks(c *gin.Context) {
 	form, err := c.MultipartForm()
 
 	if err != nil {

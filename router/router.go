@@ -28,6 +28,8 @@ func NewRouter() *gin.Engine {
 
 		debug.POST("user/add", api.DebugAddUser)
 
+		debug.POST("homework/submit", api.SubmitWorks)
+
 		debugAuth := debug.Group("/auth")
 		debugAuth.Use(middleware.LoginRequired())
 		{
@@ -41,8 +43,7 @@ func NewRouter() *gin.Engine {
 		// 用户登录
 		v1.POST("login", api.UserLogin)
 
-		v1.POST("user/assistant/add", api.AddAss)
-		v1.POST("upload/pdf", api.AssImportPdf)
+		//v1.POST("user/assistant/add", api.AddAss)
 
 		// 班级结对状态
 		v1.GET("class/pair/status/:id", api.PairStatus)
@@ -94,7 +95,7 @@ func NewRouter() *gin.Engine {
 			//auth.POST("class/student/move", )
 
 			// 班级列表
-			//auth.GET("class/list", )
+			auth.GET("class/list", api.ClassList)
 
 			// 查看作业列表
 			auth.POST("homework/list", api.ViewHomework)
@@ -114,21 +115,30 @@ func NewRouter() *gin.Engine {
 			// 创建评审表
 			auth.POST("evaluation-table/create", api.CreateEvaluationTable)
 
-			permissionAddStudents := v1.Group("")
+			permissionImportPDF := auth.Group("")
+			permissionImportPDF.Use(middleware.PermissionRequired("work_submission"))
+			{
+				permissionImportPDF.POST("homework/submit", api.SubmitWorks)
+			}
+
+			permissionAddStudents := auth.Group("")
 			permissionAddStudents.Use(middleware.PermissionRequired("add_students"))
 			{
 				// 批量添加学生
 				permissionAddStudents.POST("user/student/add", api.AddStudents)
+
+				// Excel导入学生
+				permissionAddStudents.POST("user/student/import", api.StudentImport)
 			}
 
-			permissionAddAssistants := v1.Group("")
+			permissionAddAssistants := auth.Group("")
 			permissionAddAssistants.Use(middleware.PermissionRequired("add_assistant"))
 			{
 				// 批量添加助教
 				permissionAddAssistants.POST("user/assistant/add", api.CreateAssistant)
 			}
 
-			permissionAddTeacher := v1.Group("")
+			permissionAddTeacher := auth.Group("")
 			permissionAddTeacher.Use(middleware.PermissionRequired("add_teacher"))
 			{
 				// 批量添加老师
@@ -152,6 +162,12 @@ func NewRouter() *gin.Engine {
 
 				//开始/结束组队
 				permissionClassManagement.POST("team/toggle", api.ToggleTeam)
+
+				// 教师列表
+				permissionClassManagement.POST("teacher/list/all", api.GetTeacherList)
+
+				// 助教列表
+				permissionClassManagement.POST("assistant/list/all", api.GetAssistantList)
 			}
 
 			//permissionHomeworkCorrect := auth.Group("class")
