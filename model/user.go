@@ -56,6 +56,7 @@ type UserRepositoryInterface interface {
 	AddTeacherByUser(teacher User) (int64, error)
 	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
+	GetStudentClassID(userID uint) (uint, error)
 }
 
 // GetUser 用ID获取用户
@@ -202,4 +203,11 @@ func (Repo *Repository) GetUserTeamID(user User) (uint, error) {
 	} else {
 		return teamID, nil
 	}
+}
+
+func (Repo *Repository) GetStudentClassID(userID uint) (uint, error) {
+	raw := Repo.DB.Raw("SELECT `class_id` FROM `student_class` WHERE `user_id` = ? LIMIT 1", userID).Row()
+	classID := uint(0)
+	err := raw.Scan(&classID)
+	return classID, err
 }

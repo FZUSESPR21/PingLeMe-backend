@@ -60,7 +60,7 @@ func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
 	service.PairRepositoryInterface = &model.Repo
 	service.UserRepositoryInterface = &model.Repo
-	userID := c.Param("user")
+	userID := c.Param("id")
 	user, err := strconv.Atoi(userID)
 	if err != nil {
 		res := serializer.ParamErr("", err)
@@ -157,10 +157,7 @@ func SubmitWorks(c *gin.Context) {
 		return
 	}
 
-	if exist {
-		fmt.Printf("has dir![%v]\n", _base)
-	} else {
-		fmt.Printf("no dir![%v]\n", _base)
+	if !exist {
 		// 创建文件夹
 		err := os.Mkdir(_base, os.ModePerm)
 		if err != nil {
