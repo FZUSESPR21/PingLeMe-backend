@@ -91,7 +91,7 @@ func (Repo *Repository) GetTeamByTeamLeader(leaderID uint) (Team, error) {
 	return team, result.Error
 }
 
-func (Repo *Repository) GetTeamsByClassID(cid int) ([]Team, error){
+func (Repo *Repository) GetTeamsByClassID(cid int) ([]Team, error) {
 	var teams []Team
 	result := Repo.DB.Where("class_id", cid).Find(&teams)
 	return teams, result.Error

@@ -10,7 +10,7 @@ import (
 // TeamListService 获取团队列表的服务
 type TeamListService struct {
 	model.TeamRepositoryInterface
-	ClassID       int    `form:"class_id" json:"class_id"`
+	ClassID int `form:"class_id" json:"class_id"`
 }
 
 func (service *TeamListService) GetTeamList() serializer.Response {
@@ -22,6 +22,6 @@ func (service *TeamListService) GetTeamList() serializer.Response {
 	return serializer.Response{
 		Code: 0,
 		Data: serializer.BuildTeamList(teams),
-		Msg: "Success",
+		Msg:  "Success",
 	}
 }

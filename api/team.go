@@ -46,7 +46,7 @@ func DeleteTeammate(c *gin.Context) {
 	}
 }
 
-func GetTeamList(c *gin.Context){
+func GetTeamList(c *gin.Context) {
 	var service service.TeamListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo

@@ -14,7 +14,7 @@ type Team struct {
 
 // TeamList 团队列表序列化器
 type TeamList struct {
-	List 	[]Team 	`json:"list"`
+	List []Team `json:"list"`
 }
 
 // BuildTeam 序列化用户
