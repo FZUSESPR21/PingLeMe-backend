@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 	r.Use(middleware.Cors())
 	r.Use(middleware.CurrentUser())
 
-	r.MaxMultipartMemory = 15
+	r.MaxMultipartMemory = 15 << 20
 
 	debug := r.Group("/debug")
 	debug.Use(middleware.DebugAPI())
@@ -40,6 +40,9 @@ func NewRouter() *gin.Engine {
 	{
 		// 用户登录
 		v1.POST("login", api.UserLogin)
+
+		v1.POST("user/assistant/add", api.AddAss)
+		v1.POST("upload/pdf", api.AssImportPdf)
 
 		// 班级结对状态
 		v1.GET("class/pair/status/:id", api.PairStatus)

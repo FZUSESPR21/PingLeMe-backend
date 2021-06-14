@@ -7,10 +7,13 @@ import (
 	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"PingLeMe-Backend/util"
+	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -81,7 +84,18 @@ func AddTeachers(c *gin.Context) {
 	var service service.AddTeacherService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
-		res := service.AddTeacher()
+		res := service.AddTeacher(false)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+func AddAss(c *gin.Context) {
+	var service service.AddTeacherService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.AddTeacher(true)
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
@@ -119,6 +133,66 @@ func StudentImport(c *gin.Context) {
 	var service service.StudentImportService
 	res := service.Import(StudentImportFileDst + file.Filename)
 	c.JSON(http.StatusOK, res)
+}
+
+func AssImportPdf(c *gin.Context) {
+	form, err := c.MultipartForm()
+
+	if err != nil {
+		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		return
+	}
+
+	files := form.File["files"]
+
+	_base := "./blog"
+	exist, err := PathExists(_base)
+	if err != nil {
+		fmt.Printf("get dir error![%v]\n", err)
+		return
+	}
+
+	if exist {
+		fmt.Printf("has dir![%v]\n", _base)
+	} else {
+		fmt.Printf("no dir![%v]\n", _base)
+		// 创建文件夹
+		err := os.Mkdir(_base, os.ModePerm)
+		if err != nil {
+			fmt.Printf("mkdir failed![%v]\n", err)
+		} else {
+			fmt.Printf("mkdir success!\n")
+		}
+	}
+
+	for _, file := range files {
+		filename := "blog/" + filepath.Base(file.Filename)
+		if err := c.SaveUploadedFile(file, filename); err != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+			return
+
+		}
+		//重命名
+		//newName := "blog/ILikeFuck.jpg"
+		//if er := os.Rename(filename, newName); er != nil {
+		//	c.String(http.StatusBadRequest, fmt.Sprintf("rename file err: %s", er.Error()))
+		//	return
+		//}
+	}
+	c.String(http.StatusOK,
+		fmt.Sprintf("Uploaded successfully %d files", len(files)))
+
+}
+
+func PathExists(path string) (bool, error) {
+	_, err := os.Stat(path)
+	if err == nil {
+		return true, nil
+	}
+	if os.IsNotExist(err) {
+		return false, nil
+	}
+	return false, err
 }
 
 // ChangePassword 修改密码
