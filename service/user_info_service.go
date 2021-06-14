@@ -29,8 +29,8 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				pairID = 0
-			} else {
-				//return serializer.DBErr("", err)
+			}else {
+				pairID = 0
 			}
 		}
 
