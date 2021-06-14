@@ -18,6 +18,7 @@ type User struct {
 }
 
 type Teacher struct {
+	ID        uint   `json:"id"`
 	UID       string `json:"uid"`
 	UserName  string `json:"user_name"`
 	ClassID   uint   `json:"class_id"`
@@ -25,6 +26,7 @@ type Teacher struct {
 }
 
 type Assistant struct {
+	ID        uint   `json:"id"`
 	UID       string `json:"uid"`
 	UserName  string `json:"user_name"`
 	ClassID   uint   `json:"class_id"`
@@ -135,6 +137,7 @@ func (Repo *Repository) GetAllTeacher() (int64, []Teacher, error) {
 				return 0, nil, err
 			}
 			teachers = append(teachers, Teacher{
+				ID:        user.ID,
 				UID:       user.UID,
 				UserName:  user.UserName,
 				ClassID:   class.ID,
@@ -142,6 +145,7 @@ func (Repo *Repository) GetAllTeacher() (int64, []Teacher, error) {
 			})
 		} else {
 			teachers = append(teachers, Teacher{
+				ID:        user.ID,
 				UID:       user.UID,
 				UserName:  user.UserName,
 				ClassID:   0,
@@ -166,6 +170,7 @@ func (Repo *Repository) GetAllAssistant() (int64, []Assistant, error) {
 				return 0, nil, err
 			}
 			assistant = append(assistant, Assistant{
+				ID:        user.ID,
 				UID:       user.UID,
 				UserName:  user.UserName,
 				ClassID:   class.ID,
@@ -173,6 +178,7 @@ func (Repo *Repository) GetAllAssistant() (int64, []Assistant, error) {
 			})
 		} else {
 			assistant = append(assistant, Assistant{
+				ID:        user.ID,
 				UID:       user.UID,
 				UserName:  user.UserName,
 				ClassID:   0,
