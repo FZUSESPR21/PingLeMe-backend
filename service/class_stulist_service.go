@@ -4,6 +4,7 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 )
 
 // ClassStuList 班级学生列表
@@ -12,10 +13,24 @@ type ClassStuList struct {
 }
 
 // StuListOfClass 班级学生列表
-func (service *ClassStuList) StuListOfClass(classID int) ([]model.User, error) {
-	stus,err := service.GetStusByClassName(classID)
-	if err != nil {
-		return nil,err
+func (service *ClassStuList) StuListOfClass(classID int) serializer.Response {
+	var studentList []model.User
+	var err error
+	var has int
+
+	if has, studentList, err = service.GetStusByClassName(classID); err != nil {
+		return serializer.DBErr("数据获取错误", err)
 	}
-	return stus, nil
+	if has == 0 {
+		return serializer.Response{
+			Code: 0,
+			Msg:  "目前该班级没有学生！",
+		}
+	}
+
+	return serializer.Response{
+		Code: 0,
+		Data: serializer.BuildStudentListResponse(studentList),
+		Msg:  "Success",
+	}
 }

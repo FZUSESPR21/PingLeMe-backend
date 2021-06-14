@@ -4,27 +4,38 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 )
 
-// PairIndormation 结对信息
+// PairInfoService 结对信息
 type PairInfoService struct {
 	model.PairRepositoryInterface
 	model.UserRepositoryInterface
 }
 
 // info 结对信息
-func (service *PairInfoService) PairInformation(ID uint) (model.User, error) {
+func (service *PairInfoService) PairInformation(ID uint) serializer.Response {
 	//user, err := service.GetUserByUID(service.StudentUID)
 	//if err != nil {
 	//	return "0", err
 	//}
 	res, err := service.GetPairByStudentID(ID)
-	if err != nil {
-		return model.User{}, err
+	var stu model.User
+	if res == 0 {
+		return serializer.DBErr("暂无结对", err)
+	}else {
+		stu, err = service.GetUser(res)
+		if err != nil {
+			return serializer.DBErr("获取队友信息错误", err)
+		}
 	}
-	stu, err := service.GetUser(res)
-	if err != nil {
-		return stu, err
+
+
+
+
+	return serializer.Response{
+		Code: 0,
+		Data: serializer.BuildStudentResponse(stu,"","",0),
+		Msg:  "Success",
 	}
-	return stu, nil
 }

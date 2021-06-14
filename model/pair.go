@@ -57,7 +57,7 @@ func (Repo *Repository) GetPairByStudentID(ID uint) (uint, error) {
 	var pair Pair
 	result := Repo.DB.Where("student1_id = ?", ID).Or("student2_id = ?", ID).First(&pair)
 	if result.Error != nil {
-		return 0, result.Error
+		return 0, result.Error//暂无结对
 	}
 	if pair.Student1ID == ID {
 		return pair.Student2ID, nil
@@ -101,10 +101,10 @@ func (Repo *Repository) UpdatePair(ID int, student1ID uint, student2ID uint) (Pa
 
 // UpdatePairByStu 更新Pair
 func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, error) {
-	//0为查询错误
 	//1为成功
 	//2为对方已与别人结对
-	//3为保存错误
+	//3为保存修改错误
+	//4为添加结对失败
 
 	var pair1 Pair
 	s1 := 1
@@ -120,29 +120,27 @@ func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, 
 		s2 = 0
 	}
 
-	//有Student1ID，无Student2ID
+
 	if s2 == 1 {
-		return 2, nil//对方已和别人结对
-	} else if s1 == 1{
+		return 2, nil //对方已和别人结对
+	} else if s1 == 1 {
 		if pair1.Student1ID == student1ID {
 			pair1.Student2ID = student2ID
 		} else if pair1.Student2ID == student1ID {
 			pair1.Student1ID = student2ID
-		}
+			result1 = Repo.DB.Save(&pair1)
+			if result1.Error != nil {
+				return 3, result1.Error//保存修改错误
+			}
+		}//修改队友信息成功
 	} else {
 		var pair Pair
 		pair.Student1ID = student1ID
 		pair.Student2ID = student2ID
-		result := Repo.DB.Create(&pair)
+		result := Repo.DB.Create(&pair)//两个都未结对，添加结对
 		if result.Error != nil {
-			return 4, result.Error
+			return 4, result.Error//添加结对失败
 		}
 	}
-
-
-	result1 = Repo.DB.Save(&pair1)
-	if result1.Error != nil {
-		return 3, result1.Error
-	}
-	return 1, nil
+	return 1, nil//成功
 }

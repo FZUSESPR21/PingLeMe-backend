@@ -13,7 +13,7 @@ type UserInfoService struct {
 	model.PairRepositoryInterface
 }
 
-// Information 学生、助教、老师信息
+// Information 根据userID获取学生、助教、老师信息
 func (service *UserInfoService) Information(userID uint) serializer.Response {
 	user, err := service.GetUser(userID)
 	if err != nil {
@@ -53,6 +53,9 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 			}
 		}
 		return serializer.BuildStudentResponse(user, pair.UID, pair.UserName, teamID)
+
+	case model.RoleTeacher:
+		return serializer.BuildTeacherResponse(user)
 	default:
 		return serializer.BuildUserResponse(user)
 	}

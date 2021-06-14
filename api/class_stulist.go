@@ -13,18 +13,14 @@ import (
 // ClassStuList 查看班级学生列表
 func ClassStuList(c *gin.Context) {
 	var service service.ClassStuList
-	classID, err1 :=strconv.Atoi(c.Param("class_id"))
+	classID, err1 := strconv.Atoi(c.Param("class_id"))
 	if err1 != nil {
 		c.JSON(http.StatusOK, ErrorResponse(err1))
 	}
 	if err := c.ShouldBind(&service); err == nil {
 		service.ClassRepositoryInterface = &model.Repo
-		stus, err := service.StuListOfClass(classID)
-		if err != nil {
-			c.JSON(http.StatusOK, ErrorResponse(err))
-		} else {
-			c.JSON(http.StatusOK, stus)
-		}
+		res := service.StuListOfClass(classID)
+		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}

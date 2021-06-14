@@ -17,14 +17,14 @@ type Class struct {
 
 // TeacherClass 教师-班级
 type TeacherClass struct {
-	TeacherID uint
+	UserID uint
 	ClassID   uint
 }
 
 // StudentClass 学生-班级
 type StudentClass struct {
-	UserID uint
-	ClassID   uint
+	UserID  uint
+	ClassID uint
 }
 
 type ClassRepositoryInterface interface {
@@ -37,7 +37,8 @@ type ClassRepositoryInterface interface {
 	AddTeacher(class Class, teacher User) error
 	DeleteTeacher(class Class, teacher User) error
 	EditStuClass(studentID int, newClassID int) error
-	GetStusByClassName(classID int) ([]User, error)
+	GetStusByClassName(classID int) (int, []User, error)
+	GetAssisByClassName(classID int) (int, []User, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -79,7 +80,7 @@ func (Repo *Repository) ClassAddStudents(stuClasses []StudentClass) []error {
 func (Repo *Repository) AddTeacher(class Class, teacher User) error {
 	var classID = class.ID
 	var teacherID = teacher.ID
-	result := Repo.DB.Exec("insert into teacher_class(class_id,teacher_id) values(?,?)", classID, teacherID)
+	result := Repo.DB.Exec("insert into teacher_class(class_id,user_id) values(?,?)", classID, teacherID)
 	return result.Error
 }
 
@@ -87,7 +88,7 @@ func (Repo *Repository) AddTeacher(class Class, teacher User) error {
 func (Repo *Repository) AddStudent(class Class, student User) error {
 	var classID = class.ID
 	var studentID = student.ID
-	result := Repo.DB.Exec("insert into student_class(class_id,student_id) values(?,?)", classID, studentID)
+	result := Repo.DB.Exec("insert into student_class(class_id,user_id) values(?,?)", classID, studentID)
 	return result.Error
 }
 
@@ -101,7 +102,7 @@ func (Repo *Repository) DeleteClass(classID interface{}) error {
 func (Repo *Repository) DeleteTeacher(class Class, teacher User) error {
 	var classID = class.ID
 	var teacherID = teacher.ID
-	result := Repo.DB.Exec("delete from teacher_class where class_id = ? and teacher_id = ?", classID, teacherID)
+	result := Repo.DB.Exec("delete from teacher_class where class_id = ? and user_id = ?", classID, teacherID)
 	return result.Error
 }
 
@@ -125,16 +126,38 @@ func (Repo *Repository) EditStuClass(studentID int, newClassID int) error {
 	return result.Error
 }
 
-// GetStusByClassID 查看班级学生列表
-func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
+// GetStusByClassName 查看班级学生列表
+func (Repo *Repository) GetStusByClassName(classID int) (int, []User, error) {
 	var stus []User
 	var studentClass []StudentClass
 	result := Repo.DB.Table("student_class").Where("class_id = ?", classID).Find(&studentClass)
 
-	for i := 0; i < len(studentClass); i++{
+	for i := 0; i < len(studentClass); i++ {
 		var stu User
 		result = Repo.DB.Where("id = ?", studentClass[i].UserID).First(&stu)
 		stus = append(stus, stu)
 	}
-	return stus, result.Error
+	return len(studentClass), stus, result.Error
+}
+
+// GetAssisByClassName 查看班级助教列表
+func (Repo *Repository) GetAssisByClassName(classID int) (int, []User, error) {
+	var assis []User
+	var teacherClass []TeacherClass
+	result := Repo.DB.Table("teacher_class").Where("class_id = ?", classID).Find(&teacherClass)
+
+	var num int
+	for i := 0; i < len(teacherClass); i++ {
+		var stu User
+		result = Repo.DB.Where("id = ? and role = 2", teacherClass[i].UserID).First(&stu)
+		if(result.RowsAffected > 0){
+			num++
+			assis = append(assis, stu)
+		}
+	}
+	if(num > 0){
+		return num, assis, nil
+	}else {
+		return num, assis, result.Error
+	}
 }
