@@ -4,7 +4,6 @@ package api
 
 import (
 	"PingLeMe-Backend/model"
-	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,15 +15,8 @@ func EditStuClass(c *gin.Context) {
 
 	if err := c.ShouldBind(&service); err == nil {
 		service.ClassRepositoryInterface = &model.Repo
-		err1 := service.EditStudentClass()
-		if err1 != nil {
-			c.JSON(http.StatusOK, ErrorResponse(err1))
-		} else {
-			c.JSON(http.StatusOK, serializer.Response{
-				Code: 0,
-				Msg:  "修改学生班级成功！",
-			})
-		}
+		res := service.EditStudentClass()
+		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 

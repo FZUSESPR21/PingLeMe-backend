@@ -4,6 +4,7 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 )
 
 // PairEditService 填写结对信息
@@ -15,19 +16,23 @@ type PairEditService struct {
 }
 
 // EditPairInformation 填写结对信息
-func (service *PairEditService) EditPairInformation() (int, error) {
+func (service *PairEditService) EditPairInformation() serializer.Response {
 	stu1, err := service.GetUserByUID(service.Student1UID)
 	if err != nil {
-		return 0, err
+		return serializer.DBErr("Student1UID有误", err)
 	}
 	stu2, err := service.GetUserByUID(service.Student2UID)
 	if err != nil {
-		return 0, err
+		return serializer.DBErr("Student2UID有误", err)
 	}
 
 	res, err := service.UpdatePairByStu(stu1.ID, stu2.ID)
 	if err != nil {
-		return 0, err
+		return serializer.DBErr("更新操作错误", err)
 	}
-	return res, nil
+	return serializer.Response{
+		Code: 0,
+		Data: res,
+		Msg:  "Success",
+	}
 }

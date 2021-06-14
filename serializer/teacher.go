@@ -15,6 +15,14 @@ func BuildTeacher(user model.User) Teacher {
 	return teacher
 }
 
+func BuildTeacherResponse(user model.User) Response {
+	return Response{
+		Code: 0,
+		Msg:  "Success",
+		Data: BuildTeacher(user),
+	}
+}
+
 // BuildTeacherList 序列化教师列表
 func BuildTeacherList(user []model.User) []Teacher {
 	var length = len(user)

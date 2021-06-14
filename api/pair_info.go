@@ -4,9 +4,7 @@ package api
 
 import (
 	"PingLeMe-Backend/model"
-	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
@@ -22,15 +20,8 @@ func PairInfo(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.PairRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
-		res, err := service.PairInformation(uint(ID))
-		if err != nil {
-			c.JSON(http.StatusOK, ErrorResponse(err))
-		} else {
-			c.JSON(http.StatusOK, serializer.Response{
-				Code: 0,
-				Msg:  fmt.Sprint(res),
-			})
-		}
+		res := service.PairInformation(uint(ID))
+		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}

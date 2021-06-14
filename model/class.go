@@ -17,7 +17,7 @@ type Class struct {
 
 // TeacherClass 教师-班级
 type TeacherClass struct {
-	TeacherID uint
+	UserID uint
 	ClassID   uint
 }
 
@@ -37,7 +37,9 @@ type ClassRepositoryInterface interface {
 	AddTeacher(class Class, teacher User) error
 	DeleteTeacher(class Class, teacher User) error
 	EditStuClass(studentID int, newClassID int) error
-	GetStusByClassName(classID int) ([]User, error)
+	GetStusByClassName(classID int) (int, []User, error)
+	GetAssisByClassName(classID int) (int, []User, error)
+	GetTeacherByClassID(classID int) (User, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -126,7 +128,7 @@ func (Repo *Repository) EditStuClass(studentID int, newClassID int) error {
 }
 
 // GetStusByClassName 查看班级学生列表
-func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
+func (Repo *Repository) GetStusByClassName(classID int) (int, []User, error) {
 	var stus []User
 	var studentClass []StudentClass
 	result := Repo.DB.Table("student_class").Where("class_id = ?", classID).Find(&studentClass)
@@ -136,5 +138,47 @@ func (Repo *Repository) GetStusByClassName(classID int) ([]User, error) {
 		result = Repo.DB.Where("id = ?", studentClass[i].UserID).First(&stu)
 		stus = append(stus, stu)
 	}
-	return stus, result.Error
+	return len(studentClass), stus, result.Error
+}
+
+// GetAssisByClassName 查看班级助教列表
+func (Repo *Repository) GetAssisByClassName(classID int) (int, []User, error) {
+	var assis []User
+	var teacherClass []TeacherClass
+	result := Repo.DB.Table("teacher_class").Where("class_id = ?", classID).Find(&teacherClass)
+
+	var num int
+	for i := 0; i < len(teacherClass); i++ {
+		var stu User
+		result = Repo.DB.Where("id = ? and role = 2", teacherClass[i].UserID).First(&stu)
+		if result.RowsAffected > 0 {
+			num++
+			assis = append(assis, stu)
+		}
+	}
+	if num > 0 {
+		return num, assis, nil
+	}else {
+		return num, assis, result.Error
+	}
+}
+
+//GetTeacherByClassID 通过ClassID查找老师
+func (Repo *Repository) GetTeacherByClassID(classID int) (User, error) {
+	var teacher User
+	var teacherClass []TeacherClass
+	result := Repo.DB.Table("teacher_class").Where("class_id = ?", classID).Find(&teacherClass)
+	var num int
+	for i := 0; i < len(teacherClass); i++ {
+		result = Repo.DB.Where("id = ? and role = 1", teacherClass[i].UserID).First(&teacher)
+		if result.RowsAffected > 0 {
+			num++
+		}
+	}
+	if num > 0 {
+		return teacher, nil
+	}else {
+		return teacher, result.Error
+	}
+
 }

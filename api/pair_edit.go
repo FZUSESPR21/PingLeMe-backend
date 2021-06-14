@@ -16,19 +16,20 @@ func FillInPairInformation(c *gin.Context) {
 	if err := c.ShouldBind(&service); err == nil {
 		service.PairRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
-		res, err1 := service.EditPairInformation()
-		if err1 != nil {
-			c.JSON(http.StatusOK, ErrorResponse(err1))
-		} else {
-			if res == 2 {
-				c.JSON(http.StatusOK, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
-			} else {
-				c.JSON(http.StatusOK, serializer.Response{
-					Code: 0,
-					Msg:  "修改成功",
-				})
-			}
+		res:= service.EditPairInformation()
+		if res.Data == 2 {
+			c.JSON(http.StatusOK, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
+		} else if res.Data == 3 {
+			c.JSON(http.StatusOK, serializer.ParamErr("保存修改错误，修改结对信息失败", nil))
+		} else if res.Data == 4 {
+			c.JSON(http.StatusOK, serializer.ParamErr("添加结对失败，修改结对信息失败", nil))
+		}else {
+			c.JSON(http.StatusOK, serializer.Response{
+				Code: 0,
+				Msg:  "修改成功",
+			})
 		}
+
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
 	}

@@ -4,7 +4,6 @@ package api
 
 import (
 	"PingLeMe-Backend/model"
-	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -16,17 +15,13 @@ func ClassStuList(c *gin.Context) {
 	var service service.ClassStuList
 	classID, err1 := strconv.Atoi(c.Param("class_id"))
 	if err1 != nil {
-		c.JSON(http.StatusOK, serializer.ParamErr("", err1))
+		c.JSON(http.StatusOK, ErrorResponse(err1))
 	}
 	if err := c.ShouldBind(&service); err == nil {
 		service.ClassRepositoryInterface = &model.Repo
-		students, err := service.StuListOfClass(classID)
-		if err != nil {
-			c.JSON(http.StatusOK, serializer.ParamErr("", err))
-		} else {
-			c.JSON(http.StatusOK, students)
-		}
+		res := service.StuListOfClass(classID)
+		c.JSON(http.StatusOK, res)
 	} else {
-		c.JSON(http.StatusOK, serializer.ParamErr("", err))
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
 }

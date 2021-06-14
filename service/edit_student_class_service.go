@@ -4,6 +4,7 @@ package service
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 )
 
 // EditStudentClassService 改变学生班级
@@ -14,7 +15,13 @@ type EditStudentClassService struct {
 }
 
 // EditStudentClass 改变学生班级
-func (service *EditStudentClassService) EditStudentClass() error {
+func (service *EditStudentClassService) EditStudentClass() serializer.Response {
 	err := service.EditStuClass(service.StudentID, service.NewClass)
-	return err
+	if err != nil {
+		return serializer.DBErr("数据修改错误", err)
+	}
+	return serializer.Response{
+		Code: 0,
+		Msg:  "Success",
+	}
 }
