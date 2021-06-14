@@ -15,7 +15,11 @@ type UserRepoMock struct {
 	mock.Mock
 }
 
-func (mock *UserRepoMock) GetUserRoles(ID interface{}) ([]model.Role, error) {
+func (mock *UserRepoMock) SetUserRole(roleType uint8, user model.User) error {
+	return nil
+}
+
+func (mock *UserRepoMock) GetUserRoles(ID uint) ([]model.Role, error) {
 	args := mock.Called(ID)
 	roles := []model.Role{
 		{
@@ -36,7 +40,7 @@ func (mock *UserRepoMock) GetUserRoles(ID interface{}) ([]model.Role, error) {
 	return roles, args.Error(1)
 }
 
-func (mock *UserRepoMock) GetUserPermissions(ID interface{}) ([]model.Permission, error) {
+func (mock *UserRepoMock) GetUserPermissions(ID uint) ([]model.Permission, error) {
 	args := mock.Called(ID)
 	permissions := []model.Permission{
 		{

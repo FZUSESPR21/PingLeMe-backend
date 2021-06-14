@@ -47,31 +47,35 @@ func UserLogout(c *gin.Context) {
 	})
 }
 
+func UserMe(c *gin.Context) {
+	var service service.UserInfoService
+	service.PairRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	res := service.Information(CurrentUser(c).ID)
+	c.JSON(http.StatusOK, res)
+}
+
 // UserInfo 用户信息接口
 func UserInfo(c *gin.Context) {
 	var service service.UserInfoService
 	service.PairRepositoryInterface = &model.Repo
 	service.UserRepositoryInterface = &model.Repo
-	userID := c.DefaultQuery("user", "-1")
-	if userID == "-1" {
-		// 404
+	userID := c.Param("user")
+	user, err := strconv.Atoi(userID)
+	if err != nil {
+		res := serializer.ParamErr("", err)
+		c.JSON(http.StatusOK, res)
+	} else if user < 0 {
+		res := serializer.ParamErr("用户ID错误", nil)
+		c.JSON(http.StatusOK, res)
 	} else {
-		user, err := strconv.Atoi(userID)
-		if err != nil {
-			res := serializer.ParamErr("", err)
-			c.JSON(http.StatusOK, res)
-		} else if user < 0 {
-			res := serializer.ParamErr("用户ID错误", nil)
-			c.JSON(http.StatusOK, res)
-		} else {
-			res := service.Information(uint(user))
-			c.JSON(http.StatusOK, res)
-		}
+		res := service.Information(uint(user))
+		c.JSON(http.StatusOK, res)
 	}
 }
 
 func GetTeacherList(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	res := service.GetTeacherList()
 	c.JSON(http.StatusOK, res)
 }
@@ -99,7 +103,7 @@ func AddAss(c *gin.Context) {
 }
 
 func GetTeachers(c *gin.Context) {
-	var service service.GetTeacherListService
+	var service service.TeacherListService
 	if err := c.ShouldBind(&service); err == nil {
 		service.UserRepositoryInterface = &model.Repo
 		res := service.GetTeacherList()
@@ -141,7 +145,6 @@ func AssImportPdf(c *gin.Context) {
 
 	files := form.File["files"]
 
-
 	_base := "./blog"
 	exist, err := PathExists(_base)
 	if err != nil {
@@ -177,7 +180,7 @@ func AssImportPdf(c *gin.Context) {
 		//}
 	}
 	c.String(http.StatusOK,
-		fmt.Sprintf("Uploaded successfully %d files",len(files)))
+		fmt.Sprintf("Uploaded successfully %d files", len(files)))
 
 }
 
@@ -192,3 +195,27 @@ func PathExists(path string) (bool, error) {
 	return false, err
 }
 
+// ChangePassword 修改密码
+func ChangePassword(c *gin.Context) {
+	var service service.ChangePasswordService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		res := service.ChangePassword()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+// AddStudents 批量添加学生
+func AddStudents(c *gin.Context) {
+	var service service.AddStudentsService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.ClassRepositoryInterface = &model.Repo
+		res := service.AddStudents()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}

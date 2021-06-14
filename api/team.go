@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package api
 
 import (
@@ -7,6 +9,7 @@ import (
 	"net/http"
 )
 
+// CreateTeam 创建团队
 func CreateTeam(c *gin.Context) {
 	var service service.CreateTeamService
 	if err := c.ShouldBind(&service); err == nil {
@@ -18,8 +21,9 @@ func CreateTeam(c *gin.Context) {
 	}
 }
 
+// AddTeammate 增加队员
 func AddTeammate(c *gin.Context) {
-	var service service.TeammateSetService
+	var service service.TeammateAddService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
@@ -31,11 +35,22 @@ func AddTeammate(c *gin.Context) {
 }
 
 func DeleteTeammate(c *gin.Context) {
-	var service service.TeammateSetService
+	var service service.TeammateAddService
 	if err := c.ShouldBind(&service); err == nil {
 		service.TeamRepositoryInterface = &model.Repo
 		service.UserRepositoryInterface = &model.Repo
 		res := service.DeleteTeammate()
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+func GetTeamList(c *gin.Context) {
+	var service service.TeamListService
+	if err := c.ShouldBind(&service); err == nil {
+		service.TeamRepositoryInterface = &model.Repo
+		res := service.GetTeamList()
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))

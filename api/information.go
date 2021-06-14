@@ -11,21 +11,25 @@ import (
 )
 
 // FillInPairInformation 填写结对信息
-func FillInPairInformation(c *gin.Context, stuUID uint) {
-	var service service.EditPairIndormationService
-	if user, _ := c.Get("user"); user != nil {
-		if u, ok := user.(model.User); ok {
-			res, err := service.UpdatePairByStu(u.ID, stuUID)
-			if err != nil {
-				c.JSON(http.StatusOK, ErrorResponse(err))
-			}
+func FillInPairInformation(c *gin.Context) {
+	var service service.PairEditService
+	if err := c.ShouldBind(&service); err == nil {
+		service.PairRepositoryInterface = &model.Repo
+		service.UserRepositoryInterface = &model.Repo
+		res, err1 := service.EditPairInformation()
+		if err1 != nil {
+			c.JSON(http.StatusOK, ErrorResponse(err1))
+		} else {
 			if res == 2 {
 				c.JSON(http.StatusOK, serializer.ParamErr("对方已和别人结对，修改结对信息失败", nil))
+			} else {
+				c.JSON(http.StatusOK, serializer.Response{
+					Code: 0,
+					Msg:  "修改成功",
+				})
 			}
 		}
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
 	}
-	c.JSON(http.StatusOK, serializer.Response{
-		Code: 0,
-		Msg:  "修改成功",
-	})
 }

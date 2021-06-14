@@ -7,7 +7,7 @@ type Teacher struct {
 	TeacherName string `json:"teacher_name"`
 }
 
-// BuildUser 序列化用户
+// BuildTeacher 序列化教师
 func BuildTeacher(user model.User) Teacher {
 	var teacher Teacher
 	teacher.ID = user.UID
@@ -15,7 +15,7 @@ func BuildTeacher(user model.User) Teacher {
 	return teacher
 }
 
-// BuildUser 序列化用户
+// BuildTeacherList 序列化教师列表
 func BuildTeacherList(user []model.User) []Teacher {
 	var length = len(user)
 	var teacher []Teacher

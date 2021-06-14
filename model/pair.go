@@ -4,7 +4,6 @@ package model
 
 import (
 	"errors"
-	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -101,45 +100,45 @@ func (Repo *Repository) UpdatePair(ID int, student1ID uint, student2ID uint) (Pa
 }
 
 // UpdatePairByStu 更新Pair
-func (Repo *Repository) UpdatePairByStu(student1ID uint, student2UID uint) (int, error) {
+func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, error) {
 	//0为查询错误
 	//1为成功
 	//2为对方已与别人结对
 	//3为保存错误
-	user1, err := Repo.GetUserByUID(fmt.Sprint(student2UID))
-	if err != nil {
-		return 0, err
-	}
-	student2ID := user1.ID
 
 	var pair1 Pair
+	s1 := 1
 	result1 := Repo.DB.Where("student1_id = ?", student1ID).Or("student2_id = ?", student1ID).First(&pair1)
 	if result1.Error != nil {
-		return 0, result1.Error
+		s1 = 0
 	}
 
 	var pair2 Pair
+	s2 := 1
 	result2 := Repo.DB.Where("student1_id = ?", student2ID).Or("student2_id = ?", student2ID).First(&pair2)
 	if result2.Error != nil {
-		return 0, result2.Error
-	}
-	var t int
-	t = 0
-	if pair2.Student1ID == student2ID && (pair2.Student2ID == 0 || pair2.Student2ID == student1ID) {
-		t = 1
-	}
-	if (pair2.Student1ID == 0 || pair2.Student1ID == student1ID) && pair2.Student2ID == student2ID {
-		t = 1
+		s2 = 0
 	}
 
-	if pair1.Student1ID == student1ID && t == 1 {
-		pair1.Student2ID = student2ID
-	} else if pair1.Student2ID == student1ID && t == 1 {
-		pair1.Student1ID = student2ID
-	} else {
+	//有Student1ID，无Student2ID
+	if s2 == 1 {
 		return 2, nil //对方已和别人结对
-
+	} else if s1 == 1 {
+		if pair1.Student1ID == student1ID {
+			pair1.Student2ID = student2ID
+		} else if pair1.Student2ID == student1ID {
+			pair1.Student1ID = student2ID
+		}
+	} else {
+		var pair Pair
+		pair.Student1ID = student1ID
+		pair.Student2ID = student2ID
+		result := Repo.DB.Create(&pair)
+		if result.Error != nil {
+			return 4, result.Error
+		}
 	}
+
 	result1 = Repo.DB.Save(&pair1)
 	if result1.Error != nil {
 		return 3, result1.Error

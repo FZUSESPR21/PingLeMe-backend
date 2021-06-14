@@ -55,14 +55,15 @@ func PermissionRequired(permissionDesc string) gin.HandlerFunc {
 					util.Log().Error("middleware/authService.go/PermissionRequired", zap.Error(err))
 					c.JSON(http.StatusOK, serializer.ServerInnerErr("", err))
 					c.Abort()
+					return
 				}
 				if has {
 					c.Next()
 					return
-				} else {
-					c.JSON(http.StatusOK, serializer.PermissionDenied())
-					c.Abort()
 				}
+				c.JSON(http.StatusOK, serializer.PermissionDenied())
+				c.Abort()
+				return
 			}
 		}
 

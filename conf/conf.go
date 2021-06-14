@@ -3,6 +3,7 @@
 package conf
 
 import (
+	"PingLeMe-Backend/cache"
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/util"
 	"fmt"
@@ -13,6 +14,8 @@ import (
 
 	"github.com/joho/godotenv"
 )
+
+var SystemDebugFlag = false
 
 // Init 初始化配置项
 func Init() {
@@ -31,6 +34,17 @@ func Init() {
 		logLevel = util.LevelError
 	default:
 		logLevel = util.LevelInformational
+	}
+
+	if os.Getenv("GIN_MODE") == "debug" {
+		SystemDebugFlag = true
+	}
+
+	adminDefaultPassword := os.Getenv("ADMIN_PASSWD")
+	if adminDefaultPassword == "" || len(adminDefaultPassword) < 8 {
+		model.AdminDefaultPasswd = "12345678"
+	} else {
+		model.AdminDefaultPasswd = adminDefaultPassword
 	}
 
 	logMaxSize, err1 := strconv.Atoi(os.Getenv("LOG_MAX_SIZE"))
@@ -91,5 +105,5 @@ func Init() {
 
 	// 连接数据库
 	model.Database(os.Getenv("MYSQL_DSN"), DBLogLevel)
-	//cache.Redis()
+	cache.Redis()
 }

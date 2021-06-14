@@ -7,13 +7,13 @@ import (
 	"gorm.io/gorm"
 )
 
-type SetClassInfoService struct {
+type ClassInfoService struct {
 	model.ClassRepositoryInterface
 	Name string `form:"class_name" json:"class_name"`
 }
 
 //TODO 接口缺失 form:"class_name"
-func (service *SetClassInfoService) SetClassInfo() serializer.Response {
+func (service *ClassInfoService) SetClassInfo() serializer.Response {
 	class, err := service.GetClassByName(service.Name)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {

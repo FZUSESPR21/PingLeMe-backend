@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package model
 
 import (
@@ -17,9 +19,9 @@ func TestBlogScore(t *testing.T) {
 
 	t.Run("GetPersonalBlogScoreByID", func(t *testing.T) {
 		//personal_blog_score := PersonalBlogScore{
-		//	ScoringItemID: 	1,
+		//	ItemID: 	1,
 		//	ScorekeeperID: 	1,
-		//	Grade:         	70,
+		//	Score:         	70,
 		//}
 		rows := sqlmock.NewRows([]string{"id", "created_at", "updated_at", "deleted_at", "scoring_item_id", "scorekeeper_id", "grade"}).
 			AddRow(1, time.Now(), time.Now(), time.Now(), 1, 1, 80)

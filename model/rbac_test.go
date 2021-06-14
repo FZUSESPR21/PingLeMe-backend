@@ -33,7 +33,7 @@ func TestRBAC(t *testing.T) {
 					AddRow(1, time.Now(), time.Now(), time.Now(), 1),
 			)
 		tRepo.mock.ExpectExec("INSERT IGNORE INTO user_role").
-			WithArgs(1, 1)
+			WithArgs(1, 1).WillReturnResult(sqlmock.NewResult(1, 1))
 
 		users := []User{{
 			Model: gorm.Model{
@@ -80,7 +80,7 @@ func TestRBAC(t *testing.T) {
 		if err != nil {
 			t.Error(err)
 		} else {
-			assert.Equal(t, uint8(1), roles[0].Type)
+			assert.Equal(t, uint(1), roles[0].Type)
 		}
 
 		if err := tRepo.mock.ExpectationsWereMet(); err != nil {
@@ -108,7 +108,7 @@ func TestRBAC(t *testing.T) {
 					AddRow(1, time.Now(), time.Now(), time.Now(), 1),
 			)
 
-		permissions, err := tRepo.repo.GetRolePermissions(uint8(1))
+		permissions, err := tRepo.repo.GetRolePermissions(uint(1))
 
 		if err != nil {
 			t.Error(err)
