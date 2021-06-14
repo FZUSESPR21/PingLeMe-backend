@@ -86,3 +86,10 @@ func ToggleTeam(c *gin.Context) {
 	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyTeam)
 	c.JSON(http.StatusOK, res)
 }
+
+func ClassList(c *gin.Context) {
+	var service service.ClassListService
+	service.ClassRepositoryInterface = &model.Repo
+	res := service.GetClassList()
+	c.JSON(http.StatusOK, res)
+}

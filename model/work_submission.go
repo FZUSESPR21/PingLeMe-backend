@@ -13,6 +13,7 @@ type WorkSubmission struct {
 	HomeworkID   int    `gorm:"type:int;not null"`
 	SubmitStatus uint8  `gorm:"type:int;not null"`
 	Filepath     string `gorm:"type:varchar(255)"`
+	IsReviewed   bool   `gorm:"default:false"`
 }
 
 // CreateWorkSubmission 创建作业提交表
@@ -36,8 +37,17 @@ func (Repo *Repository) GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID 
 	HomeworkID int) (WorkSubmission, error) {
 	var workSubmission WorkSubmission
 	result := Repo.DB.Where(map[string]interface{}{"SubmitterID": SubmitterID,
-		"HomeworkID": HomeworkID}).Find(&workSubmission)
+		"HomeworkID": HomeworkID}).First(&workSubmission)
 	return workSubmission, result.Error
+}
+
+// GetWorkSubmissionsByHomeworkIDandClassID 根据HomeworkID和ClassID获取作业提交表列表
+func (Repo *Repository) GetWorkSubmissionsByHomeworkIDandClassID(homeworkID int, ClassID int) ([]WorkSubmission, error) {
+	var workSubmissions []WorkSubmission
+	result := Repo.DB.Where("HomeworkID = ?", homeworkID).
+		Where("SubmitterID IN ?", Repo.DB.Table("student_class").Select("user_id").Where("class_id = ?", ClassID)).
+		Find(&workSubmissions)
+	return workSubmissions, result.Error
 }
 
 // SetSubmitStatusByID 根据ID设置作业提交状态
