@@ -33,6 +33,13 @@ func Init() {
 		logLevel = util.LevelInformational
 	}
 
+	adminDefaultPassword := os.Getenv("ADMIN_PASSWD")
+	if adminDefaultPassword == "" || len(adminDefaultPassword) < 8 {
+		model.AdminDefaultPasswd = "12345678"
+	} else {
+		model.AdminDefaultPasswd = adminDefaultPassword
+	}
+
 	logMaxSize, err1 := strconv.Atoi(os.Getenv("LOG_MAX_SIZE"))
 
 	logMaxAge, err2 := strconv.Atoi(os.Getenv("LOG_MAX_AGE"))

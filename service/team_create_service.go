@@ -8,20 +8,20 @@ import (
 type CreateTeamService struct {
 	model.TeamRepositoryInterface
 	Name          string `form:"name" json:"name"`
-	GroupLeaderId int    `form:"group_leader_id" json:"group_leader_id"`
-	ClassId       int    `form:"class_id" json:"class_id"`
+	GroupLeaderID int    `form:"group_leader_id" json:"group_leader_id"`
+	ClassID       int    `form:"class_id" json:"class_id"`
 }
 
-func makeTeam(name string, groupLeaderId int, classId int) model.Team {
+func makeTeam(name string, groupLeaderID int, classID int) model.Team {
 	var team model.Team
 	team.Name = name
-	team.GroupLeaderID = groupLeaderId
-	team.ClassID = classId
+	team.GroupLeaderID = groupLeaderID
+	team.ClassID = classID
 	return team
 }
 
 func (service *CreateTeamService) CreateTeam() serializer.Response {
-	var team = makeTeam(service.Name, service.GroupLeaderId, service.ClassId)
+	var team = makeTeam(service.Name, service.GroupLeaderID, service.ClassID)
 	//TODO 1.创建者是否已有团队 2.班级是否存在 3.队名是否重复
 
 	has, err := service.SetTeam(team)

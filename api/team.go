@@ -1,3 +1,5 @@
+//  Copyright (c) 2021 PingLeMe Team. All rights reserved.
+
 package api
 
 import (
@@ -7,6 +9,7 @@ import (
 	"net/http"
 )
 
+// CreateTeam 创建团队
 func CreateTeam(c *gin.Context) {
 	var service service.CreateTeamService
 	if err := c.ShouldBind(&service); err == nil {
@@ -18,6 +21,7 @@ func CreateTeam(c *gin.Context) {
 	}
 }
 
+// AddTeammate 增加队员
 func AddTeammate(c *gin.Context) {
 	var service service.TeammateAddService
 	if err := c.ShouldBind(&service); err == nil {

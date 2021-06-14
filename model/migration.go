@@ -11,7 +11,7 @@ import (
 
 func migration() {
 	// 自动迁移模式
-	err := Repo.DB.AutoMigrate(&User{}, &Class{}, &EvaluationItemScore{}, &EvaluationTable{}, &EvaluationTableItem{}, &Homework{},
+	err := Repo.DB.AutoMigrate(&User{}, &Class{}, &EvaluationItemScore{}, &EvaluationTable{}, &EvaluationTableItem{}, &FinalEvaluationTableScore{}, &Homework{},
 		&ScoringItem{}, &WorkSubmission{}, &Pair{}, &Performance{}, &PersonalBlogScore{}, &Role{}, &Permission{},
 		&Team{}, &TeamBlogScore{})
 

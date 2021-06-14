@@ -9,6 +9,7 @@ import (
 	"errors"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"strconv"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -17,8 +18,8 @@ import (
 // UserLoginService 管理用户登录的服务
 type UserLoginService struct {
 	model.UserRepositoryInterface
-	UID      string `form:"uid" json:"uid" binding:"required,min=5,max=18"`
-	Password string `form:"password" json:"password" binding:"required,min=6,max=18"`
+	UID      string `form:"uid" json:"uid" binding:"required,min=4,max=18"`
+	Password string `form:"password" json:"password" binding:"required,min=8,max=20"`
 }
 
 // setSession 设置session
@@ -38,7 +39,7 @@ func (service *UserLoginService) Login(c *gin.Context) serializer.Response {
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return serializer.ParamErr("账号或密码错误", nil)
 	}
-
+	util.Log().Error(strconv.FormatBool(user.CheckPassword(service.Password)))
 	if !user.CheckPassword(service.Password) {
 		return serializer.ParamErr("账号或密码错误", nil)
 	}

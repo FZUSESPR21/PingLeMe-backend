@@ -4,6 +4,7 @@ package model
 
 import (
 	"PingLeMe-Backend/util"
+	"errors"
 	"reflect"
 
 	"go.uber.org/zap"
@@ -13,10 +14,15 @@ import (
 // Role 角色模型
 type Role struct {
 	gorm.Model
-	Type       uint8        `gorm:"type:int;not null;unique"`
+	Type       uint        `gorm:"type:int;not null;unique"`
 	Permission []Permission `gorm:"many2many:role_permission;"`
 	User       []User       `gorm:"many2many:user_role;"`
 	Desc       string       `gorm:"unique;"`
+}
+
+type UserRole struct {
+	RoleID		uint
+	UserID		uint
 }
 
 // Permission 权限模型
@@ -28,12 +34,12 @@ type Permission struct {
 }
 
 type RBACRepositoryInterface interface {
-	GetUserRoles(ID interface{}) ([]Role, error)
-	GetUserPermissions(ID interface{}) ([]Permission, error)
+	GetUserRoles(ID uint) ([]Role, error)
+	GetUserPermissions(ID uint) ([]Permission, error)
 }
 
 // SetRole 新增角色
-func (Repo *Repository) SetRole(roleType uint8, roleDesc string) error {
+func (Repo *Repository) SetRole(roleType uint, roleDesc string) error {
 	result := Repo.DB.Create(Role{
 		Type: roleType,
 		Desc: roleDesc,
@@ -68,8 +74,12 @@ func (Repo *Repository) SetUserRole(roleType uint8, user User) error {
 		util.Log().Error(result.Error.Error())
 		return result.Error
 	}
-
-	Repo.DB.Exec("INSERT IGNORE INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
+	result = nil
+	var userRole UserRole
+	result = Repo.DB.Table("user_role").Where("role_id = ? AND user_id = ?", role.ID, user.ID).First(&userRole)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		Repo.DB.Exec("INSERT INTO user_role (role_id, user_id) VALUES (?, ?)", role.ID, user.ID)
+	}
 
 	return nil
 }
@@ -91,7 +101,7 @@ func (Repo *Repository) SetUsersRole(roleType uint8, users []User) error {
 }
 
 // GetUserRoles 获得用户角色
-func (Repo *Repository) GetUserRoles(ID interface{}) ([]Role, error) {
+func (Repo *Repository) GetUserRoles(ID uint) ([]Role, error) {
 	var user User
 	result := Repo.DB.Preload("Roles").Where("id = ?", ID).Find(&user)
 	return user.Roles, result.Error
@@ -101,7 +111,7 @@ func (Repo *Repository) GetUserRoles(ID interface{}) ([]Role, error) {
 func (Repo *Repository) SetRolePermissions(roleDescOrType interface{}, permissions []Permission) error {
 	var rolePermission Role
 	switch desOrType := roleDescOrType.(type) {
-	case uint8:
+	case uint:
 		rolePermission = Role{
 			Type:       desOrType,
 			Permission: permissions,
@@ -140,7 +150,7 @@ func (Repo *Repository) GetRolePermissions(roleDescOrType interface{}) ([]Permis
 }
 
 // GetUserPermissions 获取用户权限
-func (Repo *Repository) GetUserPermissions(ID interface{}) ([]Permission, error) {
+func (Repo *Repository) GetUserPermissions(ID uint) ([]Permission, error) {
 	roles, err := Repo.GetUserRoles(ID)
 	if err != nil {
 		util.Log().Error("model/rbac.go/GetUserPermissions", zap.Error(err))
