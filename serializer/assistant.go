@@ -5,8 +5,8 @@ import "PingLeMe-Backend/model"
 //助教
 type Assis struct {
 	AssistantID			uint `json:"assistant_id"`
-	AssistantUID         string `json:"assistant_uid"`
-	AssistantName string `json:"assistant_name"`
+	AssistantUID        string `json:"assistant_uid"`
+	AssistantName 		string `json:"assistant_name"`
 }
 
 //助教和老师
@@ -14,7 +14,7 @@ type Assistant struct {
 	TeacherID			uint `json:"teacher_id"`
 	TeacherUID			string `json:"teacher_uid"`
 	TeacherName 		string `json:"teacher_name"`
-	AssisList 				[]Assis `json:"assis_list"`
+	AssisList 			[]Assis `json:"assis_list"`
 }
 
 // BuildAssis 序列化助教
