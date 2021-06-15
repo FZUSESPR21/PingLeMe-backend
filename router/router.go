@@ -118,6 +118,9 @@ func NewRouter() *gin.Engine {
 			// 创建评审表
 			auth.POST("evaluation-table/create", api.CreateEvaluationTable)
 
+			// 获取班级所有团队
+			auth.GET("/class/team/list", api.GetTeamList)
+
 			permissionImportPDF := auth.Group("")
 			permissionImportPDF.Use(middleware.PermissionRequired("work_submission"))
 			{

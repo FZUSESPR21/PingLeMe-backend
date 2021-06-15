@@ -49,20 +49,25 @@ func TogglePair(c *gin.Context) {
 	classID, err1 := strconv.ParseUint(classIDStr, 10, 64)
 	if classIDStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing class id.", nil))
+		return
 	} else if err1 != nil || classID <= 0 {
 		c.JSON(http.StatusOK, serializer.ParamErr("class id param error.", nil))
+		return
 	}
 
 	timeStr := c.DefaultQuery("duration", "604800")
 	t, err2 := strconv.ParseInt(timeStr, 10, 64)
 	if timeStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing deadline t.", nil))
+		return
 	} else if err2 != nil || t < 0 {
 		c.JSON(http.StatusOK, serializer.ParamErr("t param error.", nil))
+		return
 	}
 
 	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyPair)
 	c.JSON(http.StatusOK, res)
+	return
 }
 
 func ToggleTeam(c *gin.Context) {
@@ -71,20 +76,25 @@ func ToggleTeam(c *gin.Context) {
 	classID, err1 := strconv.ParseUint(classIDStr, 10, 64)
 	if classIDStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing class id.", nil))
+		return
 	} else if err1 != nil || classID <= 0 {
 		c.JSON(http.StatusOK, serializer.ParamErr("class id param error.", nil))
+		return
 	}
 
 	timeStr := c.DefaultQuery("duration", "604800")
 	t, err2 := strconv.ParseInt(timeStr, 10, 64)
 	if timeStr == "" {
 		c.JSON(http.StatusOK, serializer.ParamErr("missing deadline t.", nil))
+		return
 	} else if err2 != nil || t < 0 {
 		c.JSON(http.StatusOK, serializer.ParamErr("t param error.", nil))
+		return
 	}
 
 	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyTeam)
 	c.JSON(http.StatusOK, res)
+	return
 }
 
 func ClassList(c *gin.Context) {

@@ -36,4 +36,3 @@ func BuildUserResponse(user model.User) Response {
 	}
 }
 
-
