@@ -126,6 +126,10 @@ func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, 
 	} else if s1 == 1 {
 		if pair1.Student1ID == student1ID {
 			pair1.Student2ID = student2ID
+			result1 = Repo.DB.Save(&pair1)
+			if result1.Error != nil {
+				return 3, result1.Error//保存修改错误
+			}
 		} else if pair1.Student2ID == student1ID {
 			pair1.Student1ID = student2ID
 			result1 = Repo.DB.Save(&pair1)
