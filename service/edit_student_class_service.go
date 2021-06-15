@@ -10,8 +10,8 @@ import (
 // EditStudentClassService 改变学生班级
 type EditStudentClassService struct {
 	model.ClassRepositoryInterface
-	StudentID int `json:"uid"`
-	NewClass  int `json:"newClass"`
+	StudentID int `json:"uid" bind:"required"`
+	NewClass  int `json:"newClass" bind:"required"`
 }
 
 // EditStudentClass 改变学生班级
