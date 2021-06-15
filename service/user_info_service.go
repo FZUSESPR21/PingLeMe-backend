@@ -13,7 +13,7 @@ type UserInfoService struct {
 	model.PairRepositoryInterface
 }
 
-// Information 学生、助教、老师信息
+// Information 根据userID获取学生、助教、老师信息
 func (service *UserInfoService) Information(userID uint) serializer.Response {
 	user, err := service.GetUser(userID)
 	if err != nil {
@@ -30,7 +30,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				pairID = 0
 			} else {
-				return serializer.DBErr("", err)
+				pairID = 0
 			}
 		}
 
@@ -38,7 +38,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		if pairID != 0 {
 			pair, err = service.GetUser(pairID)
 			if err != nil {
-				return serializer.ParamErr("", err)
+				pair = model.User{UID: "0", UserName: ""}
 			}
 		}
 
@@ -47,7 +47,8 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				teamID = 0
 			} else {
-				return serializer.DBErr("", err2)
+				teamID = 0
+				//return serializer.DBErr("", err2)
 			}
 		}
 		classID, err3 := service.GetStudentClassID(user.ID)
@@ -55,6 +56,10 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 			return serializer.ServerInnerErr("student has no class", err3)
 		}
 		return serializer.BuildStudentResponse(user, pair.UID, pair.UserName, teamID, classID)
+
+	case model.RoleTeacher:
+		return serializer.BuildTeacherResponse(user)
+
 	default:
 		return serializer.BuildUserResponse(user)
 	}

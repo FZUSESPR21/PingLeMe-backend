@@ -6,6 +6,7 @@ import "PingLeMe-Backend/model"
 
 // User 用户序列化器
 type User struct {
+	ID       uint   `json:"id"`
 	UID      string `json:"uid"`
 	UserName string `json:"user_name"`
 	PairUID  string `json:"pair_uid"`
@@ -18,6 +19,7 @@ type User struct {
 // BuildUser 序列化用户
 func BuildUser(user model.User) User {
 	return User{
+		ID:       user.ID,
 		UID:      user.UID,
 		UserName: user.UserName,
 	}
@@ -46,5 +48,19 @@ func BuildUserResponse(user model.User) Response {
 func BuildStudentResponse(user model.User, pairUID, pairName string, teamID uint, classID uint) Response {
 	return Response{
 		Data: BuildStudent(user, pairUID, pairName, teamID, classID),
+	}
+}
+
+// BuildStudentListResponse 序列化学生列表
+func BuildStudentListResponse(user []model.User, classID int) Response {
+	studentList := make([]User, 0)
+
+	for _, u := range user {
+		studentList = append(studentList, BuildStudent(u, "", "", 0, uint(classID)))
+	}
+
+	return Response{
+		Code: 0,
+		Data: studentList,
 	}
 }

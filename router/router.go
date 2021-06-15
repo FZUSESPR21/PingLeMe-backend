@@ -91,8 +91,11 @@ func NewRouter() *gin.Engine {
 			// 查看班级学生列表
 			auth.GET("class/student/list/:class_id", api.ClassStuList)
 
+			// 查看班级助教列表
+			v1.GET("class/assistant/list/detail/:class_id", api.ClassAssisList)
+
 			// 改变学生班级
-			//auth.POST("class/student/move", )
+			v1.POST("class/student/move", api.EditStuClass)
 
 			// 班级列表
 			auth.GET("class/list", api.ClassList)
