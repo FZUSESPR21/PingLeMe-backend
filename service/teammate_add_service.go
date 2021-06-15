@@ -10,8 +10,8 @@ type TeammateAddService struct {
 	model.TeamRepositoryInterface
 	model.UserRepositoryInterface
 	gorm.Model
-	UID    string `form:"uid" json:"uid"`
-	TeamID int    `form:"team_id" json:"team_id"`
+	UID    string `form:"uid" json:"uid" binding:"required"`
+	TeamID int    `form:"team_id" json:"team_id" binding:"required"`
 }
 
 func (service *TeammateAddService) AddTeammate() serializer.Response {
