@@ -29,7 +29,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				pairID = 0
-			}else {
+			} else {
 				pairID = 0
 			}
 		}
@@ -38,8 +38,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		if pairID != 0 {
 			pair, err = service.GetUser(pairID)
 			if err != nil {
-				pair.UID = "0"
-				//return serializer.ParamErr("", err)
+				pair = model.User{UID: "0", UserName: ""}
 			}
 		}
 
@@ -52,10 +51,15 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 				//return serializer.DBErr("", err2)
 			}
 		}
-		return serializer.BuildStudentResponse(user, pair.UID, pair.UserName, teamID)
+		classID, err3 := service.GetStudentClassID(user.ID)
+		if err3 != nil {
+			return serializer.ServerInnerErr("student has no class", err3)
+		}
+		return serializer.BuildStudentResponse(user, pair.UID, pair.UserName, teamID, classID)
 
 	case model.RoleTeacher:
 		return serializer.BuildTeacherResponse(user)
+
 	default:
 		return serializer.BuildUserResponse(user)
 	}

@@ -17,8 +17,8 @@ type Class struct {
 
 // TeacherClass 教师-班级
 type TeacherClass struct {
-	UserID uint
-	ClassID   uint
+	UserID  uint
+	ClassID uint
 }
 
 // StudentClass 学生-班级
@@ -55,6 +55,7 @@ type ClassRepositoryInterface interface {
 	GetStusByClassName(classID int) (int, []User, error)
 	GetAssisByClassName(classID int) (int, []User, error)
 	GetTeacherByClassID(classID int) (User, error)
+	GetClassInfoList() ([]ClassInfo, error)
 }
 
 // GetClassByID 通过班级ID获取班级
@@ -173,7 +174,7 @@ func (Repo *Repository) GetAssisByClassName(classID int) (int, []User, error) {
 	}
 	if num > 0 {
 		return num, assis, nil
-	}else {
+	} else {
 		return num, assis, result.Error
 	}
 }
@@ -192,7 +193,7 @@ func (Repo *Repository) GetTeacherByClassID(classID int) (User, error) {
 	}
 	if num > 0 {
 		return teacher, nil
-	}else {
+	} else {
 		return teacher, result.Error
 	}
 

@@ -67,7 +67,6 @@ func TogglePair(c *gin.Context) {
 
 	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyPair)
 	c.JSON(http.StatusOK, res)
-	return
 }
 
 func ToggleTeam(c *gin.Context) {
@@ -94,7 +93,6 @@ func ToggleTeam(c *gin.Context) {
 
 	res := service.ToggleGroup(uint(classID), time.Duration(t)*time.Second, KeyTeam)
 	c.JSON(http.StatusOK, res)
-	return
 }
 
 func ClassList(c *gin.Context) {

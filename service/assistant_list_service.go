@@ -7,7 +7,7 @@ import (
 	"PingLeMe-Backend/serializer"
 )
 
-// ClassStuList 班级助教列表
+// ClassAssisList 班级助教列表
 type ClassAssisList struct {
 	model.ClassRepositoryInterface
 }
@@ -41,8 +41,7 @@ func (service *ClassAssisList) AssistantListOfClass(classID int) serializer.Resp
 
 	return serializer.Response{
 		Code: 0,
-		Data: serializer.BuildAssisAndTeaResponse(teacher,assisListList),
+		Data: serializer.BuildAssisAndTeaResponse(teacher, assisListList),
 		Msg:  "Success",
 	}
 }
-

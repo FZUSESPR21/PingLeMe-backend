@@ -30,7 +30,7 @@ func (service *ClassStuList) StuListOfClass(classID int) serializer.Response {
 
 	return serializer.Response{
 		Code: 0,
-		Data: serializer.BuildStudentListResponse(studentList),
+		Data: serializer.BuildStudentListResponse(studentList, classID),
 		Msg:  "Success",
 	}
 }

@@ -20,12 +20,11 @@ func (service *PairInfoService) PairInformation(ID uint) serializer.Response {
 	//	return "0", err
 	//}
 	res, err := service.GetPairByStudentID(ID)
-	var stu model.User
 
 	if res == 0 {
 		return serializer.DBErr("暂无结对", err)
-	}else {
-		stu, err = service.GetUser(res)
+	} else {
+		_, err = service.GetUser(res)
 		if err != nil {
 			return serializer.DBErr("获取队友信息错误", err)
 		}
@@ -33,7 +32,7 @@ func (service *PairInfoService) PairInformation(ID uint) serializer.Response {
 
 	return serializer.Response{
 		Code: 0,
-		Data: serializer.BuildStudentResponse(stu,"","",0),
-		Msg:  "Success",
+		//Data: serializer.BuildStudentResponse(stu,"","",0),
+		Msg: "Success",
 	}
 }
