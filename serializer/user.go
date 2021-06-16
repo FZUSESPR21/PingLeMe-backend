@@ -28,6 +28,7 @@ func BuildUser(user model.User) User {
 // BuildStudent 序列化学生
 func BuildStudent(user model.User, pairUID, pairName string, teamID uint, classID uint) User {
 	return User{
+		ID:       user.ID,
 		UID:      user.UID,
 		UserName: user.UserName,
 		PairUID:  pairUID,
