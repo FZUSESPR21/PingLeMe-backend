@@ -70,6 +70,9 @@ func NewRouter() *gin.Engine {
 			// 用户信息
 			auth.GET("user/:id", api.UserInfo)
 
+			// 学生结对队友信息
+			auth.GET("user/pair/:id", api.PairInfo)
+
 			// 学生结对
 			auth.POST("user/pair/add", api.FillInPairInformation)
 

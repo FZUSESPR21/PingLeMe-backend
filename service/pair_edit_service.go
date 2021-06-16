@@ -11,8 +11,8 @@ import (
 type PairEditService struct {
 	model.PairRepositoryInterface
 	model.UserRepositoryInterface
-	Student1UID string `json:"Student1UID"`
-	Student2UID string `json:"Student2UID"`
+	Student1UID string `json:"Student1UID" bind:"required"`
+	Student2UID string `json:"Student2UID" bind:"required"`
 }
 
 // EditPairInformation 填写结对信息
