@@ -31,7 +31,7 @@ func NewRouter() *gin.Engine {
 
 		debug.POST("user/add", api.DebugAddUser)
 
-		debug.POST("homework/submit", api.SubmitWorks)
+		debug.POST("homework/submit/:id", api.SubmitWorks)
 
 		debug.POST("submit/:classID", api.SubmitWorks)
 

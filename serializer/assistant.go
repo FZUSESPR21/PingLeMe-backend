@@ -4,25 +4,25 @@ import "PingLeMe-Backend/model"
 
 //助教
 type Assis struct {
-	AssistantID			uint `json:"assistant_id"`
-	AssistantUID        string `json:"assistant_uid"`
-	AssistantName 		string `json:"assistant_name"`
+	AssistantID   uint   `json:"assistant_id"`
+	AssistantUID  string `json:"assistant_uid"`
+	AssistantName string `json:"assistant_name"`
 }
 
 //助教和老师
 type Assistant struct {
-	TeacherID			uint `json:"teacher_id"`
-	TeacherUID			string `json:"teacher_uid"`
-	TeacherName 		string `json:"teacher_name"`
-	AssisList 			[]Assis `json:"assis_list"`
+	TeacherID   uint    `json:"teacher_id"`
+	TeacherUID  string  `json:"teacher_uid"`
+	TeacherName string  `json:"teacher_name"`
+	AssisList   []Assis `json:"assis_list"`
 }
 
 // BuildAssis 序列化助教
 func BuildAssis(user model.User) Assis {
 	return Assis{
-		AssistantID: 			user.ID,
-		AssistantUID:  			user.UID,
-		AssistantName:			user.UserName,
+		AssistantID:   user.ID,
+		AssistantUID:  user.UID,
+		AssistantName: user.UserName,
 	}
 }
 
@@ -52,23 +52,22 @@ func BuildAssistantListResponse(assisList []model.User) Response {
 }
 
 // BuildAssisAndTea 序列化助教和老师
-func BuildAssisAndTea(teacher model.User,assis []model.User) Assistant {
+func BuildAssisAndTea(teacher model.User, assis []model.User) Assistant {
 	assisList := make([]Assis, len(assis))
 	for i := range assisList {
 		assisList[i] = BuildAssis(assis[i])
 	}
 	return Assistant{
-		TeacherID: 			teacher.ID,
-		TeacherUID:  		teacher.UID,
-		TeacherName:		teacher.UserName,
-		AssisList:			assisList,
+		TeacherID:   teacher.ID,
+		TeacherUID:  teacher.UID,
+		TeacherName: teacher.UserName,
+		AssisList:   assisList,
 	}
 }
 
 // BuildAssisAndTeaResponse 序列化助教和老师响应
-func BuildAssisAndTeaResponse(teacher model.User,assis []model.User) Response {
+func BuildAssisAndTeaResponse(teacher model.User, assis []model.User) Response {
 	return Response{
-		Data: BuildAssisAndTea(teacher,assis),
+		Data: BuildAssisAndTea(teacher, assis),
 	}
 }
-

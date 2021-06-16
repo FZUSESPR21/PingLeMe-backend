@@ -11,9 +11,11 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -141,11 +143,15 @@ func StudentImport(c *gin.Context) {
 }
 
 func SubmitWorks(c *gin.Context) {
-	util.Log().Debug(c.Param("classID"))
+	id, err1 := strconv.Atoi(c.Param("id"))
+	if err1 != nil {
+		c.JSON(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err1.Error()))
+		return
+	}
 	form, err := c.MultipartForm()
 
 	if err != nil {
-		c.String(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
+		c.JSON(http.StatusBadRequest, fmt.Sprintf("get form err: %s", err.Error()))
 		return
 	}
 
@@ -168,23 +174,53 @@ func SubmitWorks(c *gin.Context) {
 		}
 	}
 
+	var service service.WorkSubmissionService
+	if err := c.ShouldBind(&service); err == nil {
+		service.UserRepositoryInterface = &model.Repo
+		service.HomeworkRepositoryInterface = &model.Repo
+		service.WorkSubmissionRepositoryInterface = &model.Repo
+		service.TeamRepositoryInterface = &model.Repo
+	} else {
+		c.JSON(http.StatusOK, ErrorResponse(err))
+		return
+	}
+
+	reg := regexp.MustCompile(`.*-.*-[(](.*)[)]`)
+
 	for _, file := range files {
 		filename := "blog/" + filepath.Base(file.Filename)
 		if err := c.SaveUploadedFile(file, filename); err != nil {
-			c.String(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
+			c.JSON(http.StatusBadRequest, fmt.Sprintf("upload file err: %s", err.Error()))
 			return
-
 		}
+
+		results := reg.FindStringSubmatch(filename)
+		if len(results) <= 1 {
+			continue
+		}
+
 		//重命名
-		//newName := "blog/ILikeFuck.jpg"
-		//if er := os.Rename(filename, newName); er != nil {
-		//	c.String(http.StatusBadRequest, fmt.Sprintf("rename file err: %s", er.Error()))
-		//	return
-		//}
+		newName := results[1] + "_" + GetRandomString(8) + ".pdf"
+		if er := os.Rename(filename, newName); er != nil {
+			c.String(http.StatusBadRequest, fmt.Sprintf("rename file err: %s", er.Error()))
+			return
+		}
+		service.SubmitWork(results[1], newName, uint(id))
 	}
-	c.String(http.StatusOK,
+	c.JSON(http.StatusOK,
 		fmt.Sprintf("Uploaded successfully %d files", len(files)))
 
+}
+
+func GetRandomString(l int) string {
+	str := "0123456789abcdefghijklmnopqrstuvwxyz"
+	bytes := []byte(str)
+	var result []byte
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	for i := 0; i < l; i++ {
+		result = append(result, bytes[r.Intn(len(bytes))])
+	}
+	return string(result)
 }
 
 func PathExists(path string) (bool, error) {

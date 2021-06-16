@@ -59,6 +59,7 @@ type UserRepositoryInterface interface {
 	ChangeUserPassword(user User, newPasswordDigest string) error
 	GetUserTeamID(user User) (uint, error)
 	GetStudentClassID(userID uint) (uint, error)
+	GetUserByUserName(userName string) (User, error)
 }
 
 // GetUser 用ID获取用户
@@ -72,6 +73,13 @@ func (Repo *Repository) GetUser(ID interface{}) (User, error) {
 func (Repo *Repository) GetUserByUID(UID string) (User, error) {
 	var user User
 	result := Repo.DB.Where("uid = ?", UID).First(&user)
+	return user, result.Error
+}
+
+// GetUserByUserName 用UserName获取用户
+func (Repo *Repository) GetUserByUserName(userName string) (User, error) {
+	var user User
+	result := Repo.DB.Where("user_name = ?", userName).First(&user)
 	return user, result.Error
 }
 
