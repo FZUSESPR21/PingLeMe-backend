@@ -3,6 +3,7 @@
 package model
 
 import (
+	"PingLeMe-Backend/util"
 	"gorm.io/gorm"
 )
 
@@ -22,6 +23,7 @@ type Team struct {
 
 type TeamRepositoryInterface interface {
 	GetTeam(ID interface{}) (Team, error)
+	UserHasTeam(userID uint) bool
 	SetClassNameByID(ID interface{}, name string) (int64, error)
 	SetTeam(team Team) (int64, error)
 	SetTeammate(number int, students []User) (int64, error)
@@ -44,6 +46,17 @@ func (Repo *Repository) GetTeam(ID interface{}) (Team, error) {
 	return team, result.Error
 }
 
+func (Repo *Repository) UserHasTeam(userID uint) bool {
+	var teamID uint
+	row := Repo.DB.Raw("SELECT team_id FROM student_team WHERE user_id = ? LIMIT 1", userID).Row()
+	err := row.Scan(&teamID)
+	if err != nil {
+		util.Log().Error(err.Error())
+		return false
+	}
+	return true
+}
+
 func (Repo *Repository) GetTeamByNumber(number int) (Team, int64, error) {
 	var team Team
 	result := Repo.DB.Where("number = ?", number).First(&team)
@@ -64,6 +77,7 @@ func (Repo *Repository) SetClassNameByID(ID interface{}, name string) (int64, er
 
 func (Repo *Repository) SetTeam(team Team) (int64, error) {
 	result := Repo.DB.Create(&team)
+	Repo.DB.Exec("UPDATE 'student_team' SET user_id = ?, team_id = ?", team.GroupLeaderID, team.ID)
 	return result.RowsAffected, result.Error
 }
 

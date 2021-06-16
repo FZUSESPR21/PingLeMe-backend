@@ -14,6 +14,9 @@ type CreateTeamService struct {
 
 func (service *CreateTeamService) CreateTeam() serializer.Response {
 	//TODO 1.创建者是否已有团队 2.班级是否存在 3.队名是否重复
+	if service.UserHasTeam(uint(service.GroupLeaderID)) {
+		return serializer.ParamErr("已有团队，不可重复创建", nil)
+	}
 
 	has, err := service.SetTeam(model.Team{
 		Name:          service.Name,
