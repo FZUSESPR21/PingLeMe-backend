@@ -43,6 +43,7 @@ type EvaluationTableTreeItem struct {
 
 type EvaluationTableRepositoryInterface interface {
 	GetEvaluationTable(ID uint) (EvaluationTable, error)
+	GetEvaluationTableListByHomeworkID(ID uint) ([]EvaluationTable, error)
 	SetEvaluationTable(table EvaluationTable) error
 	UpdateScore(tableTreeItem EvaluationTableTreeItem, teamID uint) error
 	GetEvaluationTableList(homeworkID, teamID uint) ([]EvaluationTable, error)
@@ -64,6 +65,16 @@ func (Repo *Repository) GetEvaluationTable(ID uint) (EvaluationTable, error) {
 	table.TableItem = items
 
 	return table, nil
+}
+
+// GetEvaluationTableListByHomeworkID 获取评审表
+func (Repo *Repository) GetEvaluationTableListByHomeworkID(homeworkID uint) ([]EvaluationTable, error) {
+	var tableList []EvaluationTable
+	result := Repo.DB.Where("HomeworkID = ?", homeworkID).Find(&tableList)
+	if result.Error != nil {
+		return []EvaluationTable{}, result.Error
+	}
+	return tableList, nil
 }
 
 // GetEvaluationTableList 获取班级评审表列表

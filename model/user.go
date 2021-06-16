@@ -3,6 +3,7 @@
 package model
 
 import (
+	"PingLeMe-Backend/util"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
@@ -60,6 +61,7 @@ type UserRepositoryInterface interface {
 	GetUserTeamID(user User) (uint, error)
 	GetStudentClassID(userID uint) (uint, error)
 	GetUserByUserName(userName string) (User, error)
+	GetTeammates(teamID uint) ([]User, error)
 }
 
 // GetUser 用ID获取用户
@@ -224,4 +226,28 @@ func (Repo *Repository) GetStudentClassID(userID uint) (uint, error) {
 	classID := uint(0)
 	err := raw.Scan(&classID)
 	return classID, err
+}
+
+func (Repo *Repository) GetTeammates(teamID uint) ([]User, error) {
+	users := make([]User, 0)
+	rows, err := Repo.DB.Raw("SELECT `user_id` FROM `student_team` WHERE `team_id` = ?", teamID).Rows()
+	if err != nil {
+		return nil, err
+	}
+	for rows.Next() {
+		var userID uint
+		err1 := rows.Scan(&userID)
+		if err1 != nil {
+			util.Log().Error(err1.Error())
+			continue
+		}
+		user, err2 := Repo.GetUser(userID)
+		if err2 != nil {
+			util.Log().Error(err2.Error())
+			continue
+		}
+
+		users = append(users, user)
+	}
+	return users, nil
 }

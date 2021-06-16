@@ -62,3 +62,18 @@ func GetEvaluationTableList(c *gin.Context) {
 		c.JSON(http.StatusOK, serializer.ParamErr("", err))
 	}
 }
+
+func GetHomeworkEvaluationTableList(c *gin.Context) {
+	var service service.HomeworkEvaluationTableService
+	param := c.Param("id")
+	id, err := strconv.Atoi(param)
+	if err != nil {
+		c.JSON(http.StatusOK, serializer.ParamErr("", err))
+		c.Abort()
+	}
+	service.TeamRepositoryInterface = &model.Repo
+	service.HomeworkRepositoryInterface = &model.Repo
+	service.EvaluationTableRepositoryInterface = &model.Repo
+	res := service.GetHomeworkEvaluationTableList(uint(id))
+	c.JSON(http.StatusOK, res)
+}

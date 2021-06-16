@@ -22,6 +22,7 @@ func BuildUser(user model.User) User {
 		ID:       user.ID,
 		UID:      user.UID,
 		UserName: user.UserName,
+		Role:     user.Role,
 	}
 }
 

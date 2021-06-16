@@ -112,11 +112,14 @@ func NewRouter() *gin.Engine {
 			// 创建作业
 			auth.POST("homework/create", api.CreateHomework)
 
+			// 获取作业评审表列表
+			auth.GET("homework/evaluation/list/:id", api.GetHomeworkEvaluationTableList)
+
 			// 作业预览
 			//auth.GET("homework/detail/:id")
 
 			// 作业静态链接
-			auth.StaticFS("/homework/detail/view", http.Dir("./blog"))
+			auth.StaticFS("homework/detail/view", http.Dir("./blog"))
 
 			// 获取评审表
 			auth.GET("evaluation-table/detail/:id", api.GetEvaluationTable)
@@ -128,7 +131,10 @@ func NewRouter() *gin.Engine {
 			auth.POST("evaluation-table/create", api.CreateEvaluationTable)
 
 			// 获取班级所有团队
-			auth.GET("/class/team/list", api.GetTeamList)
+			auth.GET("class/team/list", api.GetTeamList)
+
+			// 获取团队信息
+			auth.GET("team/detail", api.GetTeamDetail)
 
 			permissionImportPDF := auth.Group("")
 			permissionImportPDF.Use(middleware.PermissionRequired("work_submission"))
