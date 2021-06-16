@@ -43,7 +43,7 @@ func (service *AddTeacherService) AddTeacher(isAss bool) serializer.Response {
 	//fmt.Println(length)
 	for i := 0; i < length; i++ {
 		a := service.Teachers[i]
-		if _, err := service.AddTeacherByUser(transformTeacher(a,isAss)); err != nil {
+		if _, err := service.AddTeacherByUser(transformTeacher(a, isAss)); err != nil {
 			errMes += "账号" + a.UID + "添加时发生错误！"
 			util.Log().Error(err.Error())
 		}

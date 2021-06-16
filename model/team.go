@@ -25,7 +25,7 @@ type TeamRepositoryInterface interface {
 	SetClassNameByID(ID interface{}, name string) (int64, error)
 	SetTeam(team Team) (int64, error)
 	SetTeammate(number int, students []User) (int64, error)
-	GetTeamByName(name string) (int64, error)
+	GetTeamByName(name string) (Team, int64, error)
 	GetTeamByNumber(number int) (Team, int64, error)
 	TestFunc() int
 	AddTeammateByID(uid int, teamID int) (int64, error)
@@ -50,10 +50,10 @@ func (Repo *Repository) GetTeamByNumber(number int) (Team, int64, error) {
 	return team, result.RowsAffected, result.Error
 }
 
-func (Repo *Repository) GetTeamByName(name string) (int64, error) {
+func (Repo *Repository) GetTeamByName(name string) (Team, int64, error) {
 	var team Team
 	result := Repo.DB.Where("Name = ?", name).First(&team)
-	return result.RowsAffected, result.Error
+	return team, result.RowsAffected, result.Error
 }
 
 func (Repo *Repository) SetClassNameByID(ID interface{}, name string) (int64, error) {
