@@ -24,11 +24,11 @@ func (service *ChangePasswordService) ChangePassword() serializer.Response {
 	if err != nil {
 		return serializer.ParamErr("该用户不存在", err)
 	}
-	//
-	//if !user.CheckPassword(service.OldPassword) {
-	//	err = errors.New("旧密码错误")
-	//	return serializer.ParamErr("旧密码错误", err)
-	//}
+
+	if !user.CheckPassword(service.OldPassword) {
+		err = errors.New("旧密码错误")
+		return serializer.ParamErr("旧密码错误", err)
+	}
 
 	if strings.Compare(service.NewPassword, service.NewPasswordConfirm) != 0 {
 		err = errors.New("两次密码不一致")

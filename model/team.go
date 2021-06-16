@@ -77,7 +77,7 @@ func (Repo *Repository) SetClassNameByID(ID interface{}, name string) (int64, er
 
 func (Repo *Repository) SetTeam(team Team) (int64, error) {
 	result := Repo.DB.Create(&team)
-	Repo.DB.Exec("UPDATE 'student_team' SET user_id = ?, team_id = ?", team.GroupLeaderID, team.ID)
+	Repo.DB.Exec("INSERT INTO student_team (user_id, team_id) VALUES (?, ?)", team.GroupLeaderID, team.ID)
 	return result.RowsAffected, result.Error
 }
 
