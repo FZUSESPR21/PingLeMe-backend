@@ -28,7 +28,7 @@ func NewRouter() *gin.Engine {
 
 		debug.POST("user/add", api.DebugAddUser)
 
-		debug.POST("homework/submit", api.SubmitWorks)
+		debug.POST("homework/submit/:id", api.SubmitWorks)
 
 		debugAuth := debug.Group("/auth")
 		debugAuth.Use(middleware.LoginRequired())

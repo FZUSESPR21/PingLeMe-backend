@@ -120,7 +120,6 @@ func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, 
 		s2 = 0
 	}
 
-
 	if s2 == 1 {
 		return 2, nil //对方已和别人结对
 	} else if s1 == 1 {
@@ -128,23 +127,23 @@ func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, 
 			pair1.Student2ID = student2ID
 			result1 = Repo.DB.Save(&pair1)
 			if result1.Error != nil {
-				return 3, result1.Error//保存修改错误
+				return 3, result1.Error //保存修改错误
 			}
 		} else if pair1.Student2ID == student1ID {
 			pair1.Student1ID = student2ID
 			result1 = Repo.DB.Save(&pair1)
 			if result1.Error != nil {
-				return 3, result1.Error//保存修改错误
+				return 3, result1.Error //保存修改错误
 			}
-		}//修改队友信息成功
+		} //修改队友信息成功
 	} else {
 		var pair Pair
 		pair.Student1ID = student1ID
 		pair.Student2ID = student2ID
-		result := Repo.DB.Create(&pair)//两个都未结对，添加结对
+		result := Repo.DB.Create(&pair) //两个都未结对，添加结对
 		if result.Error != nil {
-			return 4, result.Error//添加结对失败
+			return 4, result.Error //添加结对失败
 		}
 	}
-	return 1, nil//成功
+	return 1, nil //成功
 }
