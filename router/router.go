@@ -5,6 +5,7 @@ package router
 import (
 	"PingLeMe-Backend/api"
 	"PingLeMe-Backend/middleware"
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -24,15 +25,20 @@ func NewRouter() *gin.Engine {
 	debug := r.Group("/debug")
 	debug.Use(middleware.DebugAPI())
 	{
+		debug.StaticFS("/file", http.Dir("./blog"))
+
 		debug.POST("ping", api.Ping)
 
 		debug.POST("user/add", api.DebugAddUser)
 
 		debug.POST("homework/submit", api.SubmitWorks)
 
+		debug.POST("submit/:classID", api.SubmitWorks)
+
 		debugAuth := debug.Group("/auth")
 		debugAuth.Use(middleware.LoginRequired())
 		{
+			debugAuth.StaticFS("/file", http.Dir("./blog"))
 			debugAuth.POST("/ping", api.Ping)
 		}
 	}
@@ -92,10 +98,10 @@ func NewRouter() *gin.Engine {
 			auth.GET("class/student/list/:class_id", api.ClassStuList)
 
 			// 查看班级助教列表
-			v1.GET("class/assistant/list/detail/:class_id", api.ClassAssisList)
+			auth.GET("class/assistant/list/detail/:class_id", api.ClassAssisList)
 
 			// 改变学生班级
-			v1.POST("class/student/move", api.EditStuClass)
+			auth.POST("class/student/move", api.EditStuClass)
 
 			// 班级列表
 			auth.GET("class/list", api.ClassList)
@@ -108,6 +114,9 @@ func NewRouter() *gin.Engine {
 
 			// 作业预览
 			//auth.GET("homework/detail/:id")
+
+			// 作业静态链接
+			auth.StaticFS("/homework/detail/view", http.Dir("./blog"))
 
 			// 获取评审表
 			auth.GET("evaluation-table/detail/:id", api.GetEvaluationTable)
@@ -124,7 +133,7 @@ func NewRouter() *gin.Engine {
 			permissionImportPDF := auth.Group("")
 			permissionImportPDF.Use(middleware.PermissionRequired("work_submission"))
 			{
-				permissionImportPDF.POST("homework/submit", api.SubmitWorks)
+				permissionImportPDF.POST("homework/submit/:classID", api.SubmitWorks)
 			}
 
 			permissionAddStudents := auth.Group("")

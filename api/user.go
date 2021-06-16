@@ -141,6 +141,7 @@ func StudentImport(c *gin.Context) {
 }
 
 func SubmitWorks(c *gin.Context) {
+	util.Log().Debug(c.Param("classID"))
 	form, err := c.MultipartForm()
 
 	if err != nil {
