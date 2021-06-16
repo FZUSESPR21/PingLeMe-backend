@@ -10,7 +10,7 @@ import (
 // Pair 结对模型
 type Pair struct {
 	gorm.Model
-	Student1ID uint `gorm:"type:int;not null;index:studentID";bind`
+	Student1ID uint `gorm:"type:int;not null;index:studentID"`
 	Student2ID uint `gorm:"type:int;index:studentID"`
 }
 
@@ -106,7 +106,6 @@ func (Repo *Repository) UpdatePairByStu(student1ID uint, student2ID uint) (int, 
 	//3为保存修改错误
 	//4为添加结对失败
 	//5为不能自己跟自己结对
-
 
 	if student1ID == student2ID {
 		return 5, nil //不能自己跟自己结对

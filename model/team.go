@@ -17,7 +17,7 @@ type Team struct {
 	Students      []User `gorm:"many2many:student_team;"`
 }
 
-//tpye Student_team struct {
+//type Student_team struct {
 //	team
 //}
 
