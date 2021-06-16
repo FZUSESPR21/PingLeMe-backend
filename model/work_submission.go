@@ -9,8 +9,8 @@ import (
 // WorkSubmission 作业提交模型
 type WorkSubmission struct {
 	gorm.Model
-	SubmitterID  uint    `gorm:"type:int;not null"`
-	HomeworkID   uint    `gorm:"type:int;not null"`
+	SubmitterID  uint   `gorm:"type:int;not null"`
+	HomeworkID   uint   `gorm:"type:int;not null"`
 	SubmitStatus uint8  `gorm:"type:int;not null"`
 	Filepath     string `gorm:"type:varchar(255)"`
 	IsReviewed   bool   `gorm:"default:false"`

@@ -15,34 +15,34 @@ type WorkSubmissionService struct {
 	model.HomeworkRepositoryInterface
 }
 
-func (service *WorkSubmissionService) SubmitWork(submitterName string, filepath string,homeworkID uint) serializer.Response {
+func (service *WorkSubmissionService) SubmitWork(submitterName string, filepath string, homeworkID uint) serializer.Response {
 	homework, err := service.GetHomeworkByID(homeworkID)
 	if err != nil {
 		return serializer.ParamErr("该作业不存在", err)
 	}
 
 	if homework.Type == 0 || homework.Type == 1 {
-			user, err := service.GetUserByUserName(submitterName)
-			if err != nil {
-				return serializer.ParamErr("该用户不存在", err)
-			}
-			_, err = service.CreateWorkSubmission(user.ID, homeworkID, 1, filepath)
-			if err != nil {
-				return serializer.DBErr("", err)
-			}
+		user, err := service.GetUserByUserName(submitterName)
+		if err != nil {
+			return serializer.ParamErr("该用户不存在", err)
+		}
+		_, err = service.CreateWorkSubmission(user.ID, homeworkID, 1, filepath)
+		if err != nil {
+			return serializer.DBErr("", err)
+		}
 
 	} else if homework.Type == 2 {
-			team, _, err := service.GetTeamByName(submitterName)
-			if err != nil {
-				return serializer.ParamErr("该团队不存在", err)
-			}
-			_, err = service.CreateWorkSubmission(team.ID, homeworkID, 1, filepath)
-			if err != nil {
-				return serializer.DBErr("", err)
-			}
+		team, _, err := service.GetTeamByName(submitterName)
+		if err != nil {
+			return serializer.ParamErr("该团队不存在", err)
+		}
+		_, err = service.CreateWorkSubmission(team.ID, homeworkID, 1, filepath)
+		if err != nil {
+			return serializer.DBErr("", err)
+		}
 	}
 	return serializer.Response{
 		Code: 0,
-		Msg: "Success",
+		Msg:  "Success",
 	}
 }
