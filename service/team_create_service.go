@@ -7,9 +7,9 @@ import (
 
 type CreateTeamService struct {
 	model.TeamRepositoryInterface
-	Name          string `form:"name" json:"name"`
-	GroupLeaderID int    `form:"group_leader_id" json:"group_leader_id"`
-	ClassID       int    `form:"class_id" json:"class_id"`
+	Name          string `form:"name" json:"name" binding:"required"`
+	GroupLeaderID int    `form:"group_leader_id" json:"group_leader_id" binding:"required"`
+	ClassID       int    `form:"class_id" json:"class_id" binding:"required"`
 }
 
 func (service *CreateTeamService) CreateTeam() serializer.Response {

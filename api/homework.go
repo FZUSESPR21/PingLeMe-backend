@@ -4,9 +4,11 @@ package api
 
 import (
 	"PingLeMe-Backend/model"
+	"PingLeMe-Backend/serializer"
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // CreateHomework 创建作业的接口
@@ -43,5 +45,18 @@ func ViewHomeworkList(c *gin.Context) {
 		c.JSON(http.StatusOK, res)
 	} else {
 		c.JSON(http.StatusOK, ErrorResponse(err))
+	}
+}
+
+func GetHomeworkSubmissionList(c *gin.Context) {
+	var service service.WorkListService
+	id := c.Query("id")
+	homeworkID, err := strconv.Atoi(id)
+	if err == nil {
+		service.WorkSubmissionRepositoryInterface = &model.Repo
+		res := service.GetWorkList(homeworkID)
+		c.JSON(http.StatusOK, res)
+	} else {
+		c.JSON(http.StatusOK, serializer.ParamErr("", err))
 	}
 }

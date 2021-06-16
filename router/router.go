@@ -139,6 +139,9 @@ func NewRouter() *gin.Engine {
 			// 获取团队信息
 			auth.GET("team/detail", api.GetTeamDetail)
 
+			// 获取提交作业列表
+			auth.GET("homework/submission/detail", api.GetHomeworkSubmissionList)
+
 			permissionImportPDF := auth.Group("")
 			permissionImportPDF.Use(middleware.PermissionRequired("work_submission"))
 			{

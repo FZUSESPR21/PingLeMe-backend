@@ -19,6 +19,7 @@ type WorkSubmission struct {
 type WorkSubmissionRepositoryInterface interface {
 	CreateWorkSubmission(SubmitterID uint, HomeworkID uint, SubmitStatus uint8, Filepath string) (WorkSubmission, error)
 	GetWorkSubmissionByID(ID interface{}) (WorkSubmission, error)
+	GetWorkSubmissionsByHomeworkID(homeworkID uint) ([]WorkSubmission, error)
 	GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID int, HomeworkID int) (WorkSubmission, error)
 	SetSubmitStatusByID(ID interface{}, submitStatus int) (int64, error)
 	DeleteWorkSubmissionByID(ID interface{}) (int64, error)
@@ -38,6 +39,12 @@ func (Repo *Repository) GetWorkSubmissionByID(ID interface{}) (WorkSubmission, e
 	var workSubmission WorkSubmission
 	result := Repo.DB.Where("ID = ?", ID).Find(&workSubmission)
 	return workSubmission, result.Error
+}
+
+func (Repo *Repository) GetWorkSubmissionsByHomeworkID(homeworkID uint) ([]WorkSubmission, error) {
+	workSubmissions := make([]WorkSubmission, 0)
+	result := Repo.DB.Where("homework_id = ?", homeworkID).Find(&workSubmissions)
+	return workSubmissions, result.Error
 }
 
 // GetWorkSubmissionBySubmitterIDandHomeworkID 根据SubmitterID和HomeworkID获取作业提交表
