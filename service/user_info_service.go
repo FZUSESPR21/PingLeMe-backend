@@ -53,7 +53,7 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 		}
 		classID, err3 := service.GetStudentClassID(user.ID)
 		if err3 != nil {
-			return serializer.ServerInnerErr("student has no class", err3)
+			classID = 0
 		}
 		return serializer.BuildStudentResponse(user, pair.UID, pair.UserName, teamID, classID)
 
