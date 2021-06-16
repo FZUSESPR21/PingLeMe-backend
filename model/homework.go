@@ -46,9 +46,8 @@ func (Repo *Repository) GetHomeworkByID(ID uint) (Homework, error) {
 	if result.Error != nil {
 		return Homework{}, result.Error
 	}
-
 	var items []ScoringItem
-	result = Repo.DB.Order("index desc").Where("homework_id = ?", ID).Find(&items)
+	result = Repo.DB.Order("`index` desc").Where("homework_id = ?", ID).Find(&items)
 	if result.Error != nil {
 		return Homework{}, result.Error
 	}

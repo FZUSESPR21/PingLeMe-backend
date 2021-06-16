@@ -28,7 +28,7 @@ func ForStructure() int {
 func (service *SetTeamInfoService) TeamInfoSet() serializer.Response {
 	ForStructure()
 
-	if has, err := service.GetTeamByName(service.Name); err != nil {
+	if _, has, err := service.GetTeamByName(service.Name); err != nil {
 		return serializer.DBErr("数据获取错误", err)
 	} else if has == 1 {
 		return serializer.DBErr("修改失败！该名称已被使用！", err)

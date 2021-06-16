@@ -9,15 +9,23 @@ import (
 // WorkSubmission 作业提交模型
 type WorkSubmission struct {
 	gorm.Model
-	SubmitterID  int    `gorm:"type:int;not null"`
-	HomeworkID   int    `gorm:"type:int;not null"`
+	SubmitterID  uint    `gorm:"type:int;not null"`
+	HomeworkID   uint    `gorm:"type:int;not null"`
 	SubmitStatus uint8  `gorm:"type:int;not null"`
 	Filepath     string `gorm:"type:varchar(255)"`
 	IsReviewed   bool   `gorm:"default:false"`
 }
 
+type WorkSubmissionRepositoryInterface interface {
+	CreateWorkSubmission(SubmitterID uint, HomeworkID uint, SubmitStatus uint8, Filepath string) (WorkSubmission, error)
+	GetWorkSubmissionByID(ID interface{}) (WorkSubmission, error)
+	GetWorkSubmissionBySubmitterIDandHomeworkID(SubmitterID int, HomeworkID int) (WorkSubmission, error)
+	SetSubmitStatusByID(ID interface{}, submitStatus int) (int64, error)
+	DeleteWorkSubmissionByID(ID interface{}) (int64, error)
+}
+
 // CreateWorkSubmission 创建作业提交表
-func (Repo *Repository) CreateWorkSubmission(SubmitterID int, HomeworkID int,
+func (Repo *Repository) CreateWorkSubmission(SubmitterID uint, HomeworkID uint,
 	SubmitStatus uint8, Filepath string) (WorkSubmission, error) {
 	workSubmission := WorkSubmission{SubmitterID: SubmitterID, HomeworkID: HomeworkID,
 		SubmitStatus: SubmitStatus, Filepath: Filepath}
