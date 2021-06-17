@@ -6,8 +6,7 @@ import (
 	"PingLeMe-Backend/cache"
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
-	"errors"
-	"github.com/go-redis/redis/v8"
+	"PingLeMe-Backend/util"
 	"strconv"
 )
 
@@ -20,9 +19,9 @@ func (service *ClassListService) GetClassList() serializer.Response {
 	if err != nil {
 		return serializer.ServerInnerErr("", err)
 	}
-	for _, i := range info {
-		i.PairStatus, _ = checkStatus(i.ClassID, "pair")
-		i.TeamStatus, _ = checkStatus(i.ClassID, "team")
+	for index, i := range info {
+		info[index].PairStatus, _ = checkStatus(i.ClassID, "pair")
+		info[index].TeamStatus, _ = checkStatus(i.ClassID, "team")
 	}
 	return serializer.Response{
 		Code: 0,
@@ -33,13 +32,15 @@ func (service *ClassListService) GetClassList() serializer.Response {
 
 func checkStatus(classID uint, key string) (bool, error) {
 	val, err := cache.Get(strconv.Itoa(int(classID)), key)
-	if errors.Is(err, redis.Nil) || val != "true" {
-		return false, nil
-	} else if err != nil {
-		return true, nil
+	if err != nil {
+		util.Log().Debug("1")
+		return false, err
 	}
 	if val == "true" {
+		util.Log().Debug("2")
 		return true, nil
+	} else {
+		util.Log().Debug("3")
+		return false, nil
 	}
-	return false, nil
 }
