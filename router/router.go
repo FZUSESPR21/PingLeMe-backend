@@ -95,7 +95,7 @@ func NewRouter() *gin.Engine {
 			auth.GET("teacher/list", api.GetTeachers)
 
 			// 获取班级作业列表
-			auth.GET("class/homework/list/:id", api.GetHomeworkList)
+			auth.GET("class/homework/list", api.GetHomeworkList)
 
 			// 查看班级学生列表
 			auth.GET("class/student/list/:class_id", api.ClassStuList)
