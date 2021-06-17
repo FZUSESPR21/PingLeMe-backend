@@ -118,8 +118,8 @@ func (scoringItem *ScoringItem) AssignedToAssistantService(assistantID uint) []m
 }
 
 // GetHomeworkList 获取作业列表函数
-func (service *HomeworkListService) GetHomeworkList() serializer.Response {
-	class, err := service.GetClassByID(service.ClassID)
+func (service *HomeworkListService) GetHomeworkList(ClassID uint, page int) serializer.Response {
+	class, err := service.GetClassByID(ClassID)
 	if err != nil {
 		return serializer.ParamErr("该班级不存在", err)
 	}
@@ -130,10 +130,10 @@ func (service *HomeworkListService) GetHomeworkList() serializer.Response {
 	}
 
 	pages := len(homeworks) / 5
-	homeworks = homeworks[(service.Page-1)*5 : (service.Page-1)*5+5]
+	homeworks = homeworks[(page-1)*5 : (page-1)*5+5]
 
 	return serializer.Response{
 		Code: 0,
-		Data: serializer.BuildHomeworkList(homeworks, pages, service.Page),
+		Data: serializer.BuildHomeworkList(homeworks, pages, page),
 	}
 }
