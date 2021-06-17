@@ -76,7 +76,7 @@ func firstInit() {
 			if err := newAdmin.SetPassword(AdminDefaultPasswd); err != nil {
 				util.Log().Panic("Default admin account init error: SetPassword failed.", zap.Error(err))
 			}
-			err := Repo.SetUser(newAdmin)
+			err := Repo.SetUser(&newAdmin)
 			if err != nil {
 				util.Log().Panic("Default admin account init error.", zap.Error(result.Error))
 			}

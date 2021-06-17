@@ -15,6 +15,13 @@ type StudentImportService struct {
 	model.ClassRepositoryInterface
 }
 
+type ImportMessage struct {
+	TotalRows   int                 `json:"total_rows"`
+	SuccessRows int                 `json:"success_rows"`
+	FailedRows  int                 `json:"failed_rows"`
+	ErrorRecord map[int]ErrorRecord `json:"error_record"`
+}
+
 type ErrorRecord struct {
 	RowCnt       int      `json:"row_cnt"`
 	RowUID       string   `json:"row_uid"`
@@ -26,12 +33,14 @@ type ErrorRecord struct {
 	RowPasswd    string   `json:"row_passwd"`
 	ErrRowPasswd bool     `json:"err_row_passwd"`
 	ErrMsg       []string `json:"err_msg"`
+	IsRowIllegal bool     `json:"row_illegal"`
 }
 
 // Import 导入学生
 // Excel 格式
 // 学号  姓名  班级  密码
 func (service *StudentImportService) Import(filepath string) serializer.Response {
+	util.Log().Debug(filepath)
 	defer func(name string) {
 		err := os.Remove(name)
 		if err != nil {
@@ -52,10 +61,24 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 	tmpMap := make(map[string]model.Class)
 	errMsgs := make(map[int]ErrorRecord)
 
+	totalRow := 0
+	successRow := 0
+	failedRow := 0
+
 	for index, row := range rows {
+		flag := true
 		if index == 0 {
 			continue
 		}
+		totalRow = totalRow + 1
+
+		if len(row) < 3 {
+			e := ErrorRecord{
+				IsRowIllegal: true,
+			}
+			errMsgs[index+1] = e
+		}
+
 		var class model.Class
 		if _, ok := tmpMap[row[2]]; !ok {
 			c, err := service.GetClassByName(row[2])
@@ -66,6 +89,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 						e.ErrMsg = append(e.ErrMsg, err.Error())
 					}
 				} else {
+					failedRow = failedRow + 1
 					e := ErrorRecord{
 						RowCnt:       index + 1,
 						RowUID:       row[0],
@@ -95,7 +119,15 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 			UserName: row[1],
 			Role:     model.RoleStudent,
 		}
-		if err := user.SetPassword(row[3]); err != nil {
+
+		password := "12345678"
+		if len(row) == 4 {
+			password = row[3]
+		}
+
+		if err := user.SetPassword(password); err != nil {
+			flag = false
+			util.Log().Error(err.Error())
 			if e, ok := errMsgs[index+1]; ok {
 				if !e.ErrRowPasswd {
 					e.ErrRowPasswd = true
@@ -110,7 +142,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 					ErrRowName:   false,
 					RowClass:     row[2],
 					ErrRowClass:  false,
-					RowPasswd:    row[3],
+					RowPasswd:    password,
 					ErrRowPasswd: true,
 					ErrMsg:       make([]string, 0),
 				}
@@ -118,7 +150,9 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 				errMsgs[index+1] = e
 			}
 		}
-		if err := service.SetUser(user); err != nil {
+		if err := service.SetUser(&user); err != nil {
+			flag = false
+			util.Log().Error(err.Error())
 			if e, ok := errMsgs[index+1]; ok {
 				e.ErrMsg = append(e.ErrMsg, err.Error())
 			} else {
@@ -130,7 +164,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 					ErrRowName:   false,
 					RowClass:     row[2],
 					ErrRowClass:  false,
-					RowPasswd:    row[3],
+					RowPasswd:    password,
 					ErrRowPasswd: false,
 					ErrMsg:       make([]string, 0),
 				}
@@ -139,6 +173,8 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 			}
 		} else {
 			if err := service.AddStudent(class, user); err != nil {
+				flag = false
+				util.Log().Error(err.Error())
 				if e, ok := errMsgs[index+1]; ok {
 					e.ErrMsg = append(e.ErrMsg, err.Error())
 				} else {
@@ -150,7 +186,7 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 						ErrRowName:   false,
 						RowClass:     row[2],
 						ErrRowClass:  false,
-						RowPasswd:    row[3],
+						RowPasswd:    password,
 						ErrRowPasswd: false,
 						ErrMsg:       make([]string, 0),
 					}
@@ -159,9 +195,20 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 				}
 			}
 		}
+
+		if flag {
+			successRow = successRow + 1
+		} else {
+			failedRow = failedRow + 1
+		}
 	}
 	return serializer.Response{
 		Code: 0,
-		Data: errMsgs,
+		Data: ImportMessage{
+			TotalRows:   totalRow,
+			SuccessRows: successRow,
+			FailedRows:  failedRow,
+			ErrorRecord: errMsgs,
+		},
 	}
 }

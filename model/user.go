@@ -51,7 +51,7 @@ const (
 type UserRepositoryInterface interface {
 	GetUser(ID interface{}) (User, error)
 	GetUserByUID(UID string) (User, error)
-	SetUser(user User) error
+	SetUser(user *User) error
 	SetUsers(user []User) error
 	DeleteUser(ID interface{}) error
 	GetAllTeacher() (int64, []Teacher, error)
@@ -86,12 +86,12 @@ func (Repo *Repository) GetUserByUserName(userName string) (User, error) {
 }
 
 // SetUser 添加用户
-func (Repo *Repository) SetUser(user User) error {
-	result := Repo.DB.Create(&user)
+func (Repo *Repository) SetUser(user *User) error {
+	result := Repo.DB.Create(user)
 	if result.Error != nil {
 		return result.Error
 	}
-	err := Repo.SetUserRole(user.Role, user)
+	err := Repo.SetUserRole(user.Role, *user)
 	if err != nil {
 		return err
 	}

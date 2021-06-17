@@ -33,7 +33,7 @@ func (service *DebugUserService) DebugAddUser() serializer.Response {
 		return serializer.ParamErr("password parsing error.", err1)
 	}
 
-	err2 := service.SetUser(user)
+	err2 := service.SetUser(&user)
 	if err2 != nil {
 		return serializer.ServerInnerErr("", err2)
 	}

@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-const StudentImportFileDst = "./.student_import/"
+const StudentImportFileDst = "./student_import/"
 
 // UserLogin 用户登录接口
 func UserLogin(c *gin.Context) {
@@ -126,19 +126,37 @@ func GetTeachers(c *gin.Context) {
 // StudentImport 文件导入学生（Excel）
 func StudentImport(c *gin.Context) {
 	file, _ := c.FormFile("file")
+	//regex := regexp.MustCompile(`.*(.xls[x]?)$`)
+	regex := regexp.MustCompile(`.*(.xlsx)$`)
+	filePostfix := regex.FindStringSubmatch(file.Filename)
+	if filePostfix == nil {
+		c.JSON(http.StatusOK, serializer.ParamErr("文件类型错误", nil))
+		c.Abort()
+		return
+	}
 	var builder strings.Builder
 	builder.WriteString(strconv.Itoa(int(CurrentUser(c).ID)))
-	builder.WriteString(time.Now().String())
-	builder.WriteString(util.RandStringRunes(5))
+	builder.WriteString(util.RandStringRunes(9))
 	file.Filename = builder.String()
 
-	err := c.SaveUploadedFile(file, StudentImportFileDst)
+	fileSavedPath := StudentImportFileDst + file.Filename + filePostfix[1]
+
+	err := c.SaveUploadedFile(file, fileSavedPath)
 	if err != nil {
 		c.JSON(http.StatusOK, serializer.ServerInnerErr("", err))
+		c.Abort()
+		return
 	}
 
 	var service service.StudentImportService
-	res := service.Import(StudentImportFileDst + file.Filename)
+	service.ClassRepositoryInterface = &model.Repo
+	service.UserRepositoryInterface = &model.Repo
+	res := service.Import(fileSavedPath)
+	if res.Code != 0 {
+		c.JSON(http.StatusOK, res)
+		c.Abort()
+		return
+	}
 	c.JSON(http.StatusOK, res)
 }
 
