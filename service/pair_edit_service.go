@@ -11,6 +11,7 @@ import (
 type PairEditService struct {
 	model.PairRepositoryInterface
 	model.UserRepositoryInterface
+	model.ClassRepositoryInterface
 	Student1UID string `json:"Student1UID" bind:"required"`
 	Student2UID string `json:"Student2UID" bind:"required"`
 }
@@ -24,6 +25,19 @@ func (service *PairEditService) EditPairInformation() serializer.Response {
 	stu2, err := service.GetUserByUID(service.Student2UID)
 	if err != nil {
 		return serializer.DBErr("Student2UID有误", err)
+	}
+	id1, err := service.GetStudentClassID(stu1.ID)
+	if err != nil {
+		return serializer.DBErr("", err)
+	}
+	id2, err := service.GetStudentClassID(stu2.ID)
+	if err != nil {
+		return serializer.DBErr("", err)
+	}
+	if isAllowed, _ := CheckStatus(id1, "pair"); !isAllowed {
+		serializer.ParamErr("创建团队功能未开放", nil)
+	} else if isAllowed, _ := CheckStatus(id2, "pair"); !isAllowed {
+		serializer.ParamErr("创建团队功能未开放", nil)
 	}
 
 	res, err := service.UpdatePairByStu(stu1.ID, stu2.ID)

@@ -20,8 +20,8 @@ func (service *ClassListService) GetClassList() serializer.Response {
 		return serializer.ServerInnerErr("", err)
 	}
 	for index, i := range info {
-		info[index].PairStatus, _ = checkStatus(i.ClassID, "pair")
-		info[index].TeamStatus, _ = checkStatus(i.ClassID, "team")
+		info[index].PairStatus, _ = CheckStatus(i.ClassID, "pair")
+		info[index].TeamStatus, _ = CheckStatus(i.ClassID, "team")
 	}
 	return serializer.Response{
 		Code: 0,
@@ -30,7 +30,7 @@ func (service *ClassListService) GetClassList() serializer.Response {
 	}
 }
 
-func checkStatus(classID uint, key string) (bool, error) {
+func CheckStatus(classID uint, key string) (bool, error) {
 	val, err := cache.Get(strconv.Itoa(int(classID)), key)
 	if err != nil {
 		util.Log().Debug("1")
