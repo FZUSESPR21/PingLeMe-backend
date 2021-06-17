@@ -57,6 +57,8 @@ func NewRouter() *gin.Engine {
 		// 班级团队状态
 		v1.GET("class/team/status/:id", api.TeamStatus)
 
+		v1.GET("student/import/template", api.StudentImportTemplate)
+
 		// 需要登录保护的
 		auth := v1.Group("")
 		auth.Use(middleware.LoginRequired())

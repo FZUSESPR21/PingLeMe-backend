@@ -5,7 +5,9 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
+	"PingLeMe-Backend/util"
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
+	"os"
 )
 
 type StudentImportService struct {
@@ -30,6 +32,13 @@ type ErrorRecord struct {
 // Excel 格式
 // 学号  姓名  班级  密码
 func (service *StudentImportService) Import(filepath string) serializer.Response {
+	defer func(name string) {
+		err := os.Remove(name)
+		if err != nil {
+			util.Log().Error(err.Error())
+		}
+	}(filepath)
+
 	file, err1 := excelize.OpenFile(filepath)
 	if err1 != nil {
 		return serializer.ServerInnerErr("excelize error", err1)
@@ -44,6 +53,9 @@ func (service *StudentImportService) Import(filepath string) serializer.Response
 	errMsgs := make(map[int]ErrorRecord)
 
 	for index, row := range rows {
+		if index == 0 {
+			continue
+		}
 		var class model.Class
 		if _, ok := tmpMap[row[2]]; !ok {
 			c, err := service.GetClassByName(row[2])
