@@ -3,6 +3,7 @@ package service
 import (
 	"PingLeMe-Backend/model"
 	"PingLeMe-Backend/serializer"
+	"PingLeMe-Backend/util"
 	"errors"
 
 	"gorm.io/gorm"
@@ -44,12 +45,8 @@ func (service *UserInfoService) Information(userID uint) serializer.Response {
 
 		teamID, err2 := service.GetUserTeamID(user)
 		if err2 != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				teamID = 0
-			} else {
-				teamID = 0
-				//return serializer.DBErr("", err2)
-			}
+			util.Log().Debug(err2.Error())
+			return serializer.DBErr("", err2)
 		}
 		classID, err3 := service.GetStudentClassID(user.ID)
 		if err3 != nil {

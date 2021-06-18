@@ -212,7 +212,7 @@ func (Repo *Repository) ChangeUserPassword(user User, newPasswordDigest string) 
 }
 func (Repo *Repository) GetUserTeamID(user User) (uint, error) {
 	var teamID uint
-	row := Repo.DB.Table("student_team").Where("student_id = ?", user.ID).Select("team_id").Row()
+	row := Repo.DB.Table("student_team").Where("user_id = ?", user.ID).Select("team_id").Row()
 	err := row.Scan(&teamID)
 	if err != nil {
 		return 0, err
