@@ -13,7 +13,7 @@ type CreateClassService struct {
 	model.UserRepositoryInterface
 	ClassName  string             `form:"class_name" json:"class_name" binding:"required,min=5,max=30"`
 	TeacherID  uint               `form:"teacher_id" json:"teacher_id" binding:"required,gte=0"`
-	Assistants []AssistantService `form:"assistant_list" json:"assistant_list"`
+	Assistants []AssistantService `form:"assistant_list" json:"assistant_list" binding:"required"`
 }
 
 type AssistantService struct {
