@@ -30,6 +30,8 @@ func (service *CreateClassService) CreateClass() serializer.Response {
 	teacher, err2 := service.GetUser(service.TeacherID)
 	if err2 != nil {
 		return serializer.ParamErr("", err2)
+	} else if teacher.Role != model.RoleTeacher {
+		return serializer.ParamErr("用户不是教师", nil)
 	}
 
 	err1 = service.AddTeacher(class, teacher)
@@ -41,6 +43,8 @@ func (service *CreateClassService) CreateClass() serializer.Response {
 		assistant, err3 := service.GetUser(i.AssistantID)
 		if err3 != nil {
 			return serializer.ParamErr("", err3)
+		} else if teacher.Role != model.RoleAssistant {
+			return serializer.ParamErr("用户不是助教", nil)
 		}
 
 		err1 = service.AddTeacher(class, assistant)
