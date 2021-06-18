@@ -139,7 +139,7 @@ func NewRouter() *gin.Engine {
 			auth.GET("class/team/list", api.GetTeamList)
 
 			// 获取团队信息
-			auth.GET("team/detail", api.GetTeamDetail)
+			auth.GET("team/detail/:id", api.GetTeamDetail)
 
 			// 获取提交作业列表
 			auth.GET("homework/submission/detail", api.GetHomeworkSubmissionList)

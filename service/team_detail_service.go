@@ -8,7 +8,6 @@ import (
 type TeamDetailService struct {
 	model.UserRepositoryInterface
 	model.TeamRepositoryInterface
-	TeamID uint `form:"team_id" json:"team_id" binding:"required"`
 }
 
 type TeamDetail struct {
@@ -23,9 +22,9 @@ type TeamMate struct {
 	Name string `json:"name"`
 }
 
-func (service *TeamDetailService) GetTeamDetail() serializer.Response {
-	teammates, err := service.GetTeammates(service.TeamID)
-	teamInfo, err1 := service.GetTeam(service.TeamID)
+func (service *TeamDetailService) GetTeamDetail(TeamID uint) serializer.Response {
+	teammates, err := service.GetTeammates(TeamID)
+	teamInfo, err1 := service.GetTeam(TeamID)
 	if err != nil {
 		return serializer.ServerInnerErr("", err)
 	}

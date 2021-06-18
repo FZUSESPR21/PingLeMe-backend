@@ -8,6 +8,7 @@ import (
 	"PingLeMe-Backend/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 // CreateTeam 创建团队
@@ -59,12 +60,15 @@ func GetTeamList(c *gin.Context) {
 }
 
 func GetTeamDetail(c *gin.Context) {
-	var service service.TeamDetailService
-	if err := c.ShouldBind(&service); err == nil {
-		service.UserRepositoryInterface = &model.Repo
-		res := service.GetTeamDetail()
-		c.JSON(http.StatusOK, res)
-	} else {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
 		c.JSON(http.StatusOK, serializer.ParamErr("", err))
+		c.Abort()
+		return
 	}
+	var service service.TeamDetailService
+	service.UserRepositoryInterface = &model.Repo
+	service.TeamRepositoryInterface = &model.Repo
+	res := service.GetTeamDetail(uint(id))
+	c.JSON(http.StatusOK, res)
 }
