@@ -112,7 +112,7 @@ func NewRouter() *gin.Engine {
 			auth.GET("class/list", api.ClassList)
 
 			// 查看作业列表
-			auth.POST("homework/list", api.ViewHomework)
+			auth.POST("homework/list", api.ViewHomeworkList)
 
 			// 创建作业
 			auth.POST("homework/create", api.CreateHomework)
